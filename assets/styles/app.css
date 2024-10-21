@@ -1,3 +1,17 @@
 body {
-    background-color: skyblue;
+    background-color: lightblue;
+}
+
+.color{
+    background: linear-gradient(to right, #C5ADC5, #B2B5E0);
+  }
+
+  
+.color2{
+  background: linear-gradient(to right, #0a0a0a, #8a8a8a);
+}
+
+
+.color3{
+  background: linear-gradient(to right, #fff, #8a8a8a);
 }
