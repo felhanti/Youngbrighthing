@@ -1,245 +1,91 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  Youngbrighthing
+{% block title %}Youngbrighthing
 {% endblock %}
 
 {% block body %}
+	<main>
+		<!-- Carousel -->
+		<div id="carous" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-inner">
+				<div class="carousel-item active" data-bs-interval="3000">
+					<img src="https://placehold.co/1920x1080" class="d-block w-100" alt="Slide 1">
+					<div class="carousel-caption d-none d-md-block text-black">
+						<h5 class="display-4 fw-bold">YOUNGBRIGHTHING</h5>
+						<p class="lead">Élever votre style, briser les codes!</p>
+						<button type="button" class="btn btn-dark btn-lg">SHOP NOW</button>
+					</div>
+				</div>
+        <div class="carousel-item" data-bs-interval="3000">
+					<img src="https://placehold.co/1920x1080" class="d-block w-100" alt="Slide 2">
+					<div class="carousel-caption d-none d-md-block text-black">
+						<h5 class="display-4 fw-bold">YOUNGBRIGHTHING</h5>
+						<p class="lead">Élever votre style, briser les codes!</p>
+						<button type="button" class="btn btn-dark btn-lg">SHOP NOW</button>
+					</div>
+				</div>
+        <div class="carousel-item" data-bs-interval="3000">
+					<img src="https://placehold.co/1920x1080" class="d-block w-100" alt="Slide 3">
+					<div class="carousel-caption d-none d-md-block text-black">
+						<h5 class="display-4 fw-bold">YOUNGBRIGHTHING</h5>
+						<p class="lead">Élever votre style, briser les codes!</p>
+						<button type="button" class="btn btn-dark btn-lg">SHOP NOW</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
-  <main>
-      <!-- Caroussel -->
-      <div
-        id="carouselExampleSlidesOnly"
-        class="carousel slide"
-        data-bs-ride="true"
-      >
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img
-              src="https://placehold.co/1920x1080"
-              class="d-block w-100 h-50"
-              alt="..."
-            />
-            <div class="carousel-caption d-none d-md-block text-black">
-              <h5>YOUNGBRIGHTHING</h5>
-              <p>Élever votre style, briser les codes!</p>
-              <button type="button" class="btn btn-dark">
-                SHOP NOW
-              </button>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <img
-              src="https://placehold.co/1920x1080"
-              class="d-block w-100 h-50"
-              alt="..."
-            />
-            <div class="carousel-caption d-none d-md-block">
-              <h5>YOUNGBRIGHTHING</h5>
-              <p>Élever votre style, briser les codes!</p>
-              <button type="button" class="btn btn-outline-light">
-                SHOP NOW
-              </button>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <img
-              src="https://placehold.co/1920x1080"
-              class="d-block w-100"
-              alt="..."
-            />
-            <div class="carousel-caption d-none d-md-block">
-              <h5>YOUNGBRIGHTHING</h5>
-              <p>Élever votre style, briser les codes!</p>
-              <button type="button" class="btn btn-outline-light">
-                SHOP NOW
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Capsule -->
-      <div class="m-5 p-1">
-        <h2 class="d-flex justify-content-center text-black">Capsules</h2>
-        <p class="text-black">
-          Troisième histoire de Youngbrighthing, la CAPSULE III déconstruit le
-          costume, s'inspirant d'un univers où les vêtements n'ont plus de
-          limites, laines ajourées, cotons mélangés, mailles déchirées, tissus
-          recyclés, l'idée de vêtement unisexe est toujours présente avec un
-          style brut et urbain, l'élégance et l'esthétique qui rendent chaque
-          pièce unique correspond à toute morphologie.
-        </p>
-        <div class="container-fluid d-flex">
-          <a
-            href="https://www.w3docs.com/"
-            class="btn btn-dark container-fluid d-flex justify-content-center col-3 col-sm-2"
-            >DROP 1</a
-          >
-          <a
-            href="https://www.w3docs.com/"
-            class="btn btn-dark container-fluid d-flex justify-content-center col-3 col-sm-2"
-            >DROP 2</a
-          >
-          <a
-            href="https://www.w3docs.com/"
-            class="btn btn-dark container-fluid d-flex justify-content-center col-3 col-sm-2"
-            >DROP 3</a
-          >
-        </div>
-      </div>
+		<!-- Section Capsules -->
+		<section class="capsules py-5">
+			<div class=" container-fluid">
+				<h2 class="text-center mb-4">Capsules</h2>
+				<p class="text-center mb-5 mx-auto">
+					Troisième histoire de Youngbrighthing, la CAPSULE III déconstruit le costume, s'inspirant d'un univers où les vêtements n'ont plus de limites, laines ajourées, cotons mélangés, mailles déchirées, tissus recyclés, l'idée de vêtement unisexe est toujours présente avec un style brut et urbain, l'élégance et l'esthétique qui rendent chaque pièce unique correspond à toute morphologie.
+				</p>
+				<div class="d-flex justify-content-center gap-5">
+					{% for i in 1..3 %}
+						<a href="#" class="btn btn-dark px-4">DROP
+							{{ i }}</a>
+					{% endfor %}
+				</div>
+			</div>
+		</section>
 
-      <!-- Liste des articles -->
-      <div class="mt-5">
-        <h2 class="d-flex justify-content-center text-black">Last drop</h2>
-        <div class="row d-flex justify-content-center m-4">
-          <!-- Article 1 -->
-          <div class="col-md-4">
-            <div class="card mb-4 color2 text-white">
-              <img
-                src="https://placehold.co/400x400"
-                class="card-img-top"
-                alt="Article 1"
-              />
-              <div class="card-body">
-                <div class="d-flex justify-content-center">
-                  <h5 class="card-title">MIXED JEANS DENIM 2024</h5>
-                </div>
-                <div class="d-flex justify-content-center">
-                  <a href="https://placehold.co/400x400" class="btn btn-outline-light">160.00€</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Article 2 -->
-          <div class="col-md-4">
-            <div class="card mb-4 color2 text-white">
-              <img
-                src="https://placehold.co/400x400"
-                class="card-img-top"
-                alt="Article 1"
-              />
-              <div class="card-body">
-                <div class="d-flex justify-content-center">
-                  <h5 class="card-title">MIXED JEANS DENIM 2024</h5>
-                </div>
-                <div class="d-flex justify-content-center">
-                  <a href="#" class="btn btn-outline-light">160.00€</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Article 3 -->
-          <div class="col-md-4">
-            <div class="card mb-4 color2 text-white">
-              <img
-                src="https://placehold.co/400x400"
-                class="card-img-top"
-                alt="Article 1"
-              />
-              <div class="card-body">
-                <div class="d-flex justify-content-center">
-                  <h5 class="card-title">MIXED JEANS DENIM 2024</h5>
-                </div>
-                <div class="d-flex justify-content-center">
-                  <a href="#" class="btn btn-outline-light">170.00€</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Article 4 -->
-          <div class="col-md-4">
-            <div class="card mb-4 color2 text-white">
-              <img
-                src="https://placehold.co/400x400"
-                class="card-img-top"
-                alt="Article 1"
-              />
-              <div class="card-body">
-                <div class="d-flex justify-content-center">
-                  <h5 class="card-title">MIXED JEANS DENIM 2024</h5>
-                </div>
-                <div class="d-flex justify-content-center">
-                  <a href="#" class="btn btn-outline-light">160.00€</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Article 5 -->
-          <div class="col-md-4">
-            <div class="card mb-4 color2 text-white">
-              <img
-                src="https://placehold.co/400x400"
-                class="card-img-top"
-                alt="Article 1"
-              />
-              <div class="card-body">
-                <div class="d-flex justify-content-center">
-                  <h5 class="card-title">MIXED JEANS DENIM 2024</h5>
-                </div>
-                <div class="d-flex justify-content-center">
-                  <a href="#" class="btn btn-outline-light">160.00€</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Article 6 -->
-          <div class="col-md-4">
-            <div class="card mb-4 color2 text-white">
-              <img
-                src="https://placehold.co/400x400"
-                class="card-img-top"
-                alt="Article 1"
-              />
-              <div class="card-body">
-                <div class="d-flex justify-content-center">
-                  <h5 class="card-title">MIXED JEANS DENIM 2024</h5>
-                </div>
-                <div class="d-flex justify-content-center">
-                  <a href="#" class="btn btn-outline-light">160.00€</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+		<!-- Section Last Drop -->
+		<section class="last-drop p-5 bg-light">
+			<div class="container-fluid">
+				<h2 class="text-center mb-5">Last drop</h2>
+				<div class="row g-4">
+					{% for i in 1..6 %}
+						<div class="col-12 col-md-4">
+							<div class="card h-100 color2 text-white">
+								<img src="https://placehold.co/400x400" class="card-img-top" alt="Article {{ i }}">
+								<div class="card-body text-center">
+									<h5 class="card-title mb-3">MIXED JEANS DENIM 2024</h5>
+									<a href="#" class="btn btn-outline-light">160.00€</a>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</section>
 
-      <div class="m-4 row border border-1">
-        <div class="col-md-6 border border-1">
-          <h2 class="d-flex justify-content-center text-black">
-            Youngbrighthing - Libérer le Style Sans Limites
-          </h2>
-          <p class="text-black">
-            Entrez chez Youngbrighthing, où la mode abolit les frontières.
-            CAPSULE III réinvente la tenue, avec des laines ajourées, des cotons
-            mélangés et des tissus recyclés. Nos créations unisexes dégagent une
-            élégance urbaine brute, adaptée à toutes les silhouettes. Découvrez
-            une mode sans limites chez Youngbrighthing. Lorem, ipsum dolor sit
-            amet consectetur adipisicing elit. Consequatur enim aliquid nemo
-            aperiam quis temporibus repellat porro eaque. Ab consequuntur,
-            soluta libero eius, adipisci earum harum magnam mollitia a illum
-            omnis suscipit molestiae nihil aut dolores. Quod consequuntur
-            accusantium explicabo voluptas deserunt doloribus quo at praesentium
-            officiis nobis accusamus nostrum quaerat, nam qui quas, eius, maxime
-            temporibus ullam ut laudantium. Delectus aspernatur temporibus enim
-            aliquid, quibusdam accusamus saepe voluptates doloremque eveniet
-            suscipit autem ipsa eaque quis eius sed vel, reiciendis omnis ab
-            sint. Iste nobis culpa, quisquam fugit vel sequi praesentium
-            explicabo, ipsa reprehenderit aliquam impedit. Odio veritatis
-            tempora inventore a cumque saepe explicabo iusto, nesciunt quaerat
-            
-            
-          </p>
-        </div>
-        <div class="border border-1 col-md-6">
-          <img
-            src="{{ asset('images/IMG_20240417_172439_073.jpg')}}"
-            alt=""
-            width="100%"
-            height="100%"
-          />
-        </div>
-      </div>
-    </main>
-
+		<!-- Section À Propos -->
+		<section class="about py-5">
+			<div class="container-lg">
+				<div class="row g-0">
+					<div class="col-md-6 p-4">
+						<h2 class="text-center mb-4">Youngbrighthing - Libérer le Style Sans Limites</h2>
+						<p class="text-justify">
+							Entrez chez Youngbrighthing, où la mode abolit les frontières.CAPSULE III réinvente la tenue, avec des laines ajourées, des coton mélangés et des tissus recyclés. Nos créations unisexes dégagent uneélégance urbaine brute, adaptée à toutes les silhouettes. Découvrezune mode sans limites chez Youngbrighthing.
+						</p>
+					</div>
+					<div class="col-md-6">
+						<img src="{{ asset('images/IMG_20240417_172439_073.jpg')}}" alt="À propos de Youngbrighthing" class="img-fluid w-100 h-100 object-fit-cover">
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
 {% endblock %}
-
