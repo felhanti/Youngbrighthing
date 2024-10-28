@@ -34,12 +34,22 @@ class UserType extends AbstractType
                 'expanded' => true,
                 'label' => 'Rôles'
             ])
-            // On retire le champ password du formulaire d'édition
-            // car il nécessite un traitement spécial avec le hachage
-            /*->add('password', PasswordType::class, [
+            ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
-                'required' => false
-            ])*/
+                'required' => false,
+                'label' => 'Mot de passe',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Laissez vide pour garder le mot de passe actuel'
+                    
+                ],
+                'constraints' => [
+                    new Length([
+                        'min' => 6,
+                        'minMessage' => 'Le mot de passe doit faire au moins {{ limit }} caractères',
+                    ])
+                ],
+            ])
             ->add('nom', TextType::class, [
                 'label' => 'Nom',
                 'attr' => [
@@ -74,21 +84,4 @@ class UserType extends AbstractType
             ]
         ]);
     }
-    public function addPasswordField(FormBuilderInterface $builder)
-{
-    $builder->add('plainPassword', PasswordType::class, [
-        'mapped' => false,
-        'required' => false,
-        'attr' => [
-            'class' => 'form-control',
-            'placeholder' => 'Laissez vide pour ne pas changer'
-        ],
-        'constraints' => [
-            new Length([
-                'min' => 6,
-                'minMessage' => 'Le mot de passe doit faire au moins {{ limit }} caractères',
-            ])
-        ],
-    ]);
-}
 }

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User index{% endblock %}
+{% block title %}Index utilisateurs{% endblock %}
 
 {% block body %}
      <div class="container mt-4">
@@ -26,9 +26,10 @@
                     <td>{{ user.prenom }}</td>
                     <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
                     <td>
-                        <a href="{{ path('app_admin_user_show', {'id': user.id}) }}" class="btn btn-info btn-sm">Voir</a>
-                        <a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                        <a href="{{ path('app_admin_user_delete', {'id': user.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
+                        <a href="{{ path('app_admin_user_show', {'id': user.id}) }}" class="btn btn-info">Voir</a>
+                        <a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="btn btn-warning">Modifier</a>
+                        {{ include('admin/user/_delete_form.html.twig') }}
+                        
                     </td>
                 </tr>
             {% else %}
@@ -39,6 +40,6 @@
             </tbody>
         </table>
 
-        <a href="{{ path('app_admin_user_new') }}" class="btn btn-primary">Créer un nouvel utilisateur</a>
+        <a href="{{ path('app_admin_user_new') }}" class="btn btn-primary m-1">Créer un nouvel utilisateur</a>
     </div>
 {% endblock %}

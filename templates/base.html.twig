@@ -32,12 +32,26 @@
 				<img src="{{ asset('images/LOGO_ybt-01_72c34f78-1ef2-4c5c-a378-735dffc185cb.png') }}" alt="LOGO" height="70"/>
 
 				<div>
-					<a class="navbar-brand p-2" href="{{ path('app_login')}}">
-						<img src="{{ asset('assets/svg/person.svg') }}" width="50" height="50" alt="Login"/>
-					</a>
-					<a class="navbar-brand p-2" href="#">
-						<img src="{{ asset('assets/svg/cart.svg') }}" width="50" height="50" alt="Panier"/>
-					</a>
+					{% if app.user %}
+						{# <div class="mb-3">
+							Vous êtes connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>, #}
+						{# </div> #}
+						{% if app.user and 'ROLE_ADMIN' in app.user.roles %}
+							<a class="navbar-brand p-2" href="{{ path('app_admin_user_index') }}">
+								<img src="{{ asset('assets/svg/gear.svg') }}" width="50" height="50" alt="Administrateur"/>
+							</a>
+						{% endif %}
+						<a class="navbar-brand p-2" href="{{ path('app_logout') }}">
+							<img src="{{ asset('assets/svg/logout.svg') }}" width="50" height="50" alt="Logout"/>
+						</a>
+						<a class="navbar-brand p-2" href="#">
+							<img src="{{ asset('assets/svg/cart.svg') }}" width="50" height="50" alt="Panier"/>
+						</a>
+					{% else %}
+						<a class="navbar-brand p-2" href="{{ path('app_login')}}">
+							<img src="{{ asset('assets/svg/person.svg') }}" width="50" height="50" alt="Login"/>
+						</a>
+					{% endif %}
 				</div>
 			</nav>
 
