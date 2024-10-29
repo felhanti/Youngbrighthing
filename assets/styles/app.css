@@ -1,21 +1,64 @@
-body {
-  background-color: lightblue;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+html, body {
+  margin: 0;
+  padding: 0;
   height: 100%;
 }
 
-.color {
-  background: linear-gradient(to right, #c5adc5, #b2b5e0);
+body {
+  background-color: #c7c7c7;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
+main {
+  flex: 1 0 auto;
+}
+
+header {
+  flex-shrink: 0;
+}
+
+footer {
+  flex-shrink: 0;
+}
+
+.navbar-menu {
+  height: 50px; /* Hauteur fixe pour le menu */
+}
+
+.color-white {
+  color:white;
+}
+.bg-white{
+  background-color: white;
+}
+
+.color-black {
+  color:black;
+}
+.bg-white{
+  background-color: black;
+}
+
+.color-gray {
+  color:#c7c7c7;
+}
+.bg-white{
+  background-color: #c7c7c7;
+}
+
+.color-gold {
+  color:hwb(51 0% 0%);
+}
+.bg-gold{
+  background-color: #ffd700;
+}
+
+
 
 .color3 {
   background: linear-gradient(to right, #fff, #8a8a8a);
-}
-
-.navbar-height {
-  height: 100px;
 }
 
 .carousel-item img {
@@ -45,3 +88,8 @@ body {
   }
 }
 
+/* Palette : Élégance Classique
+Couleur Principale : Noir (#000000)
+Couleur Secondaire : Blanc (#FFFFFF)
+Accent : Or Métallique (#FFD700)
+Couleur de Fond : Gris Clair (#F7F7F7) */

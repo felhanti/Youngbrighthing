@@ -1,16 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edition{% endblock %}
+{% block title %}Edition
+{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <h1>Editer les utilisateurs</h1>
+	<div class="container mt-4">
+		<h1>Editer les utilisateurs</h1>
 
-    {{ include('admin/user/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
+		{{ include('admin/user/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    <a class="btn btn-info m-1" href="{{ path('app_admin_user_index') }}">Retour à la liste</a>
+		<a class="btn btn-info m-1" href="{{ path('app_admin_user_index') }}">Retour à la liste</a>
 
-    {{ include('admin/user/_delete_form.html.twig', {'user': user} ) }}
+		{{ include('admin/user/_delete_form.html.twig', {'user': user} ) }}
 
-    </div>
+	</div>
 {% endblock %}

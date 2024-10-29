@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edition
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-4">
+		<h1>Editer les produits</h1>
+
+		{{ include('admin/product/_form.html.twig', {'button_label': 'Update'}) }}
+
+		<a class="btn btn-info m-1" href="{{ path('app_admin_product_index') }}">Retour à la liste</a>
+
+		{{ include('admin/product/_delete_form.html.twig') }}
+
+	</div>
+{% endblock %}
