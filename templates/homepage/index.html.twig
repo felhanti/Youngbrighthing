@@ -6,30 +6,30 @@
 {% block body %}
 	<main>
 		<!-- Carousel -->
-		<div id="carous" class="carousel slide" data-bs-ride="carousel">
+		<div class="carousel slide" data-bs-ride="carousel">
 			<div class="carousel-inner">
 				<div class="carousel-item active" data-bs-interval="2500">
 					<img src="https://placehold.co/1920x1080" class="d-block w-100" alt="Slide 1">
 					<div class="carousel-caption d-none d-md-block text-black">
 						<h5 class="display-4 fw-bold">YOUNGBRIGHTHING</h5>
 						<p class="lead">Élever votre style, briser les codes!</p>
-						<button type="button" class="btn btn-dark btn-lg">SHOP NOW</button>
+						<button type="button" class="btn btn-dark btn-lg text-gold">SHOP NOW</button>
 					</div>
 				</div>
-        <div class="carousel-item" data-bs-interval="2500">
+				<div class="carousel-item" data-bs-interval="2500">
 					<img src="https://placehold.co/1920x1080" class="d-block w-100" alt="Slide 2">
 					<div class="carousel-caption d-none d-md-block text-black">
 						<h5 class="display-4 fw-bold">YOUNGBRIGHTHING</h5>
 						<p class="lead">Élever votre style, briser les codes!</p>
-						<button type="button" class="btn btn-dark btn-lg">SHOP NOW</button>
+						<button type="button" class="btn btn-dark btn-lg text-gold">SHOP NOW</button>
 					</div>
 				</div>
-        <div class="carousel-item" data-bs-interval="2500">
+				<div class="carousel-item" data-bs-interval="2500">
 					<img src="https://placehold.co/1920x1080" class="d-block w-100" alt="Slide 3">
 					<div class="carousel-caption d-none d-md-block text-black">
 						<h5 class="display-4 fw-bold">YOUNGBRIGHTHING</h5>
 						<p class="lead">Élever votre style, briser les codes!</p>
-						<button type="button" class="btn btn-dark btn-lg">SHOP NOW</button>
+						<button type="button" class="btn btn-dark btn-lg text-gold">SHOP NOW</button>
 					</div>
 				</div>
 			</div>
@@ -44,7 +44,7 @@
 				</p>
 				<div class="d-flex justify-content-center gap-5">
 					{% for i in 1..3 %}
-						<a href="#" class="btn btn-dark px-4">DROP
+						<a href="#" class="btn btn-dark text-gold px-4">DROP
 							{{ i }}</a>
 					{% endfor %}
 				</div>
@@ -52,17 +52,17 @@
 		</section>
 
 		<!-- Section Last Drop -->
-		<section class="last-drop p-5 bg-light">
+		<section class="last-drop p-5 bg-dark">
 			<div class="container-fluid">
-				<h2 class="text-center mb-5">Last drop</h2>
+				<h2 class="text-center mb-5 text-gold">Last drop</h2>
 				<div class="row g-4">
 					{% for i in 1..6 %}
 						<div class="col-12 col-lg-4">
-							<div class="card h-100 color2 text-white">
+							<div class="card h-100">
 								<img src="https://placehold.co/400x400" class="card-img-top" alt="Article {{ i }}">
-								<div class="card-body text-center">
+								<div class="card-body text-center bg-gray">
 									<h5 class="card-title mb-3">MIXED JEANS DENIM 2024</h5>
-									<a href="#" class="btn btn-outline-light">160.00€</a>
+									<a href="#" class="btn btn-dark text-gold">160.00€</a>
 								</div>
 							</div>
 						</div>
