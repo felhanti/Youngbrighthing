@@ -2,17 +2,20 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomepageController extends AbstractController
 {
     #[Route('/', name: 'home')]
-    public function index(): Response
+    public function index(CategoryRepository $categoryRepository, ProductRepository $productRepository): Response
     {
         return $this->render('homepage/index.html.twig', [
-            'controller_name' => 'HomepageController',
+            'categories' => $categoryRepository->findAll(),
+            'products' => $productRepository->findAll(),
         ]);
     }
 
@@ -42,4 +45,5 @@ class HomepageController extends AbstractController
     {
         return $this->render('cgv/retour.html.twig');
     }
+    
 }

@@ -43,9 +43,9 @@
 					Troisième histoire de Youngbrighthing, la CAPSULE III déconstruit le costume, s'inspirant d'un univers où les vêtements n'ont plus de limites, laines ajourées, cotons mélangés, mailles déchirées, tissus recyclés, l'idée de vêtement unisexe est toujours présente avec un style brut et urbain, l'élégance et l'esthétique qui rendent chaque pièce unique correspond à toute morphologie.
 				</p>
 				<div class="d-flex justify-content-center gap-5">
-					{% for i in 1..3 %}
-						<a href="#" class="btn btn-dark text-gold px-4">DROP
-							{{ i }}</a>
+					{% for category in categories %}
+						<a href="#" class="text-uppercase btn btn-dark text-gold px-4">
+							{{ category.name }}</a>
 					{% endfor %}
 				</div>
 			</div>
@@ -56,13 +56,13 @@
 			<div class="container-fluid">
 				<h2 class="text-center mb-5 text-gold">Last drop</h2>
 				<div class="row g-4">
-					{% for i in 1..6 %}
+					{% for product in products %}
 						<div class="col-12 col-lg-4">
 							<div class="card h-100">
-								<img src="https://placehold.co/400x400" class="card-img-top" alt="Article {{ i }}">
+								<img src="https://placehold.co/400x400" class="card-img-top" alt="Article {{ product.id }}">
 								<div class="card-body text-center bg-gray">
-									<h5 class="card-title mb-3">MIXED JEANS DENIM 2024</h5>
-									<a href="#" class="btn btn-dark text-gold">160.00€</a>
+									<h5 class="card-title mb-3">{{ product.name }}</h5>
+									<a href="#" class="btn btn-dark text-gold">{{ product.price }}</a>
 								</div>
 							</div>
 						</div>

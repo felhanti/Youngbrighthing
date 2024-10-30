@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product{% endblock %}
+{% block title %}{{ product.name }}{% endblock %}
 
 {% block body %}
 <div class="container-lg mt-4">
-    <h1>Product</h1>
+    <h1>{{ product.name }}</h1>
 
     <table class="table">
         <tbody>
