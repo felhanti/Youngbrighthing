@@ -17,6 +17,7 @@
 					<th>Disponible</th>
 					<th>Taille</th>
 					<th>Date d'ajout</th>
+					<th>Categories</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -37,10 +38,17 @@
 						<td>{{ product.size }}</td>
 						<td>{{ product.addDate ? product.addDate|date('d/m/Y') : '' }}</td>
 						<td>
+                            {% for category in product.category %}
+                                {{ category.name }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </td>
+						<td>
 							<a href="{{ path('app_admin_product_show', {'id': product.id}) }}" class="btn btn-info">Voir</a>
 							<a href="{{ path('app_admin_product_edit', {'id': product.id}) }}" class="btn btn-warning">Modifier</a>
 							{{ include('admin/product/_delete_form.html.twig') }}
 						</td>
+						
+						
 					</tr>
 				{% else %}
 					<tr>

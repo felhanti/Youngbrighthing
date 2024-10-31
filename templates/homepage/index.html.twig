@@ -56,7 +56,7 @@
 			<div class="container-fluid">
 				<h2 class="text-center mb-5 text-gold">Last drop</h2>
 				<div class="row g-4">
-					{% for product in products %}
+					{% for product in products|filter(product => 'Drop 1' in product.category|map(category => category.name)) %}
 						<div class="col-12 col-lg-4">
 							<div class="card h-100">
 								<img src="https://placehold.co/400x400" class="card-img-top" alt="Article {{ product.id }}">
@@ -78,7 +78,7 @@
 					<div class="col-md-6 p-4">
 						<h2 class="text-center mb-4">Youngbrighthing - Libérer le Style Sans Limites</h2>
 						<p class="text-justify">
-							Entrez chez Youngbrighthing, où la mode abolit les frontières.CAPSULE III réinvente la tenue, avec des laines ajourées, des coton mélangés et des tissus recyclés. Nos créations unisexes dégagent uneélégance urbaine brute, adaptée à toutes les silhouettes. Découvrezune mode sans limites chez Youngbrighthing.
+							Entrez chez Youngbrighthing, où la mode abolit les frontières.CAPSULE III réinvente la tenue, avec des laines ajourées, des coton mélangés et des tissus recyclés. Nos créations unisexes dégagent uneélégance urbaine brute, adaptée à toutes les silhouettes. Découvrez une mode sans limites chez Youngbrighthing.
 						</p>
 					</div>
 					<div class="col-md-6">

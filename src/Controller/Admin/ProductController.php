@@ -2,8 +2,11 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Category;
 use App\Entity\Product;
+use App\Form\CategoryType;
 use App\Form\ProductType;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,10 +18,11 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ProductController extends AbstractController
 {
     #[Route(name: 'app_admin_product_index', methods: ['GET'])]
-    public function index(ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository,CategoryRepository $categoryRepository): Response
     {
         return $this->render('admin/product/index.html.twig', [
             'products' => $productRepository->findAll(),
+            'category' => $categoryRepository->findAll(),
         ]);
     }
 
@@ -39,14 +43,16 @@ final class ProductController extends AbstractController
         return $this->render('admin/product/new.html.twig', [
             'product' => $product,
             'form' => $form,
+            
         ]);
     }
 
     #[Route('/{id}', name: 'app_admin_product_show', methods: ['GET'])]
-    public function show(Product $product): Response
+    public function show(Product $product, Category $category): Response
     {
         return $this->render('admin/product/show.html.twig', [
             'product' => $product,
+            'category' => $category
         ]);
     }
 
