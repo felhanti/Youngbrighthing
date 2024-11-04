@@ -16,6 +16,7 @@
 					<th>Prénom</th>
 					<th>Date de naissance</th>
 					<th>Rôles</th>
+					<th>Adresse</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -29,6 +30,7 @@
 						<td>{{ user.birthDate ? user.birthDate|date('d/m/Y') : '' }}</td>
 
 						<td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+						<td>{{ user.adress ~ ' ' ~ user.cp ~ ' ' ~ user.city}}</td>
 						<td>
 							<a href="{{ path('app_admin_user_show', {'id': user.id}) }}" class="btn btn-info">Voir</a>
 							<a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="btn btn-warning">Modifier</a>

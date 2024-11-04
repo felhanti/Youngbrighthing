@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class UserType extends AbstractType
@@ -72,6 +73,34 @@ class UserType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
+            ->add('adress', TextType::class, [
+                'label' => 'Adresse',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Entrez votre adresse'
+                ]
+            ])
+            ->add('cp', TextType::class, [
+                'label' => 'Code Postal',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Entrez votre code postal',
+                ],
+            ])
+            ->add('city', TextType::class, [
+                'label' => 'Ville',
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Entrez votre ville',
+                ],
+            ])
+            ->add('country', CountryType::class, [
+                'label' => 'Pays',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'placeholder' => 'Choisissez un pays', // Affiche une option vide
+            ]);
         ;
     }
 

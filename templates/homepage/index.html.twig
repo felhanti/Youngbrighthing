@@ -44,7 +44,7 @@
 				</p>
 				<div class="d-flex justify-content-center gap-5">
 					{% for category in categories %}
-						<a href="#" class="text-uppercase btn btn-dark text-gold px-4">
+						<a href="#" class="text-uppercase btn btn-dark text-gold px-5">
 							{{ category.name }}</a>
 					{% endfor %}
 				</div>
@@ -62,7 +62,7 @@
 								<img src="{{ asset('images/product/' ~  product.imageName ) }}"  class="card-img-top img-card" alt="Article {{ product.id }}">
 								<div class="card-body text-center bg-gray">
 									<h5 class="card-title mb-3">{{ product.name }}</h5>
-									<a href="#" class="btn btn-dark text-gold">{{ product.price }}</a>
+									<a href="#" class="btn btn-dark text-gold">{{ product.price ~ " €"}}</a>
 								</div>
 							</div>
 						</div>

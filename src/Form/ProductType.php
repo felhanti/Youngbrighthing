@@ -49,7 +49,7 @@ class ProductType extends AbstractType
                     'min' => 0,
                     'step' => '0.01'
                 ],
-                'currency' => 'EUR',
+                'currency' => 'None',
                 'label' => 'Prix',
                 'label_attr' => ['class' => 'form-label fw-semibold'],
                 'row_attr' => ['class' => 'mb-3']
@@ -58,13 +58,13 @@ class ProductType extends AbstractType
                 'label' => 'Disponible',
                 'required' => false,
                 'label_attr' => [
-                    'class' => 'form-check-label fw-semibold'
+                    'class' => 'form-check-label fw-semibold d-block'
                 ],
                 'row_attr' => [
-                    'class' => 'form-check form-switch mb-3'
+                    'class' => 'form-check form-switch mb-5 p-0'
                 ],
                 'attr' => [
-                    'class' => 'form-check-input',
+                    'class' => 'form-check-input ms-1',
                     'role' => 'switch'
                 ],
             ])
@@ -98,8 +98,8 @@ class ProductType extends AbstractType
 
             ])
             ->add('imageFile', FileType::class, [
-                // 'mapped' => false,
                 'label' => 'Image du produit',
+                'label_attr' => ['class' => 'form-label fw-semibold'],
                 'required' => false,
             ])
         ;
