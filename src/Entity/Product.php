@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[Vich\Uploadable]
 class Product
 {
     #[ORM\Id]
@@ -26,10 +29,22 @@ class Product
     private ?string $price = null;
 
     #[ORM\Column]
-    private ?bool $is_sold = false;
+    private ?bool $is_sold = null;
 
     #[ORM\Column(length: 10)]
     private ?string $size = null;
+
+    #[Vich\UploadableField(mapping: 'product', fileNameProperty: 'imageName', size: 'imageSize')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $imageSize = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $add_date = null;
@@ -39,6 +54,15 @@ class Product
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
     private Collection $category;
+
+    // #[ORM\Column(length: 255, nullable: true)]
+    // private ?string $image = null;
+
+    public function __construct()
+    {
+        $this->add_date = new \DateTime(); // Définit la date actuelle par défaut
+        $this->category = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -81,12 +105,12 @@ class Product
         return $this;
     }
 
-    public function isSold(): ?bool
+    public function getIssold(): ?bool
     {
         return $this->is_sold;
     }
 
-    public function setSold(bool $is_sold): self
+    public function setIssold(bool $is_sold): self
     {
         $this->is_sold = $is_sold;
 
@@ -105,11 +129,6 @@ class Product
         return $this;
     }
 
-    public function __construct()
-    {
-        $this->add_date = new \DateTime(); // Définit la date actuelle par défaut
-        $this->category = new ArrayCollection();
-    }
     public function getAddDate(): ?\DateTimeInterface
     {
         return $this->add_date;
@@ -144,5 +163,40 @@ class Product
         $this->category->removeElement($category);
 
         return $this;
+    }
+
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function setImageSize(?int $imageSize): void
+    {
+        $this->imageSize = $imageSize;
+    }
+
+    public function getImageSize(): ?int
+    {
+        return $this->imageSize;
     }
 }

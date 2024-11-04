@@ -32,8 +32,10 @@ final class ProductController extends AbstractController
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // dd($product);
             $entityManager->persist($product);
             $entityManager->flush();
 

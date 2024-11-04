@@ -24,6 +24,9 @@ class Category
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'category')]
     private Collection $products;
 
+    #[ORM\Column]
+    private ?bool $Last = null;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -69,6 +72,18 @@ class Category
         if ($this->products->removeElement($product)) {
             $product->removeCategory($this);
         }
+
+        return $this;
+    }
+
+    public function isLast(): ?bool
+    {
+        return $this->Last;
+    }
+
+    public function setLast(bool $Last): self
+    {
+        $this->Last = $Last;
 
         return $this;
     }

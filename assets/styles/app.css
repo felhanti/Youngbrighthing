@@ -72,6 +72,18 @@ footer {
   }
 }
 
+.white-space{
+  white-space: nowrap;
+}
+
+.img{
+  max-width: 300px;
+}
+
+.img-card{
+  max-width: 1200px;
+  max-height: 1200px;
+}
 /* Palette : Élégance Classique
 Couleur Principale : Noir (#000000)
 Couleur Secondaire : Blanc (#FFFFFF)

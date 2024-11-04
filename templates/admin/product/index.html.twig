@@ -18,6 +18,7 @@
 					<th>Taille</th>
 					<th>Date d'ajout</th>
 					<th>Categories</th>
+					<th>Image</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -27,12 +28,12 @@
 						<td>{{ product.id }}</td>
 						<td>{{ product.Name }}</td>
 						<td>{{ product.Description }}</td>
-						<td>{{ product.price ~ ' €' }}</td>
+						<td class="white-space">{{ product.price ~ ' €' }}</td>
 						<td>
 							{% if product.isSold %}
-								<span class="badge bg-success">Oui</span>
+								<span class="badge bg-success fs-6">Oui</span>
 							{% else %}
-								<span class="badge bg-danger">Non</span>
+								<span class="badge bg-danger fs-6">Non</span>
 							{% endif %}
 						</td>
 						<td>{{ product.size }}</td>
@@ -42,6 +43,7 @@
                                 {{ category.name }}{% if not loop.last %}, {% endif %}
                             {% endfor %}
                         </td>
+						<td> <img src="{{ asset('images/product/' ~  product.imageName ) }}" alt="" class="img"></td>
 						<td>
 							<a href="{{ path('app_admin_product_show', {'id': product.id}) }}" class="btn btn-info">Voir</a>
 							<a href="{{ path('app_admin_product_edit', {'id': product.id}) }}" class="btn btn-warning">Modifier</a>
