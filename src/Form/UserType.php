@@ -100,7 +100,7 @@ class UserType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'placeholder' => 'Choisissez un pays', // Affiche une option vide
-            ]);
+            ])
         ;
     }
 

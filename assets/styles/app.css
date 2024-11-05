@@ -90,6 +90,10 @@ footer {
   margin-bottom: 0.5rem; /* Espace entre le label et la case à cocher */
 }
 
+.img-product {
+  max-width: 100%;
+}
+
 /* Palette : Élégance Classique
 Couleur Principale : Noir (#000000)
 Couleur Secondaire : Blanc (#FFFFFF)

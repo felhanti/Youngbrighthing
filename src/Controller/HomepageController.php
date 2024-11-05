@@ -45,5 +45,22 @@ class HomepageController extends AbstractController
     {
         return $this->render('cgv/retour.html.twig');
     }
+
+    #[Route('/product/{id}', name: 'app_product', methods: ['GET'])]
+    public function product(int $id, CategoryRepository $categoryRepository, ProductRepository $productRepository): Response
+    {
+        // Récupère le produit correspondant à l'id donné
+        $product = $productRepository->find($id);
+        
+        // Vérifie si le produit existe
+        if (!$product) {
+            throw $this->createNotFoundException('Le produit demandé n\'existe pas.');
+        }
+        
+        return $this->render('product/index.html.twig', [
+            'categories' => $categoryRepository->findAll(),
+            'product' => $product, // envoie le produit unique, pas tous les produits
+        ]);
+    }
     
 }
