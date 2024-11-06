@@ -43,7 +43,7 @@
                                 {{ category.name }}{% if not loop.last %}, {% endif %}
                             {% endfor %}
                         </td>
-						<td> <img src="{{ asset('images/product/' ~  product.imageName ) }}" alt="" class="img"></td>
+						<td> <img src="{{ asset('images/product/' ~  product.imageName ) }}" alt="" class="back_img_product"></td>
 						<td>
 							<a href="{{ path('app_admin_product_show', {'id': product.id}) }}" class="btn btn-info">Voir</a>
 							<a href="{{ path('app_admin_product_edit', {'id': product.id}) }}" class="btn btn-warning">Modifier</a>

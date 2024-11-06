@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    
+{% endblock %}
+
+{% block body %}
+    <section class="last-drop p-5">
+			<div class="container-fluid">
+				<h2 class="text-center mb-5 text-dark">Last drop</h2>
+				<div class="row g-4">
+					{% for product in products %}
+						<div class="col-12 col-lg-4">
+							<div class="card h-100">
+								<img src="{{ asset('images/product/' ~  product.imageName ) }}"  class="card-img-top img-card" alt="Article {{ product.id }}">
+								<div class="card-body text-center bg-dark">
+									<h5 class="card-title mb-2 text-uppercase text-white">{{ product.name }}</h5>
+									<div class="text-gold mb-2">{{ product.price ~ " €"}}</div>
+									<a href="{{ path('app_product', { id: product.id }) }}" class="btn btn-light">Voir</a>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</section>
+{% endblock %}
+

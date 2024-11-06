@@ -46,7 +46,7 @@ class HomepageController extends AbstractController
         return $this->render('cgv/retour.html.twig');
     }
 
-    #[Route('/product/{id}', name: 'app_product', methods: ['GET'])]
+    #[Route('/product/{id}', name: 'app_product')]
     public function product(int $id, CategoryRepository $categoryRepository, ProductRepository $productRepository): Response
     {
         // Récupère le produit correspondant à l'id donné
@@ -63,4 +63,11 @@ class HomepageController extends AbstractController
         ]);
     }
     
+    #[Route('/collection/all', name: 'app_collection_all') ]
+    public function collection(ProductRepository $productRepository): Response
+    {
+        return $this->render('collection/index.html.twig', [
+            'products' => $productRepository->findAll(),
+        ]);
+    }
 }

@@ -76,13 +76,15 @@ footer {
   white-space: nowrap;
 }
 
-.img{
-  max-width: 300px;
+.back_img_product{
+  max-width: 250px;
+  max-height: 350px;
 }
 
 .img-card{
+  height: 100%;
   max-width: 1200px;
-  max-height: 1200px;
+  /* max-height: 1200px; */
 }
 
 .form-check-label {
