@@ -5,33 +5,19 @@
 
 {% block body %}
 	<main>
-		<!-- Carousel -->
 		<div class="carousel slide" data-bs-ride="carousel">
 			<div class="carousel-inner">
-				<div class="carousel-item active" data-bs-interval="2500">
-					<img src="https://placehold.co/1920x1080" class="d-block w-100" alt="Slide 1">
-					<div class="carousel-caption d-none d-md-block text-black">
-						<h5 class="display-4 fw-bold">YOUNGBRIGHTHING</h5>
-						<p class="lead">Élever votre style, briser les codes!</p>
-						<button type="button" class="btn btn-dark btn-lg text-gold">SHOP NOW</button>
+				{% for product in products %}
+					<div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="2500">
+						<img src="{{ asset('images/product/' ~ product.imageName ) }}" class="d-block w-100">
 					</div>
-				</div>
-				<div class="carousel-item" data-bs-interval="2500">
-					<img src="https://placehold.co/1920x1080" class="d-block w-100" alt="Slide 2">
-					<div class="carousel-caption d-none d-md-block text-black">
-						<h5 class="display-4 fw-bold">YOUNGBRIGHTHING</h5>
-						<p class="lead">Élever votre style, briser les codes!</p>
-						<button type="button" class="btn btn-dark btn-lg text-gold">SHOP NOW</button>
-					</div>
-				</div>
-				<div class="carousel-item" data-bs-interval="2500">
-					<img src="https://placehold.co/1920x1080" class="d-block w-100" alt="Slide 3">
-					<div class="carousel-caption d-none d-md-block text-black">
-						<h5 class="display-4 fw-bold">YOUNGBRIGHTHING</h5>
-						<p class="lead">Élever votre style, briser les codes!</p>
-						<button type="button" class="btn btn-dark btn-lg text-gold">SHOP NOW</button>
-					</div>
-				</div>
+				{% endfor %}
+			</div>
+			<!-- Texte fixe pour toutes les images -->
+			<div class="carousel-caption d-none d-md-block text-black">
+				<h5 class="display-4 fw-bold">YOUNGBRIGHTHING</h5>
+				<p class="lead">Élever votre style, briser les codes!</p>
+				<a href="{{ path('app_collection_all') }}" class="btn btn-dark btn-lg text-gold">SHOP NOW</a>
 			</div>
 		</div>
 
@@ -59,7 +45,7 @@
 					{% for product in products|filter(product => 'yes' in product.category|map(category => category.last)) %}
 						<div class="col-12 col-lg-4">
 							<div class="card h-100">
-								<img src="{{ asset('images/product/' ~  product.imageName ) }}"  class="card-img-top img-card" alt="Article {{ product.id }}">
+								<img src="{{ asset('images/product/' ~ product.imageName ) }}" class="card-img-top img-card" alt="Article {{ product.id }}">
 								<div class="card-body text-center bg-gray">
 									<h5 class="card-title mb-2text-uppercase">{{ product.name }}</h5>
 									<div class="text-white mb-2">{{ product.price ~ " €"}}</div>
