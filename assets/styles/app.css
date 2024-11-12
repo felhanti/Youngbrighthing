@@ -70,6 +70,10 @@ footer {
   .carousel-item img {
     height: 50vh;
   }
+  .logo {
+    text-decoration: none;
+    justify-content: center;
+  }
 }
 
 .white-space{

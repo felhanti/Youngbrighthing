@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+	<section class="last-drop p-5">
+		<div class="container-fluid">
+			<!-- Afficher les catégories d'un produit -->
+			<h2 class="text-center mb-5 text-dark">
+				{{ category.name }}
+			</h2>
+			<div class="row g-4">
+				{% for product in products %}
+					<div class="col-12 col-lg-4">
+						<div class="card h-100">
+							<img src="{{ asset('images/product/' ~ product.imageName ) }}" class="card-img-top img-card" alt="Article {{ product.id }}">
+							<div class="card-body text-center bg-dark">
+								<h5 class="card-title mb-2 text-uppercase text-white">{{ product.name }}</h5>
+								<div class="text-gold mb-2">{{ product.price ~ " €"}}</div>
+								{% if product.isSold() %}
+                                    <a href="{{ path('app_product', { id: product.id }) }}" class="btn btn-light">Voir</a>
+                                {% else %}
+                                    <button class="btn btn-secondary" disabled>Épuisé</button>
+                                {% endif %}
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+{% endblock %}
+ 

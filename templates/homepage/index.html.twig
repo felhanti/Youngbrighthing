@@ -9,7 +9,7 @@
 			<div class="carousel-inner">
 				{% for product in products %}
 					<div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="2500">
-						<img src="{{ asset('images/product/' ~ product.imageName ) }}" class="d-block w-100">
+						<img src="{{ asset('images/product/' ~ product.imageName) }}" class="d-block w-100" alt="{{ product.name }}">
 					</div>
 				{% endfor %}
 			</div>
@@ -29,8 +29,8 @@
 					Troisième histoire de Youngbrighthing, la CAPSULE III déconstruit le costume, s'inspirant d'un univers où les vêtements n'ont plus de limites, laines ajourées, cotons mélangés, mailles déchirées, tissus recyclés, l'idée de vêtement unisexe est toujours présente avec un style brut et urbain, l'élégance et l'esthétique qui rendent chaque pièce unique correspond à toute morphologie.
 				</p>
 				<div class="d-flex justify-content-center gap-5">
-					{% for category in categories %}
-						<a href="http://localhost/product/1" class="text-uppercase btn btn-dark text-gold px-5">
+					{% for category in category %}
+						<a href="{{ path('app_drop', { name: category.name }) }}" class="text-uppercase btn btn-dark text-gold px-5">
 							{{ category.name }}</a>
 					{% endfor %}
 				</div>

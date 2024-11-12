@@ -14,7 +14,7 @@ class HomepageController extends AbstractController
     public function index(CategoryRepository $categoryRepository, ProductRepository $productRepository): Response
     {
         return $this->render('homepage/index.html.twig', [
-            'categories' => $categoryRepository->findAll(),
+            'category' => $categoryRepository->findAll(),
             'products' => $productRepository->findAll(),
         ]);
     }
@@ -51,23 +51,45 @@ class HomepageController extends AbstractController
     {
         // Récupère le produit correspondant à l'id donné
         $product = $productRepository->find($id);
-        
+
         // Vérifie si le produit existe
         if (!$product) {
             throw $this->createNotFoundException('Le produit demandé n\'existe pas.');
         }
-        
+
         return $this->render('product/index.html.twig', [
-            'categories' => $categoryRepository->findAll(),
+            'category' => $categoryRepository->findAll(),
             'product' => $product, // envoie le produit unique, pas tous les produits
         ]);
     }
-    
-    #[Route('/collection/all', name: 'app_collection_all') ]
+
+    #[Route('/collection/all', name: 'app_collection_all')]
     public function collection(ProductRepository $productRepository): Response
     {
         return $this->render('collection/index.html.twig', [
             'products' => $productRepository->findAll(),
         ]);
     }
+
+    #[Route('/drop/{name}', name: 'app_drop')]
+    public function drop(string $name, CategoryRepository $categoryRepository): Response
+    {
+        // Récupérer la catégorie par son nom
+        $category = $categoryRepository->findOneBy(['Name' => $name]);
+        if (!$category) {
+            throw $this->createNotFoundException('La catégorie demandée n\'existe pas.');
+        }
+
+        $products = $category->getProducts(); // Utilisation de la relation ManyToMany
+
+        return $this->render('drop/index.html.twig', [
+            'products' => $products,
+            'category' => $category,
+            
+        ]);
+    }
+
+
+
+
 }
