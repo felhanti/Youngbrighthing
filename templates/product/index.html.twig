@@ -48,7 +48,13 @@
 
                 {# Boutons d'action #}
                 <div class="mt-4">
-                    <a href="#" class="btn btn-dark text-gold rounded">Ajouter au panier</a>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <!-- Si l'utilisateur est connecté, il peut ajouter au panier -->
+        <a href="#" class="btn btn-dark text-gold rounded">Ajouter au panier</a>
+    {% else %}
+        <!-- Si l'utilisateur n'est pas connecté, redirection vers la page de connexion -->
+        <a href="{{ path('app_login') }}" class="btn btn-dark text-gold rounded">Ajouter au panier</a>
+    {% endif %}
                     <a href="Javascript:history.go(-1)" class="btn btn-secondary rounded">Retour en arriere</a>
                 </div>
             </div>
