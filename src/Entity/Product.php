@@ -55,6 +55,12 @@ class Product
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
     private Collection $category;
 
+    /**
+     * @var Collection<int, Cart>
+     */
+    #[ORM\ManyToMany(targetEntity: Cart::class, mappedBy: 'product')]
+    private Collection $carts;
+
     // #[ORM\Column(length: 255, nullable: true)]
     // private ?string $image = null;
 
@@ -62,6 +68,7 @@ class Product
     {
         $this->add_date = new \DateTime(); // Définit la date actuelle par défaut
         $this->category = new ArrayCollection();
+        $this->carts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -198,5 +205,32 @@ class Product
     public function getImageSize(): ?int
     {
         return $this->imageSize;
+    }
+
+    /**
+     * @return Collection<int, Cart>
+     */
+    public function getCarts(): Collection
+    {
+        return $this->carts;
+    }
+
+    public function addCart(Cart $cart): static
+    {
+        if (!$this->carts->contains($cart)) {
+            $this->carts->add($cart);
+            $cart->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCart(Cart $cart): static
+    {
+        if ($this->carts->removeElement($cart)) {
+            $cart->removeProduct($this);
+        }
+
+        return $this;
     }
 }
