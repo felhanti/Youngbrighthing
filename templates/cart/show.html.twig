@@ -1,26 +1,70 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Cart{% endblock %}
+{% block title %}Mon Panier{% endblock %}
 
 {% block body %}
-    <h1>Cart</h1>
+<div class="container my-5">
+    <!-- Titre de la page -->
+    <h1 class="text-center mb-4">Mon Panier</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ cart.id }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ cart.date ? cart.date|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- Tableau des articles -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Photo</th>
+                    <th>Nom</th>
+                    <th>Prix Unitaire</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set total = 0 %}
+                {% for product in cart.getProduct %}
+                    {% set subtotal = product.price %}
+                    {% set total = total + subtotal %}
+                    <tr>
+                        <td>
+                            <img src="{{ asset('images/product/' ~ product.imageName) }}" alt="{{ product.imageName }}" class="img-fluid" width="100">
+                        </td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price | number_format(2, ',', ' ') }} €</td>
+                
+                        <td>
+                            <!-- Bouton pour supprimer un article -->
+                            <form method="post" action="{{ path('app_cart_remove', { 'id': product.id }) }}">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    Supprimer
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center">Votre panier est vide.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <a href="{{ path('app_cart_index') }}">back to list</a>
-
-    <a href="{{ path('app_cart_edit', {'id': cart.id}) }}">edit</a>
-
-    {{ include('cart/_delete_form.html.twig') }}
+    <!-- Résumé du panier -->
+    <div class="row">
+        <div class="col-md-6 offset-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Résumé</h4>
+                    <p class="card-text">
+                        <strong>Total HT : </strong> {{ (total / 1.2) | number_format(2, ',', ' ') }} €<br>
+                        <strong>TVA (20%) : </strong> {{ (total - (total / 1.2)) | number_format(2, ',', ' ') }} €<br>
+                        <strong>Total TTC : </strong> {{ total | number_format(2, ',', ' ') }} €
+                    </p>
+                    {# <a href="{{ path('app_checkout') }}" class="btn btn-success btn-block">
+                        Passer la commande
+                    </a> #}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
