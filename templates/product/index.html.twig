@@ -1,64 +1,69 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ product.name }} - Détails du produit
+	{{ product.name }}
+	- Détails du produit
 {% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="row">
-            
-            {# Section pour l'image de produit #}
-            <div class="col-md-6">
-                <div class="text-center">
-                    <img src="{{ asset('images/product/' ~ product.imageName) }}" alt="{{ product.name }}" class="img-product rounded">
-                </div>
-            </div>
+	<div class="container mt-5">
+		<div
+			class="row">
 
-            {# Section pour les détails du produit #}
-            <div class="col-md-6">
-                
-                {# Catégories du produit #}
-                <div class="my-3 text-secondary fs-5">
-                    {% for category in product.category %}
-                        <span>{{ category.name }}</span>
-                    {% endfor %}
-                </div>
+			{# Section pour l'image de produit #}
+			<div class="col-md-6">
+				<div class="text-center">
+					<img src="{{ asset('images/product/' ~ product.imageName) }}" alt="{{ product.name }}" class="img-product rounded">
+				</div>
+			</div>
 
-                {# Nom du produit #}
-                <div class="my-2 fs-2">{{ product.name }}</div>
-                
-                {# Prix du produit #}
-                <div class="my-2 text-white fs-3">
-                    {{ product.price | number_format(2, ',', ' ') }} €
-                </div>
-                <hr>
+			{# Section pour les détails du produit #}
+			<div
+				class="col-md-6">
 
-                {# Description du produit #}
-                <div class="my-2">
-                    <div class="text-secondary fs-6">Description :</div>
-                    <p class="fw-bold fs-5">{{ product.description }}</p>
-                </div>
+				{# Catégories du produit #}
+				<div class="my-3 text-secondary fs-5">
+					{% for category in product.category %}
+						<span>{{ category.name }}</span>
+					{% endfor %}
+				</div>
 
-                {# Taille du produit #}
-                <div class="my-2">
-                    <div class="text-secondary fs-6">Taille : </div>
-                    <p class="fw-bold fs-5">{{ product.size }}</p>
-                </div>
+				{# Nom du produit #}
+				<div class="my-2 fs-2">{{ product.name }}</div>
 
-                {# Boutons d'action #}
-                <div class="mt-4">
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <!-- Si l'utilisateur est connecté, il peut ajouter au panier -->
-        <a href="#" class="btn btn-dark text-gold rounded">Ajouter au panier</a>
-    {% else %}
-        <!-- Si l'utilisateur n'est pas connecté, redirection vers la page de connexion -->
-        <a href="{{ path('app_login') }}" class="btn btn-dark text-gold rounded">Ajouter au panier</a>
-    {% endif %}
-                    <a href="Javascript:history.go(-1)" class="btn btn-secondary rounded">Retour en arriere</a>
-                </div>
-            </div>
-        </div>
-    </div>
+				{# Prix du produit #}
+				<div class="my-2 text-white fs-3">
+					{{ product.price | number_format(2, ',', ' ') }}
+					€
+				</div>
+				<hr>
+
+				{# Description du produit #}
+				<div class="my-2">
+					<div class="text-secondary fs-6">Description :</div>
+					<p class="fw-bold fs-5">{{ product.description }}</p>
+				</div>
+
+				{# Taille du produit #}
+				<div class="my-2">
+					<div class="text-secondary fs-6">Taille :
+					</div>
+					<p class="fw-bold fs-5">{{ product.size }}</p>
+				</div>
+
+				<div class="mt-4">
+					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+						<!-- Formulaire pour ajouter le produit au panier -->
+						<form action="{{ path('app_cart_add', {id: product.id}) }}" method="post" style="display: inline;">
+							<button type="submit" class="btn btn-dark text-gold rounded">Ajouter au panier</button>
+						</form>
+					{% else %}
+						<!-- Si l'utilisateur n'est pas connecté, redirection vers la page de connexion -->
+						<a href="{{ path('app_login') }}" class="btn btn-dark text-gold rounded">Ajouter au panier</a>
+					{% endif %}
+					<a href="Javascript:history.go(-1)" class="btn btn-secondary rounded">Retour en arrière</a>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
-

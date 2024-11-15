@@ -16,7 +16,7 @@ class Cart
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\ManyToOne(inversedBy: 'carts')]
@@ -31,6 +31,7 @@ class Cart
     public function __construct()
     {
         $this->product = new ArrayCollection();
+        $this->date = new \DateTime();
     }
 
     public function getId(): ?int
