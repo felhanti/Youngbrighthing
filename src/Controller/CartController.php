@@ -112,4 +112,35 @@ final class CartController extends AbstractController
         ]);
     }
 
+    #[Route('/cart/clear/{id}', name: 'app_cart_clear', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function clearCart(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $cart = $entityManager->getRepository(Cart::class)->find($id);
+
+        if (!$cart) {
+            throw $this->createNotFoundException("Panier non trouvé.");
+        }
+
+        $connectedUser = $this->getUser();
+
+        // Vérifier que le panier appartient à l'utilisateur connecté
+        if ($cart->getUser() !== $connectedUser) {
+            throw $this->createAccessDeniedException("Vous n'avez pas accès à ce panier.");
+        }
+
+        // Remettre chaque produit comme non vendu
+        foreach ($cart->getProduct() as $product) {
+            $product->setIssold(true);
+        }
+
+        // Vider le panier
+        $cart->getProduct()->clear();
+
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Le panier a été vidé avec succès.');
+
+        return $this->redirectToRoute('app_cart_show', ['id' => $cart->getId()]);
+    }
 }
