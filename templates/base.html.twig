@@ -18,13 +18,12 @@
 				{{ importmap('app') }}
 			{% endblock %}
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
 		{% endblock %}
 	</head>
 	<body>
 		<header>
 			<!-- Navigation principale -->
-			<nav
+			<nav 
 				class="color white d-flex justify-content-between align-items-center">
 				<!-- Container gauche pour le logo et burger -->
 				<div
@@ -76,10 +75,10 @@
 								<a class="nav-link text-gold" href="{{ path('app_collection_all') }}">Collections</a>
 							</li>
 							<li>
-								<a class="nav-link text-gold" href="#">Lookbook</a>
+								<a class="nav-link text-gold" href="{{ path('app_campagne') }}">Campagne</a>
 							</li>
 							<li>
-								<a class="nav-link text-gold" href="#">Edito</a>
+								<a class="nav-link text-gold" href="{{ path('app_histoire') }}">Histoire</a>
 							</li>
 						</ul>
 					</div>
@@ -94,10 +93,10 @@
 							<a class="nav-link fs-3" href="{{ path('app_collection_all') }}">Collections</a>
 						</li>
 						<li>
-							<a class="nav-link fs-3" href="#">Lookbook</a>
+							<a class="nav-link fs-3" href="{{ path('app_campagne') }}">Campagne</a>
 						</li>
 						<li>
-							<a class="nav-link fs-3" href="#">Edito</a>
+							<a class="nav-link fs-3" href="{{ path('app_histoire') }}">Histoire</a>
 						</li>
 					</ul>
 				</div>

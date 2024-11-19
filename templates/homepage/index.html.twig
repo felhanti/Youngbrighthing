@@ -8,14 +8,13 @@
 		<div class="carousel slide" data-bs-ride="carousel">
 			<div class="carousel-inner">
 				{% for product in products %}
-					<div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="2500">
+					<div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="500">
 						<img src="{{ asset('images/product/' ~ product.imageName) }}" class="d-block w-100" alt="{{ product.name }}">
 					</div>
 				{% endfor %}
 			</div>
 			<!-- Texte fixe pour toutes les images -->
 			<div class="carousel-caption d-none d-md-block text-black">
-				<h5 class="display-4 fw-bold">YOUNGBRIGHTHING</h5>
 				<p class="lead">Élever votre style, briser les codes!</p>
 				<a href="{{ path('app_collection_all') }}" class="btn btn-dark btn-lg text-gold">SHOP NOW</a>
 			</div>

@@ -6,7 +6,7 @@
 <div class="container my-5">
     <!-- Messages flash -->
     {% for label, messages in app.flashes %}
-        <div class="alert alert-{{ label }} mt-3">
+        <div class="alert alert-success mt-3">
             {% for message in messages %}
                 {{ message }}
             {% endfor %}
