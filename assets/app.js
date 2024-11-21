@@ -42,3 +42,27 @@ document.getElementById('toggle-password').addEventListener('click', function ()
     }
 });
 
+const inputs = document.querySelectorAll('.form-control');
+
+inputs.forEach(input => {
+    input.addEventListener('input', function () {
+        if (this.id === 'password') { // Vérifie si c'est le champ mot de passe
+            if (this.value.length >= 8) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+            }
+        } else {
+            // Pour les autres champs, utiliser la validation standard
+            if (this.checkValidity()) {
+                this.classList.remove('is-invalid');
+                this.classList.add('is-valid');
+            } else {
+                this.classList.remove('is-valid');
+                this.classList.add('is-invalid');
+            }
+        }
+    });
+});
