@@ -53,7 +53,7 @@ class RegistrationController extends AbstractController
             );
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -64,29 +64,32 @@ class RegistrationController extends AbstractController
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository): Response
     {
-
-        $id = $request->query->get('id'); // retrieve the user id from the url
+        // Récupérer l'identifiant utilisateur depuis l'URL
+        $id = $request->query->get('id');
         if (null === $id) {
-            return $this->redirectToRoute('home');
-        }
-
-        $user = $userRepository->find($id);
-
-        if (null === $user) {
-            return $this->redirectToRoute('home');
-        }
-        try {
-            $this->emailVerifier->handleEmailConfirmation($request, $user);
-
-
-        } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
-
+            $this->addFlash('warning', 'Aucun identifiant utilisateur trouvé dans le lien de vérification.');
             return $this->redirectToRoute('app_login');
         }
-
-        $this->addFlash('success', 'Votre adresse mail a bien été verifié');
-
-        return $this->redirectToRoute('home');
+    
+        // Récupérer l'utilisateur correspondant à l'identifiant
+        $user = $userRepository->find($id);
+        if (null === $user) {
+            $this->addFlash('warning', 'Utilisateur introuvable.');
+            return $this->redirectToRoute('app_login');
+        }
+    
+        try {
+            // Vérifier l'email
+            $this->emailVerifier->handleEmailConfirmation($request, $user);
+        } catch (VerifyEmailExceptionInterface $exception) {
+            // Ajouter un message flash en cas d'erreur de vérification
+            $this->addFlash('warning', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
+            return $this->redirectToRoute('app_login');
+        }
+    
+        // Ajouter un message flash de succès si tout s'est bien passé
+        $this->addFlash('success', 'Votre adresse e-mail a bien été vérifiée.');
+    
+        return $this->redirectToRoute('app_login');
     }
-}
+}    
