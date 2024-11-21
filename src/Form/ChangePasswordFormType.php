@@ -21,31 +21,31 @@ class ChangePasswordFormType extends AbstractType
                 'type' => PasswordType::class,
                 'options' => [
                     'attr' => [
-                        'autocomplete' => 'new-password',
+                        'autocomplete' => 'nouveau-mot-de-passe',
                     ],
                 ],
                 'first_options' => [
                     'constraints' => [
                         new NotBlank([
-                            'message' => 'Please enter a password',
+                            'message' => 'Veuillez entrer un mot de passe',
                         ]),
                         new Length([
                             'min' => 8,
-                            'minMessage' => 'Your password should be at least {{ limit }} characters',
-                            // max length allowed by Symfony for security reasons
+                            'minMessage' => 'Votre mot de passe doit comporter au moins {{ limit }} caractères',
+                            // longueur maximale autorisée par Symfony pour des raisons de sécurité
                             'max' => 4096,
                         ]),
-                        // new PasswordStrength(),
-                        // new NotCompromisedPassword(),
+                        new PasswordStrength(),
+                        new NotCompromisedPassword(),
                     ],
-                    'label' => 'New password',
+                    'label' => 'Nouveau mot de passe',
                 ],
                 'second_options' => [
-                    'label' => 'Repeat Password',
+                    'label' => 'Répéter le mot de passe',
                 ],
-                'invalid_message' => 'The password fields must match.',
-                // Instead of being set onto the object directly,
-                // this is read and encoded in the controller
+                'invalid_message' => 'Les champs de mot de passe doivent correspondre.',
+                // Au lieu d'être directement défini sur l'objet,
+                // celui-ci est lu et encodé dans le contrôleur
                 'mapped' => false,
             ])
         ;
