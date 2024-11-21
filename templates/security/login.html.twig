@@ -40,8 +40,10 @@
 				<label for="password" class="form-label">Mot de passe</label>
 				<div class="input-group">
 					<input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
-					<span class="input-group-text bg-white">
-						<img src="{{ asset('assets/svg/eye.svg') }}" alt="Voir le mot de passe" id="toggle-password" style="cursor: pointer;">
+					<span
+						class="input-group-text bg-white">
+						<!-- Ajouter les attributs data pour les images d'œil ouvert et fermé -->
+						<img src="{{ asset('assets/svg/eye_close.svg') }}" alt="Voir le mot de passe" id="toggle-password" style="cursor: pointer;" data-eye-open="{{ asset('assets/svg/eye.svg') }}" data-eye-close="{{ asset('assets/svg/eye_close.svg') }}">
 					</span>
 				</div>
 				<div class="invalid-feedback">
@@ -53,8 +55,8 @@
 
 			<button class="btn btn-lg btn-success w-100" type="submit">Connexion</button>
 			<a class="btn btn-lg btn-primary w-100 mt-2" href="{{ path('app_register') }}">S'inscrire</a>
-			<a class="btn btn-link mt-2 w-100 text-center" href="#">Mot de passe oublié ?</a>
+			<a class="btn btn-link mt-2 w-100 text-center" href="{{ path('app_forgot_password_request') }}">Mot de passe oublié ?</a>
 		</form>
 	</div>
-		
+
 {% endblock %}
