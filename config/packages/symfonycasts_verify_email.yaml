@@ -1,0 +1,3 @@
+symfonycasts_verify_email:
+    lifetime: 3600 # Durée de validité du lien en secondes (ici 1 heure)
+    throttle: 3600 # Intervalle minimum entre deux demandes (facultatif)

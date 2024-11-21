@@ -100,6 +100,16 @@ footer {
   max-width: 100%;
 }
 
+
+#password {
+  padding-right: 2.5rem; /* Assure qu'il y a assez d'espace pour l'icône */
+}
+
+.input-group-text img {
+  width: 20px;
+  height: 20px;
+}
+
 /* Palette : Élégance Classique
 Couleur Principale : Noir (#000000)
 Couleur Secondaire : Blanc (#FFFFFF)
