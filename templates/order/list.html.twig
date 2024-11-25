@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes commandes
+{% endblock %}
+
+{% block body %}
+	<h1>Mes commandes</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Numéro de commande</th>
+				<th>Date</th>
+				<th>Statut</th>
+				<th>Total</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for order in orders %}
+				<tr>
+					<td>{{ order.id }}</td>
+					<td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
+					<td>
+						{% if order.status == 'pending' %}
+							En attente
+						{% elseif order.status == 'processing' %}
+							En cours de traitement
+						{% elseif order.status == 'completed' %}
+							Terminée
+						{% else %}
+							Annulée
+						{% endif %}
+					</td>
+					<td>{{ order.total|number_format(2, ',', ' ') }}
+						€</td>
+					<td>
+						<a href="{{ path('order_summary', {id: order.id}) }}" class="btn btn-sm btn-primary">Voir</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
