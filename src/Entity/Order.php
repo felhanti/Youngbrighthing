@@ -32,12 +32,13 @@ class Order
     /**
      * @var Collection<int, OrderItem>
      */
-    #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'customerOrder')]
+    #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'customerOrder',cascade: ['persist'])]
     private Collection $orderItems;
 
     public function __construct()
     {
         $this->orderItems = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -76,8 +77,14 @@ class Order
 
     public function setStatus(string $status): static
     {
-        $this->status = $status;
+        $differentStatus = ['pending', 'processing', 'completed', 'cancelled'];
 
+        if (!in_array($status, $differentStatus)) {
+            throw new \InvalidArgumentException('Statut non valide.');
+        }
+    
+        $this->status = $status;
+    
         return $this;
     }
 

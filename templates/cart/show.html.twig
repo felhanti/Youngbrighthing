@@ -70,9 +70,9 @@
                         <strong>Total TTC : </strong> {{ total | number_format(2, ',', ' ') }} €
                     </p>
 
-                    <button href="#" class="btn btn-success btn-block">
+                    <a href="{{ path('order_finalize')}}" class="btn btn-success btn-block">
                         Passer la commande
-                    </button>
+                    </a>
 
                     <!-- Bouton pour vider le panier -->
                     <form action="{{ path('app_cart_clear', { 'id': cart.id }) }}" method="post" style="display: inline;">
