@@ -51,13 +51,13 @@ footer {
   object-fit: cover;
 }
 
-.card {
+/* .card {
   transition: transform 0.3s ease;
 }
 
 .card:hover {
   transform: translateY(-10px);
-}
+} */
 
 .object-fit-cover {
   object-fit: cover;
