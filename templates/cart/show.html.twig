@@ -1,89 +1,104 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon Panier{% endblock %}
+{% block title %}Mon Panier
+{% endblock %}
 
 {% block body %}
-<div class="container my-5">
-    <!-- Messages flash -->
-    {% for label, messages in app.flashes %}
-        <div class="alert alert-success mt-3">
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-        </div>
-    {% endfor %}
+	<div
+		class="container my-5">
+		<!-- Messages flash -->
+		{% for label, messages in app.flashes %}
+			<div class="alert alert-{{ label }} mt-3 container" role="alert">
+				{% for message in messages %}
+					{{ message }}
+				{% endfor %}
+			</div>
+		{% endfor %}
 
-    <!-- Titre de la page -->
-    <h1 class="text-center mb-4">Mon Panier</h1>
+		<!-- Titre de la page -->
+		<h1 class="text-center mb-4">Mon Panier</h1>
 
-    <div class="row">
-        <!-- Partie gauche (Panier) -->
-        <div class="col-md-8">
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Photo</th>
-                            <th>Nom</th>
-                            <th>Prix Unitaire</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% set total = 0 %}
-                        {% for product in cart.getProduct %}
-                            {% set subtotal = product.price %}
-                            {% set total = total + subtotal %}
-                            <tr>
-                                <td class="text-center align-item-center">
-                                    <img src="{{ asset('images/product/' ~ product.imageName) }}" alt="{{ product.imageName }}" class="back_img_product" width="50">
-                                </td>
-                                <td class="text-center align-item-center">{{ product.name }}</td>
-                                <td class="text-center align-item-center">{{ product.price | number_format(2, ',', ' ') }} €</td>
-                                <td class="text-center align-item-center">
-                                    <!-- Bouton pour supprimer un article -->
-                                    <form method="post" action="{{ path('app_cart_remove', { 'id': product.id }) }}">
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            Supprimer
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td colspan="4" class="text-center">Votre panier est vide.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+		<div
+			class="row">
+			<!-- Partie gauche (Panier) -->
+			<div class="col-md-8">
+				<div class="table-responsive">
+					<table class="table table-bordered table-hover table-striped">
+						<thead class="thead-light">
+							<tr>
+								<th>Photo</th>
+								<th>Nom</th>
+								<th>Prix Unitaire</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% set total = 0 %}
+							{% for product in cart.getProduct %}
+								{% set subtotal = product.price %}
+								{% set total = total + subtotal %}
+								<tr>
+									<td class="text-center align-item-center">
+										<img src="{{ asset('images/product/' ~ product.imageName) }}" alt="{{ product.imageName }}" class="back_img_product" width="50">
+									</td>
+									<td class="text-center align-item-center">{{ product.name }}</td>
+									<td class="text-center align-item-center">{{ product.price | number_format(2, ',', ' ') }}
+										€</td>
+									<td
+										class="text-center align-item-center">
+										<!-- Bouton pour supprimer un article -->
+										<form method="post" action="{{ path('app_cart_remove', { 'id': product.id }) }}">
+											<button type="submit" class="btn btn-danger btn-sm">
+												Supprimer
+											</button>
+										</form>
+									</td>
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="4" class="text-center">Votre panier est vide.</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
 
-        <!-- Partie droite (Résumé du panier et paiement) -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Résumé</h4>
-                    <p class="card-text">
-                        <strong>Total HT : </strong> {{ (total / 1.2) | number_format(2, ',', ' ') }} €<br>
-                        <strong>TVA (20%) : </strong> {{ (total - (total / 1.2)) | number_format(2, ',', ' ') }} €<br>
-                        <strong>Total TTC : </strong> {{ total | number_format(2, ',', ' ') }} €
-                    </p>
+			<!-- Partie droite (Résumé du panier et paiement) -->
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-body">
+						<h4 class="card-title">Résumé</h4>
+						<p class="card-text">
+							<strong>Total HT :
+							</strong>
+							{{ (total / 1.2) | number_format(2, ',', ' ') }}
+							€<br>
+							<strong>TVA (20%) :
+							</strong>
+							{{ (total - (total / 1.2)) | number_format(2, ',', ' ') }}
+							€<br>
+							<strong>Total TTC :
+							</strong>
+							{{ total | number_format(2, ',', ' ') }}
+							€
+						</p>
 
-                    <a href="{{ path('order_finalize')}}" class="btn btn-success btn-block">
-                        Passer la commande
-                    </a>
+						<a href="{{ path('order_finalize')}}" class="btn btn-success btn-block">
+							Passer la commande
+						</a>
 
-                    <!-- Bouton pour vider le panier -->
-                    <form action="{{ path('app_cart_clear', { 'id': cart.id }) }}" method="post" style="display: inline;">
-                        <input type="hidden" name="_token" value="{{ csrf_token('clear_cart' ~ cart.id) }}">
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment vider le panier ?')">
-                            <i class="bi bi-trash"></i> Vider le panier
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+						<!-- Bouton pour vider le panier -->
+						<form action="{{ path('app_cart_clear', { 'id': cart.id }) }}" method="post" style="display: inline;">
+							<input type="hidden" name="_token" value="{{ csrf_token('clear_cart' ~ cart.id) }}">
+							<button type="submit" class="btn btn-danger" onclick="return confirm('Voulez-vous vraiment vider le panier ?')">
+								<i class="bi bi-trash"></i>
+								Vider le panier
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

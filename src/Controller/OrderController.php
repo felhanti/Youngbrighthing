@@ -27,7 +27,7 @@ class OrderController extends AbstractController
 
         // Vérifie que l'utilisateur est connecté
         if (!$user) {
-            $this->addFlash('error', 'Vous devez être connecté pour finaliser votre commande.');
+            $this->addFlash('danger', 'Vous devez être connecté pour finaliser votre commande.');
             return $this->redirectToRoute('app_login');
         }
 
@@ -35,7 +35,7 @@ class OrderController extends AbstractController
         $cart = $this->cartRepository->findOneBy(['user' => $user]);
 
         if (!$cart || $cart->getProduct()->isEmpty()) {
-            $this->addFlash('error', 'Votre panier est vide.');
+            $this->addFlash('danger', 'Votre panier est vide.');
             return $this->redirectToRoute('app_cart_show', ['id' => $cart->getId()]);
         }
 

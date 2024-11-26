@@ -5,6 +5,14 @@
 {% block body %}
 <h1>Résumé de votre commande</h1>
 
+{% for label, messages in app.flashes %}
+			<div class="alert alert-{{ label }} mt-3 container">
+				{% for message in messages %}
+					{{ message }}
+				{% endfor %}
+			</div>
+		{% endfor %}
+
 <h3>Numéro de commande : {{ order.id }}</h3>
 <p>Date : {{ order.createdAt|date('d/m/Y H:i') }}</p>
 <p>

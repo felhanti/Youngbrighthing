@@ -103,7 +103,17 @@
 			</nav>
 		</header>
 
-		<main class="flex-fill"> {% block body %}{% endblock %}
+		<main class="flex-fill">
+
+		{# {% for label, messages in app.flashes %}
+			<div class="alert alert-{{ label }} mt-3 container">
+				{% for message in messages %}
+					{{ message }}
+				{% endfor %}
+			</div>
+		{% endfor %} #}
+		
+		{% block body %}{% endblock %}
 			</main>
 
 			<!-- Footer -->
