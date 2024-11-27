@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    Bienvenue
+	Bienvenue
 {% endblock %}
 
 {% block body %}
-    <div class="container my-5 p-3">
-        <h1 class="my-3 text-center">
-            Back-office de YOUNGBRIGHTHING
-        </h1>
-        <div class="d-grid gap-2 col-4 mx-auto">
-            <a href="{{ path('app_admin_user_index')}}" class="btn btn-primary">Les utilisateurs</a>
-            <a href="{{ path('app_admin_product_index')}}" class="btn btn-primary">Les produits</a>
-            <a href="{{ path('app_admin_category_index')}}" class="btn btn-primary">Les catégories</a>
-        </div>
-    </div>
+	<div class="container my-5 p-3">
+		<h1 class="my-3 text-center">
+			Back-office de YOUNGBRIGHTHING
+		</h1>
+		<div class="d-grid gap-2 col-4 mx-auto">
+			<a href="{{ path('app_admin_user_index')}}" class="btn btn-primary">Les utilisateurs</a>
+			<a href="{{ path('app_admin_product_index')}}" class="btn btn-primary">Les produits</a>
+			<a href="{{ path('app_admin_category_index')}}" class="btn btn-primary">Les catégories</a>
+		</div>
+	</div>
 {% endblock %}
