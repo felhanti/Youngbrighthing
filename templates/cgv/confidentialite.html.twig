@@ -1,18 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Youngbrighthing
-{% endblock %}
+{% block title %}Politique de Protection des Données - Youngbrighthing{% endblock %}
 
 {% block body %}
-	<main>
-		<body>
-			<h1>Politique de confidentialité</h1>
-			<p>Nous nous engageons à protéger votre vie privée. Voici comment nous utilisons vos données.</p>
-			<h2>1. Collecte des informations</h2>
-			<p>Nous collectons des informations lorsque vous utilisez notre site.</p>
-			<h2>2. Utilisation des informations</h2>
-			<p>Les informations que nous recueillons peuvent être utilisées pour améliorer notre service.</p>
-			<a href="{{ path('home')}}">Retour à l'accueil</a>
-		</body>
+	<main class="container mt-5">
+		<div class="container mt-5">
+			<h1>Politique de Protection des Données</h1>
+			<p>Chez Youngbrighthing, nous accordons une grande importance à la protection de vos données personnelles. Voici comment nous collectons, utilisons et protégeons vos informations.</p>
+
+			<h2>1. Qui sommes-nous et que couvre cette politique ?</h2>
+			<p>La présente Politique de Protection des Données s’applique aux données personnelles que nous collectons lorsque vous utilisez notre site <strong>Youngbrighthing.com</strong>.</p>
+			<p>Elle décrit les méthodes de collecte, d'utilisation et de partage de vos données, ainsi que les choix qui s'offrent à vous concernant leur traitement.</p>
+
+			<h2>2. Qui est responsable du traitement de vos données personnelles ?</h2>
+			<p>Le traitement de vos données personnelles est effectué par <strong>Youngbrighthing</strong>, situé au : 99 rue de Verdun, 92150 Suresnes.</p>
+
+			<h2>3. Quelles données collectons-nous ?</h2>
+			<h3>3.1. Les données que vous nous fournissez :</h3>
+			<ul>
+				<li><strong>Informations de compte :</strong> nom, prénom, date de naissance, adresse e-mail, mot de passe.</li>
+				<li><strong>Informations de transaction :</strong> adresse de livraison et facturation, coordonnées bancaires.</li>
+				<li><strong>Newsletter :</strong> adresse e-mail en cas d'abonnement.</li>
+			</ul>
+			<h3>3.2. Données collectées automatiquement :</h3>
+			<ul>
+				<li>Adresse IP, type de navigateur, système d’exploitation, date et heure d'accès.</li>
+				<li>Cookies et technologies similaires pour analyser l'utilisation du site et personnaliser votre expérience.</li>
+			</ul>
+
+			<h2>4. Comment utilisons-nous vos données ?</h2>
+			<ul>
+				<li>Gérer votre compte et vos commandes.</li>
+				<li>Améliorer notre site et vos interactions avec nos services.</li>
+				<li>Vous informer sur nos produits et offres promotionnelles.</li>
+				<li>Assurer la sécurité et le bon fonctionnement de notre site.</li>
+			</ul>
+
+			<h2>5. Partage de vos données</h2>
+			<p>Vos données personnelles peuvent être partagées avec des tiers :</p>
+			<ul>
+				<li><strong>Fournisseurs de services :</strong> pour exécuter nos prestations.</li>
+				<li><strong>Autorités légales :</strong> en cas d'obligation réglementaire.</li>
+				<li><strong>Partenaires commerciaux :</strong> dans le cadre d'offres spécifiques.</li>
+			</ul>
+
+			<h2>6. Vos droits</h2>
+			<p>Conformément à la réglementation, vous pouvez :</p>
+			<ul>
+				<li>Accéder à vos données personnelles.</li>
+				<li>Demander leur modification ou suppression.</li>
+				<li>Vous opposer à leur traitement ou en limiter l'utilisation.</li>
+				<li>Retirer votre consentement à tout moment.</li>
+			</ul>
+			<p>Pour exercer vos droits, contactez-nous à : <a href="mailto:Youngbrighthing2@gmail.com">Youngbrighthing2@gmail.com</a>.</p>
+
+			<a class="btn btn-dark text-gold mt-3 mb-3" href="{{ path('home')}}">Retour à l'accueil</a>
+		</div>
 	</main>
 {% endblock %}
