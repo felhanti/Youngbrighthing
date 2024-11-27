@@ -1,18 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Youngbrighthing
-{% endblock %}
+{% block title %}Politique de remboursement - Youngbrighthing{% endblock %}
 
 {% block body %}
-	<main>
-		<body>
-			<h1>Politique de retour</h1>
-			<p>Nous souhaitons que vous soyez satisfait de votre achat. Voici notre politique de retour.</p>
-			<h2>1. Délai de retour</h2>
-			<p>Vous avez 30 jours à partir de la date d'achat pour retourner un article.</p>
-			<h2>2. Conditions de retour</h2>
-			<p>Les articles doivent être retournés dans leur état d'origine.</p>
-			<a href="{{ path('home')}}">Retour à l'accueil</a>
-		</body>
+	<main class="container mt-5">
+		<div class="container mt-5">
+			<h1>Politique de remboursement</h1>
+			<p>Nous vous offrons la possibilité de faire rembourser vos achats dans les 15 jours suivant la réception de votre commande.</p>
+			
+			<h2>1. Processus de retour</h2>
+			<p>Il vous suffit de nous envoyer un email à <a href="mailto:Youngbrighthing2@gmail.com">Youngbrighthing2@gmail.com</a> ou via notre page Instagram directement par message : <strong>@Youngbrighthing</strong> avec votre numéro de commande.</p>
+			<p>Nous vous enverrons immédiatement par e-mail les coordonnées où retourner votre colis. Malheureusement, pour le moment, les frais de retour sont à vos frais et ne sont pas remboursables.</p>
+
+			<h2>2. Vérification du colis retourné</h2>
+			<p>Vous recevrez un email de confirmation de bonne réception de notre part, une fois que le paquet arrive à nous, et nous procéderons ensuite à sa vérification.</p>
+
+			<h2>3. Conditions de remboursement</h2>
+			<p>Tout article retourné avec des dommages ne sera malheureusement pas remboursable, ni échangé. Nous vous prions de faire particulièrement attention à ce que le produit nous soit retourné dans le même état que nous l’avons envoyé.</p>
+
+			<h2>4. Délai de remboursement</h2>
+			<p>Si toutes les conditions sont remplies, vous recevrez un courriel de confirmation de remboursement. Ce remboursement arrivera directement sur le même mode de paiement utilisé lors de votre commande, dans les 5 à 7 jours suivant l’email de confirmation de remboursement.</p>
+
+			<a class="btn btn-dark text-gold mt-3 mb-3" href="{{ path('home')}}">Retour à l'accueil</a>
+		</div>
 	</main>
 {% endblock %}

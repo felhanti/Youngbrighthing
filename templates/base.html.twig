@@ -23,7 +23,7 @@
 	<body>
 		<header>
 			<!-- Navigation principale -->
-			<nav 
+			<nav
 				class="color white d-flex justify-content-between align-items-center">
 				<!-- Container gauche pour le logo et burger -->
 				<div
@@ -103,27 +103,16 @@
 			</nav>
 		</header>
 
-		<main class="flex-fill">
-
-		{# {% for label, messages in app.flashes %}
-			<div class="alert alert-{{ label }} mt-3 container">
-				{% for message in messages %}
-					{{ message }}
-				{% endfor %}
-			</div>
-		{% endfor %} #}
-		
-		{% block body %}{% endblock %}
+		<main class="flex-fill"> {% block body %}{% endblock %}
 			</main>
 
 			<!-- Footer -->
-			<footer class="bg-dark text-gold mt-5">
-				<div class="container py-4">
-					<div
-						class="row">
-						<!-- Informations légales -->
-						<div class="col-md-4">
-							<h5>Informations légales</h5>
+			<footer class="bg-dark text-white text-center">
+				<div class="container py-2">
+				<!-- Informations légales -->
+					<div class="row">
+						<div class="col-md-6">
+							<h5 class="text-gold">Informations légales</h5>
 							<ul class="list-unstyled">
 								<li>
 									<a href="{{ path('app_cgv_cgu') }}" class="text-white">CGU</a>
@@ -140,47 +129,24 @@
 							</ul>
 						</div>
 
-						{# <!-- Support -->
-						<div class="col-md-4">
-							<h5>Support</h5>
-							<ul class="list-unstyled">
-								<li>
-									<a href="" class="text-white">FAQ</a>
-								</li>
-								<li>
-									<a href="#" class="text-white">Contactez-nous</a>
-								</li>
-								<li>
-									<a href="#" class="text-white">Suivi de commande</a>
-								</li>
-								<li>
-									<a href="#" class="text-white">Livraison</a>
-								</li>
-							</ul>
-						</div> #}
 
 						<!-- Restez connecté -->
-						<div class="col-md-4 logo">
-							<h5>Restez connecté</h5>
-							<div>
-								<a href="https://www.facebook.com" class="text-white logo me-2">
-									<img src="{{ asset('assets/svg/facebook.svg') }}" alt="Facebook"/>
-								</a>
-								<a href="https://www.instagram.com/youngbrighthing/" class="text-white logo me-2" target="_blank">
-									<img src="{{ asset('assets/svg/instagram.svg') }}" alt="Youtube"/>
-								</a>
-								<a href="https://www.youtube.com" class="text-white logo me-2">
-									<img src="{{ asset('assets/svg/youtube.svg') }}" alt="Youtube"/>
-								</a>
-							</div>
+						<div class="col-md-6">
+							<h5 class="mb-3 text-gold">Suivez-nous</h5>
+							<a href="https://www.instagram.com/youngbrighthing/" target="_blank" class="d-inline-block">
+								<img src="{{ asset('assets/svg/instagram.svg') }}" alt="Instagram" style="width: 50px; height: 50px;"/>
+							</a>
+							<p class="mt-2">Retrouvez-nous sur Instagram</p>
 						</div>
 					</div>
-
-					<div class="text-center mt-3">
-						<p class="mb-0">&copy; 2024 Youngbrighthing. Tous droits réservés.</p>
-					</div>
 				</div>
-			</footer>
 
+				<div class="text-center text-gold mt-1 mb-2">
+					<p class="mb-0">&copy;
+						{{ "now"|date("Y") }}
+						Youngbrighthing. Tous droits réservés.</p>
+				</div>
+			</div>
 		</body>
 	</html>
+</footer></body></html>
