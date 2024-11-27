@@ -1,57 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Résumé de votre commande
-{% endblock %}
+{% block title %}Résumé de votre commande{% endblock %}
 
 {% block body %}
-	<h1>Résumé de votre commande</h1>
+	<div class="container mt-5">
+		<h1 class="text-center">Résumé de votre commande</h1>
 
-	{% for label, messages in app.flashes %}
-		<div class="alert alert-{{ label }} mt-3 container">
-			{% for message in messages %}
-				{{ message }}
-			{% endfor %}
+		{% for label, messages in app.flashes %}
+			<div class="alert alert-{{ label }} mt-3">
+				{% for message in messages %}
+					{{ message }}
+				{% endfor %}
+			</div>
+		{% endfor %}
+
+		<div class="order-summary mt-4">
+			<h3>Numéro de commande : <span class="text-muted">{{ order.id }}</span></h3>
+			<p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
+			<p><strong>Statut :</strong>
+				{% if order.status == 'pending' %}
+					<span class="badge badge-pill bg-warning text-dark">En attente</span>
+				{% elseif order.status == 'processing' %}
+					<span class="badge badge-pill bg-info text-white">En cours de traitement</span>
+				{% elseif order.status == 'completed' %}
+					<span class="badge badge-pill bg-success text-white">Terminée</span>
+				{% else %}
+					<span class="badge badge-pill bg-danger text-white">Annulée</span>
+				{% endif %}
+			</p>
 		</div>
-	{% endfor %}
 
-	<h3>Numéro de commande :
-		{{ order.id }}</h3>
-	<p>Date :
-		{{ order.createdAt|date('d/m/Y H:i') }}</p>
-	<p>
-		Statut :
-		{% if order.status == 'pending' %}
-			En attente
-		{% elseif order.status == 'processing' %}
-			En cours de traitement
-		{% elseif order.status == 'completed' %}
-			Terminée
-		{% else %}
-			Annulée
-		{% endif %}
-	</p>
-
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Produit</th>
-				<th>Prix</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for item in order.orderItems %}
+		<table class="table table-striped mt-4">
+			<thead>
 				<tr>
-					<td>{{ item.productName }}</td>
-					<td>{{ order.total|number_format(2, ',', ' ') }}
-						€</td>
+					<th>Produit</th>
+					<th>Prix</th>
 				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{% for item in order.orderItems %}
+					<tr>
+						<td>{{ item.productName }}</td>
+						<td>{{ item.totalPrice|number_format(2, ',', ' ') }} €</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 
-	<h3>Total :
-		{{ order.total|number_format(2, ',', ' ') }}
-		€</h3>
+		<div class="total mt-4">
+			<h3>Total : <strong>{{ order.total|number_format(2, ',', ' ') }} €</strong></h3>
+		</div>
 
-	<a href="{{ path('home') }}" class="btn btn-primary">Retour à l'accueil</a>
+		<div class="mt-5">
+			<a href="{{ path('home') }}" class="btn btn-dark text-gold mt-3 mb-3">Retour à l'accueil</a>
+		</div>
+	</div>
 {% endblock %}

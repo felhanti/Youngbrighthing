@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Supprime l'alerte après l'animation
       setTimeout(() => alert.remove(), 500);
     }
-  }, 5000);
+  }, 2000);
 });
 
 

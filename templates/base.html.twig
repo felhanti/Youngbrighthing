@@ -46,15 +46,25 @@
 								<img src="{{ asset('assets/svg/gear.svg') }}" width="50" height="50" alt="Administrateur"/>
 							</a>
 						{% endif %}
+						<a class="navbar-brand p-2" href="#">
+							<img src="{{ asset('assets/svg/account.svg') }}" width="50" height="50" alt="Account"/>
+						</a>
+
 						<a class="navbar-brand p-2" href="{{ path('app_logout') }}">
 							<img src="{{ asset('assets/svg/logout.svg') }}" width="50" height="50" alt="Logout"/>
 						</a>
+
 						{% if app.user %}
 							{% set cart = app.user.carts|first %}
 							{% if cart %}
 								<a class="navbar-brand p-2" href="{{ path('app_cart_show', { 'id': cart.id }) }}">
 									<img src="{{ asset('assets/svg/cart.svg') }}" width="50" height="50" alt="Panier"/>
 								</a>
+							{% else %}
+								<a class="navbar-brand p-2">
+									<img src="{{ asset('assets/svg/cart.svg') }}" width="50" height="50" alt="Panier"/>
+								</a>
+
 							{% endif %}
 						{% endif %}
 					{% else %}
@@ -108,7 +118,8 @@
 
 			<!-- Footer -->
 			<footer class="bg-dark text-white text-center">
-				<div class="container py-2">
+				<div
+					class="container py-2">
 					<!-- Informations légales -->
 					<div class="row">
 						<div class="col-md-6">

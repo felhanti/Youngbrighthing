@@ -47,7 +47,7 @@ class OrderController extends AbstractController
             return $this->redirectToRoute('order_summary', ['id' => $order->getId()]);
         } catch (\Exception $e) {
             // En cas d'erreur, renvoie l'utilisateur à la vue du panier
-            $this->addFlash('error', $e->getMessage());
+            $this->addFlash('danger', $e->getMessage());
             return $this->redirectToRoute('app_cart_show', [
                 'id' => $cart->getId()
             ]);
@@ -62,7 +62,7 @@ class OrderController extends AbstractController
 
         // Vérifie que la commande existe et appartient à l'utilisateur connecté
         if (!$order || $order->getUser() !== $this->getUser()) {
-            $this->addFlash('error', 'Commande introuvable ou accès non autorisé.');
+            $this->addFlash('danger', 'Commande introuvable ou accès non autorisé.');
             return $this->redirectToRoute('home');
         }
 

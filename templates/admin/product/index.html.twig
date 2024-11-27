@@ -6,7 +6,8 @@
 {% block body %}
 	<div class="container mt-4">
 		<h1>Gestion des produits</h1>
-
+		<a href="{{ path('app_admin_product_new') }}" class="btn btn-dark text-gold my-3">Nouveau produit</a>
+		<a class="btn btn-dark text-gold my-3">Rendre tout les articles disponibles</a>
 		<table class="table">
 			<thead>
 				<tr>
@@ -63,6 +64,6 @@
 			</tbody>
 		</table>
 
-		<a href="{{ path('app_admin_product_new') }}" class="btn btn-primary m-1">Nouveau produit</a>
+		<a class="btn btn-dark text-gold my-3" href="{{ path('app_admin_dashboard') }}">Retour au dashboard</a>
 	</div>
 {% endblock %}

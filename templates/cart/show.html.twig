@@ -8,7 +8,7 @@
 		class="container my-5">
 		<!-- Messages flash -->
 		{% for label, messages in app.flashes %}
-			<div class="alert alert-{{ label }} mt-3 container" role="alert">
+			<div class="alert alert-{{ label }} mt-3 container">
 				{% for message in messages %}
 					{{ message }}
 				{% endfor %}
