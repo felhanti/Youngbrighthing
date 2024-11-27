@@ -21,11 +21,13 @@
 					<tr>
 						<td>{{ category.id }}</td>
 						<td>{{ category.Name }}</td>
-						<td>{% if category.Last %}
+						<td>
+							{% if category.Last %}
 								<span class="badge bg-success fs-6">Oui</span>
 							{% else %}
 								<span class="badge bg-danger fs-6">Non</span>
-							{% endif %}</td>
+							{% endif %}
+						</td>
 						<td>
 							{# <a href="{{ path('app_admin_category_show', {'id': category.id}) }}" class="btn btn-info">Voir</a> #}
 							<a href="{{ path('app_admin_category_edit', {'id': category.id}) }}" class="btn btn-warning">Modifier</a>

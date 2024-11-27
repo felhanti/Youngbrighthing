@@ -1,35 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Réinitialiser votre mot de passe{% endblock %}
+{% block title %}Réinitialiser votre mot de passe
+{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        {% for flash_error in app.flashes('reset_password_error') %}
-            <div class="alert alert-danger">
-                {{ flash_error }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
+	<div class="container mt-5">
+		{% for flash_error in app.flashes('reset_password_error') %}
+			<div class="alert alert-danger">
+				{{ flash_error }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		{% endfor %}
 
-        <div class="card shadow p-4">
-            <h1 class="h3 mb-4 text-center">Réinitialiser votre mot de passe</h1>
+		<div class="card shadow p-4">
+			<h1 class="h3 mb-4 text-center">Réinitialiser votre mot de passe</h1>
 
-            {{ form_start(requestForm, { 'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'} }) }}
-            
-            <div class="mb-3">
-                <label for="{{ requestForm.email.vars.id }}" class="form-label">Adresse e-mail</label>
-                {{ form_widget(requestForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Votre adresse e-mail'}}) }}
-                <div class="form-text text-muted">
-                    Entrez votre adresse e-mail, et nous vous enverrons un lien pour réinitialiser votre mot de passe.
-                </div>
-                {{ form_errors(requestForm.email) }}
-            </div>
+			{{ form_start(requestForm, { 'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'} }) }}
 
-            <button class="btn btn-primary w-100 mt-3">
-                <i class="bi bi-envelope"></i> Envoyer l'email de réinitialisation du mot de passe
-            </button>
-            
-            {{ form_end(requestForm) }}
-        </div>
-    </div>
+			<div class="mb-3">
+				<label for="{{ requestForm.email.vars.id }}" class="form-label">Adresse e-mail</label>
+				{{ form_widget(requestForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Votre adresse e-mail'}}) }}
+				<div class="form-text text-muted">
+					Entrez votre adresse e-mail, et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+				</div>
+				{{ form_errors(requestForm.email) }}
+			</div>
+
+			<button class="btn btn-primary w-100 mt-3">
+				<i class="bi bi-envelope"></i>
+				Envoyer l'email de réinitialisation du mot de passe
+			</button>
+
+			{{ form_end(requestForm) }}
+		</div>
+	</div>
 {% endblock %}

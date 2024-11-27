@@ -1,51 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.name }}{% endblock %}
+{% block title %}
+	{{ product.name }}
+{% endblock %}
 
 {% block body %}
-<div class="container-lg mt-4">
-    <h1>{{ product.name }}</h1>
+	<div class="container-lg mt-4">
+		<h1>{{ product.name }}</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ product.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ product.Name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ product.Description }}</td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>{{ product.price }}</td>
-            </tr>
-            <tr>
-                <th>Is_sold</th>
-                <td>{{ product.isSold ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Size</th>
-                <td>{{ product.size }}</td>
-            </tr>
-            <tr>
-                <th>Add_date</th>
-                <td>{{ product.addDate ? product.addDate|date('d/m/Y') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Categorie</th>
-                <td>{{ category.name }}</td>
-            </tr>
-        </tbody>
-    </table>
+		<table class="table">
+			<tbody>
+				<tr>
+					<th>Id</th>
+					<td>{{ product.id }}</td>
+				</tr>
+				<tr>
+					<th>Name</th>
+					<td>{{ product.Name }}</td>
+				</tr>
+				<tr>
+					<th>Description</th>
+					<td>{{ product.Description }}</td>
+				</tr>
+				<tr>
+					<th>Price</th>
+					<td>{{ product.price }}</td>
+				</tr>
+				<tr>
+					<th>Is_sold</th>
+					<td>{{ product.isSold ? 'Yes' : 'No' }}</td>
+				</tr>
+				<tr>
+					<th>Size</th>
+					<td>{{ product.size }}</td>
+				</tr>
+				<tr>
+					<th>Add_date</th>
+					<td>{{ product.addDate ? product.addDate|date('d/m/Y') : '' }}</td>
+				</tr>
+				<tr>
+					<th>Categorie</th>
+					<td>{{ category.name }}</td>
+				</tr>
+			</tbody>
+		</table>
 
-    <a class="btn btn-info mr-1" href="{{ path('app_admin_product_index') }}">Retour à la liste</a>
+		<a class="btn btn-info mr-1" href="{{ path('app_admin_product_index') }}">Retour à la liste</a>
 
-    <a class="btn btn-warning m-1" href="{{ path('app_admin_product_edit', {'id': product.id}) }}">Modifier</a>
+		<a class="btn btn-warning m-1" href="{{ path('app_admin_product_edit', {'id': product.id}) }}">Modifier</a>
 
-    {{ include('admin/product/_delete_form.html.twig') }}
-{% endblock %}
+		{{ include('admin/product/_delete_form.html.twig') }}
+	{% endblock %}

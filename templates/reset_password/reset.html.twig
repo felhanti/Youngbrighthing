@@ -1,31 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Réinitialiser votre mot de passe{% endblock %}
+{% block title %}Réinitialiser votre mot de passe
+{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="card shadow-sm p-4">
-            <h1 class="text-center mb-4">Réinitialiser votre mot de passe</h1>
+	<div class="container mt-5">
+		<div class="card shadow-sm p-4">
+			<h1 class="text-center mb-4">Réinitialiser votre mot de passe</h1>
 
-            {{ form_start(resetForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+			{{ form_start(resetForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
 
-            <div class="mb-3">
-                {{ form_label(resetForm.plainPassword.first, 'Nouveau mot de passe', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(resetForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Entrez votre nouveau mot de passe'}}) }}
-                {{ form_errors(resetForm.plainPassword.first, {'attr': {'class': 'text-danger'}}) }}
-            </div>
+			<div class="mb-3">
+				{{ form_label(resetForm.plainPassword.first, 'Nouveau mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+				{{ form_widget(resetForm.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Entrez votre nouveau mot de passe'}}) }}
+				{{ form_errors(resetForm.plainPassword.first, {'attr': {'class': 'text-danger'}}) }}
+			</div>
 
-            <div class="mb-3">
-                {{ form_label(resetForm.plainPassword.second, 'Répéter le mot de passe', {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(resetForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Confirmez votre mot de passe'}}) }}
-                {{ form_errors(resetForm.plainPassword.second, {'attr': {'class': 'text-danger'}}) }}
-            </div>
+			<div class="mb-3">
+				{{ form_label(resetForm.plainPassword.second, 'Répéter le mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+				{{ form_widget(resetForm.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Confirmez votre mot de passe'}}) }}
+				{{ form_errors(resetForm.plainPassword.second, {'attr': {'class': 'text-danger'}}) }}
+			</div>
 
-            <div class="d-grid">
-                <button class="btn btn-primary btn-lg" type="submit">Réinitialiser le mot de passe</button>
-            </div>
+			<div class="d-grid">
+				<button class="btn btn-primary btn-lg" type="submit">Réinitialiser le mot de passe</button>
+			</div>
 
-            {{ form_end(resetForm) }}
-        </div>
-    </div>
+			{{ form_end(resetForm) }}
+		</div>
+	</div>
 {% endblock %}
