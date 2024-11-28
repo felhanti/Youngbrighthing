@@ -44,7 +44,7 @@ class OrderController extends AbstractController
             $order = $this->cartToOrderService->createOrderFromCart($user, $cart); // Passer le panier et l'utilisateur ici
 
             $this->addFlash('success', 'Votre commande a été finalisée avec succès.');
-            return $this->redirectToRoute('order_summary', ['id' => $order->getId()]);
+            return $this->redirectToRoute('payement_stripe', ['orderId' => $order->getId()]);
         } catch (\Exception $e) {
             // En cas d'erreur, renvoie l'utilisateur à la vue du panier
             $this->addFlash('danger', $e->getMessage());
