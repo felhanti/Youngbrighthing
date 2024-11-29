@@ -41,7 +41,7 @@ final class CartController extends AbstractController
         $cart->addProduct($product);
 
         // Marquer le produit comme vendu
-        $product->setIssold(false);
+        // $product->setIssold(false);
 
         // Sauvegarder le panier et mettre à jour l'état du produit
         $entityManager->persist($cart);

@@ -24,12 +24,12 @@ class PayementController extends AbstractController
 
     #[Route("/order/create-session-stripe/{orderId}", name: "payement_stripe")]
     public function stripeCheckout(int $orderId, Request $request): RedirectResponse
-    {dd($_ENV['STRIPE_SECRET_KEY'], $_SERVER['STRIPE_SECRET_KEY'], getenv('STRIPE_SECRET_KEY'));
+    {
         // Récupérez votre clé secrète depuis les paramètres de configuration
-        // Stripe::setApiKey($this->getParameter('stripe_secret_key'));
+        Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
         $order = $this->entityManagerInterface->getRepository(Order::class)->find($orderId);
-
+        
         if (!$order) {
             throw $this->createNotFoundException('Commande non trouvée');
         }
@@ -52,17 +52,17 @@ class PayementController extends AbstractController
                 ],
                 'mode' => 'payment',
                 'success_url' => $this->generateUrl('order_summary', ['id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
-                'cancel_url' => $this->generateUrl('order_finalize', ['id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+                'cancel_url' => $this->generateUrl('app_cart_show', ['id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
                 // 'return_url' => $this->generateUrl('home'),
             ]);
-
             // Mettez à jour le statut de la commande si nécessaire
-            $order->setStatus('completed');
-            $this->entityManagerInterface->persist($order);
-            $this->entityManagerInterface->flush();
+            // $order->setStatus('completed');
+            // $this->entityManagerInterface->persist($order);
+            // $this->entityManagerInterface->flush();
 
             // Redirection vers la page de paiement Stripe
-            return new RedirectResponse($checkout_session->url);
+            return new RedirectResponse(url: $checkout_session->url);
+            
 
         } catch (\Exception $e) {
             // Gérez les erreurs Stripe

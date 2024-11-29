@@ -1,44 +1,53 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mes commandes
-{% endblock %}
+{% block title %}Mes commandes{% endblock %}
 
 {% block body %}
-	<h1>Mes commandes</h1>
+<div class="container my-5">
+    <h1 class="text-center mb-4">Mes commandes</h1>
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th>Numéro de commande</th>
-				<th>Date</th>
-				<th>Statut</th>
-				<th>Total</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for order in orders %}
-				<tr>
-					<td>{{ order.id }}</td>
-					<td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
-					<td>
-						{% if order.status == 'pending' %}
-							En attente
-						{% elseif order.status == 'processing' %}
-							En cours de traitement
-						{% elseif order.status == 'completed' %}
-							Terminée
-						{% else %}
-							Annulée
-						{% endif %}
-					</td>
-					<td>{{ order.total|number_format(2, ',', ' ') }}
-						€</td>
-					<td>
-						<a href="{{ path('order_summary', {id: order.id}) }}" class="btn btn-sm btn-primary">Voir</a>
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Numéro de commande</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td><strong>#{{ order.id }}</strong></td>
+                        <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
+                        <td>
+                            {% if order.status == 'pending' %}
+                                <span class="badge bg-warning text-dark">En attente</span>
+                            {% elseif order.status == 'processing' %}
+                                <span class="badge bg-info text-dark">En cours de traitement</span>
+                            {% elseif order.status == 'completed' %}
+                                <span class="badge bg-success">Terminée</span>
+                            {% else %}
+                                <span class="badge bg-danger">Annulée</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ order.total|number_format(2, ',', ' ') }} €</td>
+                        <td>
+                            <a href="{{ path('order_summary', {id: order.id}) }}" class="btn btn-sm btn-primary">
+                                <i ></i> Voir
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">Aucune commande disponible.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
+

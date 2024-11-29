@@ -22,7 +22,7 @@ class OrderController extends AbstractController
 
     #[Route("/order/finalize", name: "order_finalize")]
     public function finalizeOrder(): Response
-    {
+    { 
         $user = $this->getUser();
 
         // Vérifie que l'utilisateur est connecté
@@ -56,7 +56,7 @@ class OrderController extends AbstractController
 
     #[Route("/order/summary/{id}", name: "order_summary")]
     public function orderSummary(int $id, OrderRepository $orderRepository): Response
-    {
+    { 
         // Récupère la commande par son ID
         $order = $orderRepository->find($id);
 
