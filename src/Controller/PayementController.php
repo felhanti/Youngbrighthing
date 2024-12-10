@@ -56,9 +56,9 @@ class PayementController extends AbstractController
                 // 'return_url' => $this->generateUrl('home'),
             ]);
             // Mettez à jour le statut de la commande si nécessaire
-            // $order->setStatus('completed');
-            // $this->entityManagerInterface->persist($order);
-            // $this->entityManagerInterface->flush();
+            $order->setStatus('completed');
+            $this->entityManagerInterface->persist($order);
+            $this->entityManagerInterface->flush();
 
             // Redirection vers la page de paiement Stripe
             return new RedirectResponse(url: $checkout_session->url);
