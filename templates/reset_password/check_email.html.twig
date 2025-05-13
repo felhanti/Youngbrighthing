@@ -1,29 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Email de réinitialisation envoyé
-{% endblock %}
+{% block title %}Email de réinitialisation envoyé{% endblock %}
 
 {% block body %}
-	<div class="container mt-5">
-		<div class="card shadow p-4">
-			<div class="card-body text-center">
-				<h1 class="h3 mb-4">Email de réinitialisation envoyé</h1>
+<div class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md mx-auto">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:p-6 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-green-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <h1 class="text-2xl font-bold text-gray-900 mb-4 font-serif">Email de réinitialisation envoyé</h1>
 
-				<p class="text-muted">
-					Si un compte correspondant à votre adresse e-mail existe, un e-mail vient de vous être envoyé avec un lien que vous pouvez utiliser pour réinitialiser votre mot de passe.
-				</p>
-				<p class="text-muted">
-					Ce lien expirera dans
-					<strong>{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}</strong>.
-				</p>
+                <p class="text-gray-600 mb-2">
+                    Si un compte correspondant à votre adresse e-mail existe, un e-mail vient de vous être envoyé avec un lien que vous pouvez utiliser pour réinitialiser votre mot de passe.
+                </p>
+                <p class="text-gray-600 mb-4">
+                    Ce lien expirera dans
+                    <span class="font-semibold">{{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}</span>.
+                </p>
 
-				<p class="mt-3">
-					Si vous ne recevez pas d'email, veuillez vérifier votre dossier spam ou
-					<a href="{{ path('app_forgot_password_request') }}" class="text-decoration-none text-primary">réessayez</a>.
-				</p>
+                <p class="text-gray-600 mb-6">
+                    Si vous ne recevez pas d'email, veuillez vérifier votre dossier spam ou
+                    <a href="{{ path('app_forgot_password_request') }}" class="font-medium text-yb-dark hover:text-yb-gold">réessayez</a>.
+                </p>
 
-				<a href="{{ path('app_login') }}" class="btn btn-primary w-100 mt-4">Retour à la page de connexion</a>
-			</div>
-		</div>
-	</div>
+                <a href="{{ path('app_login') }}" class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
+                    Retour à la page de connexion
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

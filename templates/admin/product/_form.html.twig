@@ -1,13 +1,110 @@
-{{ form_start(form) }}
-
-{{ form_row(form.name) }}
-{{ form_row(form.description) }}
-{{ form_row(form.price) }}
-{{ form_row(form.is_sold) }}
-{{ form_row(form.size) }}
-{{ form_row(form.add_date) }}
-{{ form_row(form.category) }}
-{{ form_row(form.imageFile) }}
-
-<button class="btn btn-success m-1">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="space-y-6">
+    {{ form_start(form) }}
+    
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                <!-- Nom du produit -->
+                <div class="sm:col-span-3">
+                    {{ form_label(form.name, 'Nom du produit', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.name, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
+                    </div>
+                    {{ form_errors(form.name, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                </div>
+                
+                <!-- Prix -->
+                <div class="sm:col-span-3">
+                    {{ form_label(form.price, 'Prix', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1 relative rounded-md shadow-sm">
+                        {{ form_widget(form.price, {'attr': {'class': 'focus:ring-yb-gold focus:border-yb-gold block w-full pr-12 sm:text-sm border-gray-300 rounded-md'}}) }}
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <span class="text-gray-500 sm:text-sm">€</span>
+                        </div>
+                    </div>
+                    {{ form_errors(form.price, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                </div>
+                
+                <!-- Description -->
+                <div class="sm:col-span-6">
+                    {{ form_label(form.description, 'Description', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.description, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md', 'rows': 4}}) }}
+                    </div>
+                    {{ form_errors(form.description, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                </div>
+                
+                <!-- Taille -->
+                <div class="sm:col-span-3">
+                    {{ form_label(form.size, 'Taille', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.size, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
+                    </div>
+                    {{ form_errors(form.size, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                </div>
+                
+                <!-- Date d'ajout -->
+                <div class="sm:col-span-3">
+                    {{ form_label(form.add_date, 'Date d\'ajout', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1">
+                        {{ form_widget(form.add_date, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
+                    </div>
+                    {{ form_errors(form.add_date, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                </div>
+                
+                <!-- Disponibilité -->
+                <div class="sm:col-span-6">
+                    <div class="flex items-center">
+                        {{ form_widget(form.is_sold, {'attr': {'class': 'h-4 w-4 text-yb-gold focus:ring-yb-gold border-gray-300 rounded'}}) }}
+                        {{ form_label(form.is_sold, 'Produit disponible', {'label_attr': {'class': 'ml-2 block text-sm text-gray-900'}}) }}
+                    </div>
+                    {{ form_errors(form.is_sold, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                </div>
+                
+                <!-- Image du produit -->
+                <div class="sm:col-span-6">
+                    {{ form_label(form.imageFile, 'Image du produit', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                        <div class="space-y-1 text-center">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="flex text-sm text-gray-600">
+                                <label for="{{ form.imageFile.vars.id }}" class="relative cursor-pointer bg-white rounded-md font-medium text-yb-dark hover:text-yb-gold">
+                                    <span>Télécharger un fichier</span>
+                                    {{ form_widget(form.imageFile, {'attr': {'class': 'sr-only'}}) }}
+                                </label>
+                                <p class="pl-1">ou glisser-déposer</p>
+                            </div>
+                            <p class="text-xs text-gray-500">
+                                PNG, JPG, GIF jusqu'à 5MB
+                            </p>
+                        </div>
+                    </div>
+                    {{ form_errors(form.imageFile, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                </div>
+                
+                <!-- Catégories -->
+                <div class="sm:col-span-6">
+                    {{ form_label(form.category, 'Catégories', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+                    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                        {% for choice in form.category %}
+                            <div class="flex items-center">
+                                {{ form_widget(choice, {'attr': {'class': 'h-4 w-4 text-yb-gold focus:ring-yb-gold border-gray-300 rounded'}}) }}
+                                {{ form_label(choice, null, {'label_attr': {'class': 'ml-2 block text-sm text-gray-900'}}) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {{ form_errors(form.category, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+            <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
+                {{ button_label|default('Enregistrer') }}
+            </button>
+        </div>
+    </div>
+    
+    {{ form_end(form) }}
+</div>

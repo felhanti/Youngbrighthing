@@ -1,76 +1,99 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Politique de Protection des Données - Youngbrighthing
-{% endblock %}
+{% block title %}Politique de Protection des Données - Youngbrighthing{% endblock %}
 
 {% block body %}
-	<main class="container mt-5">
-		<div class="container mt-5">
-			<h1>Politique de Protection des Données</h1>
-			<p>Chez Youngbrighthing, nous accordons une grande importance à la protection de vos données personnelles. Voici comment nous collectons, utilisons et protégeons vos informations.</p>
+<div class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:px-6 sm:py-6">
+                <h1 class="text-3xl font-bold text-gray-900 mb-6 font-serif">Politique de Protection des Données</h1>
+                
+                <div class="prose prose-lg max-w-none text-gray-600">
+                    <p class="mb-6">Chez Youngbrighthing, nous accordons une grande importance à la protection de vos données personnelles. Voici comment nous collectons, utilisons et protégeons vos informations.</p>
 
-			<h2>1. Qui sommes-nous et que couvre cette politique ?</h2>
-			<p>La présente Politique de Protection des Données s’applique aux données personnelles que nous collectons lorsque vous utilisez notre site
-				<strong>Youngbrighthing.com</strong>.</p>
-			<p>Elle décrit les méthodes de collecte, d'utilisation et de partage de vos données, ainsi que les choix qui s'offrent à vous concernant leur traitement.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 font-serif">1. Qui sommes-nous et que couvre cette politique ?</h2>
+                    <p class="mb-4">La présente Politique de Protection des Données s'applique aux données personnelles que nous collectons lorsque vous utilisez notre site
+                        <strong>Youngbrighthing.com</strong>.
+                    </p>
+                    <p class="mb-6">Elle décrit les méthodes de collecte, d'utilisation et de partage de vos données, ainsi que les choix qui s'offrent à vous concernant leur traitement.</p>
 
-			<h2>2. Qui est responsable du traitement de vos données personnelles ?</h2>
-			<p>Le traitement de vos données personnelles est effectué par
-				<strong>Youngbrighthing</strong>, situé au : 99 rue de Verdun, 92150 Suresnes.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 font-serif">2. Qui est responsable du traitement de vos données personnelles ?</h2>
+                    <p class="mb-6">Le traitement de vos données personnelles est effectué par
+                        <strong>Youngbrighthing</strong>, situé au : 99 rue de Verdun, 92150 Suresnes.
+                    </p>
 
-			<h2>3. Quelles données collectons-nous ?</h2>
-			<h3>3.1. Les données que vous nous fournissez :</h3>
-			<ul>
-				<li>
-					<strong>Informations de compte :</strong>
-					nom, prénom, date de naissance, adresse e-mail, mot de passe.</li>
-				<li>
-					<strong>Informations de transaction :</strong>
-					adresse de livraison et facturation, coordonnées bancaires.</li>
-				<li>
-					<strong>Newsletter :</strong>
-					adresse e-mail en cas d'abonnement.</li>
-			</ul>
-			<h3>3.2. Données collectées automatiquement :</h3>
-			<ul>
-				<li>Adresse IP, type de navigateur, système d’exploitation, date et heure d'accès.</li>
-				<li>Cookies et technologies similaires pour analyser l'utilisation du site et personnaliser votre expérience.</li>
-			</ul>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 font-serif">3. Quelles données collectons-nous ?</h2>
+                    <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-serif">3.1. Les données que vous nous fournissez :</h3>
+                    <ul class="list-disc pl-6 mb-6 space-y-2">
+                        <li>
+                            <strong>Informations de compte :</strong>
+                            nom, prénom, date de naissance, adresse e-mail, mot de passe.
+                        </li>
+                        <li>
+                            <strong>Informations de transaction :</strong>
+                            adresse de livraison et facturation, coordonnées bancaires.
+                        </li>
+                        <li>
+                            <strong>Newsletter :</strong>
+                            adresse e-mail en cas d'abonnement.
+                        </li>
+                    </ul>
+                    
+                    <h3 class="text-xl font-semibold text-gray-800 mt-6 mb-3 font-serif">3.2. Données collectées automatiquement :</h3>
+                    <ul class="list-disc pl-6 mb-6 space-y-2">
+                        <li>Adresse IP, type de navigateur, système d'exploitation, date et heure d'accès.</li>
+                        <li>Cookies et technologies similaires pour analyser l'utilisation du site et personnaliser votre expérience.</li>
+                    </ul>
 
-			<h2>4. Comment utilisons-nous vos données ?</h2>
-			<ul>
-				<li>Gérer votre compte et vos commandes.</li>
-				<li>Améliorer notre site et vos interactions avec nos services.</li>
-				<li>Vous informer sur nos produits et offres promotionnelles.</li>
-				<li>Assurer la sécurité et le bon fonctionnement de notre site.</li>
-			</ul>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 font-serif">4. Comment utilisons-nous vos données ?</h2>
+                    <ul class="list-disc pl-6 mb-6 space-y-2">
+                        <li>Gérer votre compte et vos commandes.</li>
+                        <li>Améliorer notre site et vos interactions avec nos services.</li>
+                        <li>Vous informer sur nos produits et offres promotionnelles.</li>
+                        <li>Assurer la sécurité et le bon fonctionnement de notre site.</li>
+                    </ul>
 
-			<h2>5. Partage de vos données</h2>
-			<p>Vos données personnelles peuvent être partagées avec des tiers :</p>
-			<ul>
-				<li>
-					<strong>Fournisseurs de services :</strong>
-					pour exécuter nos prestations.</li>
-				<li>
-					<strong>Autorités légales :</strong>
-					en cas d'obligation réglementaire.</li>
-				<li>
-					<strong>Partenaires commerciaux :</strong>
-					dans le cadre d'offres spécifiques.</li>
-			</ul>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 font-serif">5. Partage de vos données</h2>
+                    <p class="mb-4">Vos données personnelles peuvent être partagées avec des tiers :</p>
+                    <ul class="list-disc pl-6 mb-6 space-y-2">
+                        <li>
+                            <strong>Fournisseurs de services :</strong>
+                            pour exécuter nos prestations.
+                        </li>
+                        <li>
+                            <strong>Autorités légales :</strong>
+                            en cas d'obligation réglementaire.
+                        </li>
+                        <li>
+                            <strong>Partenaires commerciaux :</strong>
+                            dans le cadre d'offres spécifiques.
+                        </li>
+                    </ul>
 
-			<h2>6. Vos droits</h2>
-			<p>Conformément à la réglementation, vous pouvez :</p>
-			<ul>
-				<li>Accéder à vos données personnelles.</li>
-				<li>Demander leur modification ou suppression.</li>
-				<li>Vous opposer à leur traitement ou en limiter l'utilisation.</li>
-				<li>Retirer votre consentement à tout moment.</li>
-			</ul>
-			<p>Pour exercer vos droits, contactez-nous à :
-				<a href="mailto:Youngbrighthing2@gmail.com">Youngbrighthing2@gmail.com</a>.</p>
-
-			<a class="btn btn-dark text-gold mt-3 mb-3" href="{{ path('home')}}">Retour à l'accueil</a>
-		</div>
-	</main>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 font-serif">6. Vos droits</h2>
+                    <p class="mb-4">Conformément à la réglementation, vous pouvez :</p>
+                    <ul class="list-disc pl-6 mb-6 space-y-2">
+                        <li>Accéder à vos données personnelles.</li>
+                        <li>Demander leur modification ou suppression.</li>
+                        <li>Vous opposer à leur traitement ou en limiter l'utilisation.</li>
+                        <li>Retirer votre consentement à tout moment.</li>
+                    </ul>
+                    <p class="mb-6">Pour exercer vos droits, contactez-nous à :
+                        <a href="mailto:Youngbrighthing2@gmail.com" class="text-yb-dark hover:text-yb-gold font-medium">Youngbrighthing2@gmail.com</a>.
+                    </p>
+                </div>
+                
+                <div class="mt-10">
+                    <a href="{{ path('home') }}" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                        </svg>
+                        Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
