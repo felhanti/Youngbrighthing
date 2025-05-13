@@ -1,48 +1,67 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mentions Légales - Youngbrighthing
-{% endblock %}
+{% block title %}Mentions Légales - Youngbrighthing{% endblock %}
 
 {% block body %}
-	<main class="container mt-5">
-		<div class="container mt-5">
-			<h1>Mentions Légales</h1>
+<div class="py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:px-6 sm:py-6">
+                <h1 class="text-3xl font-bold text-gray-900 mb-6 font-serif">Mentions Légales</h1>
+                
+                <div class="prose prose-lg max-w-none text-gray-600">
+                    <p class="mb-6">Conformément aux dispositions de la loi n° 2004-575 du 21 juin 2004 pour la confiance en l'économie numérique, il est précisé aux utilisateurs du site Youngbrighthing l'identité des différents intervenants dans le cadre de sa réalisation et de son suivi.</p>
 
-			<p>Conformément aux dispositions de la loi n° 2004-575 du 21 juin 2004 pour la confiance en l'économie numérique, il est précisé aux utilisateurs du site Youngbrighthing l'identité des différents intervenants dans le cadre de sa réalisation et de son suivi.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 font-serif">Édition du site</h2>
+                    <p class="mb-4">Le présent site, accessible à l'URL
+                        <a href="https://www.youngbrighthing.com" class="text-yb-dark hover:text-yb-gold font-medium">Youngbrighthing.com</a>
+                        (le « Site »), est édité par :
+                    </p>
+                    <p class="mb-6">
+                        <strong>Fouad El Hanti</strong>, résidant au 16 rue de la ville l'Évêque, 78008 Paris, de nationalité Française (France), né le 13/02/1992.
+                    </p>
 
-			<h2>Édition du site</h2>
-			<p>Le présent site, accessible à l’URL
-				<a href="https://www.youngbrighthing.com">Youngbrighthing.com</a>
-				(le « Site »), est édité par :</p>
-			<p>
-				<strong>Fouad El Hanti</strong>, résidant au 16 rue de la ville l'Évêque, 78008 Paris, de nationalité Française (France), né le 13/02/1992.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 font-serif">Hébergement</h2>
+                    <p class="mb-6">Le Site est hébergé par la société
+                        <strong>Hostinger International LTD</strong>, dont le siège est situé à l'adresse suivante :
+                        <a href="https://www.hostinger.fr/contact" class="text-yb-dark hover:text-yb-gold font-medium">https://www.hostinger.fr/contact</a>.
+                    </p>
 
-			<h2>Hébergement</h2>
-			<p>Le Site est hébergé par la société
-				<strong>Hostinger International LTD</strong>, dont le siège est situé à l'adresse suivante :
-				<a href="https://www.hostinger.fr/contact">https://www.hostinger.fr/contact</a>.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 font-serif">Directeur de publication</h2>
+                    <p class="mb-6">Le Directeur de la publication du Site est :
+                        <strong>Fouad El Hanti</strong>.
+                    </p>
 
-			<h2>Directeur de publication</h2>
-			<p>Le Directeur de la publication du Site est :
-				<strong>Fouad El Hanti</strong>.</p>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 font-serif">Nous contacter</h2>
+                    <p class="mb-2">
+                        <strong>Par téléphone :</strong>
+                        +33613332564
+                    </p>
+                    <p class="mb-2">
+                        <strong>Par email :</strong>
+                        <a href="mailto:pro.felhanti@gmail.com" class="text-yb-dark hover:text-yb-gold font-medium">pro.felhanti@gmail.com</a>
+                    </p>
+                    <p class="mb-6">
+                        <strong>Par courrier :</strong>
+                        16 rue de la ville l'Évêque, 78008 Paris
+                    </p>
 
-			<h2>Nous contacter</h2>
-			<p>
-				<strong>Par téléphone :</strong>
-				+33613332564</p>
-			<p>
-				<strong>Par email :</strong>
-				<a href="mailto:pro.felhanti@gmail.com">pro.felhanti@gmail.com</a>
-			</p>
-			<p>
-				<strong>Par courrier :</strong>
-				16 rue de la ville l'Évêque, 78008 Paris</p>
-
-			<h2>Données personnelles</h2>
-			<p>Le traitement de vos données à caractère personnel est régi par notre
-				<a href="{{ path('app_cgv_confidentialite') }}">Politique de protection des données</a>, disponible depuis la section "Politique de protection des données", conformément au Règlement Général sur la Protection des Données 2016/679 du 27 avril 2016 (« RGPD »).</p>
-
-			<a class="btn btn-dark text-gold mt-3 mb-3" href="{{ path('home')}}">Retour à l'accueil</a>
-		</div>
-	</main>
+                    <h2 class="text-2xl font-bold text-gray-900 mt-8 mb-4 font-serif">Données personnelles</h2>
+                    <p class="mb-6">Le traitement de vos données à caractère personnel est régi par notre
+                        <a href="{{ path('app_cgv_confidentialite') }}" class="text-yb-dark hover:text-yb-gold font-medium">Politique de protection des données</a>, disponible depuis la section "Politique de protection des données", conformément au Règlement Général sur la Protection des Données 2016/679 du 27 avril 2016 (« RGPD »).
+                    </p>
+                </div>
+                
+                <div class="mt-10">
+                    <a href="{{ path('home') }}" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                        </svg>
+                        Retour à l'accueil
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,14 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvelle catégorie
-{% endblock %}
+{% block title %}Nouvelle catégorie - Administration{% endblock %}
 
 {% block body %}
-	<div class="container mt-4">
-		<h1>Créer une nouvelle catégorie</h1>
+<div class="bg-gray-100 min-h-screen py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="md:flex md:items-center md:justify-between mb-6">
+            <div class="flex-1 min-w-0">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate font-serif">
+                    Créer une nouvelle catégorie
+                </h2>
+                <p class="mt-1 text-sm text-gray-500">
+                    Ajoutez une nouvelle catégorie pour organiser vos produits
+                </p>
+            </div>
+            <div class="mt-4 flex md:mt-0 md:ml-4">
+                <a href="{{ path('app_admin_category_index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
+                    <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Retour à la liste
+                </a>
+            </div>
+        </div>
 
-		{{ include('admin/category/_form.html.twig') }}
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+                <div>
+                    <div>
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Informations de la catégorie</h3>
+                        <p class="mt-1 text-sm text-gray-500">Renseignez les détails de la nouvelle catégorie.</p>
+                    </div>
 
-		<a class="btn btn-info m-1" href="{{ path('app_admin_category_index') }}">Retour à la liste</a>
-	</div>
+                    <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                        <!-- Nom de la catégorie -->
+                        <div class="sm:col-span-3">
+                            {{ form_label(form.name, 'Nom de la catégorie', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            <div class="mt-1">
+                                {{ form_widget(form.name, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md', 'placeholder': 'Ex: Collection Hiver, Vestes, etc.'}}) }}
+                            </div>
+                            {{ form_errors(form.name, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                        </div>
+
+                        <!-- Last Drop -->
+                        <div class="sm:col-span-3">
+                            {{ form_label(form.last, 'Catégorie Last Drop', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            <div class="mt-1">
+                                {{ form_widget(form.last, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
+                            </div>
+                            <p class="mt-1 text-xs text-gray-500">Les produits dans une catégorie "Last Drop" sont mis en avant sur la page d'accueil.</p>
+                            {{ form_errors(form.last, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-5">
+                    <div class="flex justify-end">
+                        <button type="button" onclick="window.location.href='{{ path('app_admin_category_index') }}'" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
+                            Annuler
+                        </button>
+                        <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
+                            Créer
+                        </button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
