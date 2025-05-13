@@ -1,83 +1,204 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Youngbrighthing
+{% block title %}Accueil{% endblock %}
+
+{% block stylesheets %}
+<style>
+    /* Styles spécifiques pour le carousel */
+    .carousel {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .carousel-slide {
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .carousel-slide.active {
+        opacity: 1;
+    }
+    
+    /* Animation de défilement */
+    @keyframes fadeInOut {
+        0%, 45% { opacity: 1; }
+        50%, 95% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+</style>
 {% endblock %}
 
 {% block body %}
-	<main>
-		<div class="carousel slide" data-bs-ride="carousel">
-			<div class="carousel-inner">
-				{% for product in products %}
-					<div class="carousel-item {% if loop.first %}active{% endif %}" data-bs-interval="500">
-						<img src="{{ asset('images/product/' ~ product.imageName) }}" class="d-block w-100" alt="{{ product.name }}">
-					</div>
-				{% endfor %}
-			</div>
-			<!-- Texte fixe pour toutes les images -->
-			<div class="carousel-caption d-none d-md-block text-black">
-				<p class="lead">Élever votre style, briser les codes!</p>
-				<a href="{{ path('app_collection_all') }}" class="btn btn-dark btn-lg text-gold">SHOP NOW</a>
-			</div>
-		</div>
+    <!-- Hero Section avec Carousel -->
+    <div class="relative">
+        <div class="carousel" x-data="{ activeSlide: 0 }" x-init="
+            setInterval(() => {
+                activeSlide = (activeSlide + 1) % {{ products|length }};
+            }, 5000)
+        ">
+            <div class="relative h-screen max-h-[70vh] overflow-hidden">
+                {% for product in products %}
+                    <div 
+                        class="carousel-slide"
+                        :class="{ 'active': activeSlide === {{ loop.index0 }} }"
+                    >
+                        <img src="{{ asset('images/product/' ~ product.imageName) }}" class="object-cover w-full h-full" alt="{{ product.name }}">
+                    </div>
+                {% endfor %}
+                
+                <!-- Overlay et texte sur l'image -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="bg-black bg-opacity-30 p-8 rounded-lg text-center">
+                        <p class="text-white text-2xl md:text-4xl font-serif mb-6">Élever votre style, briser les codes!</p>
+                        <a href="{{ path('app_collection_all') }}" class="inline-block bg-yb-dark text-yb-gold px-8 py-3 text-lg font-medium rounded hover:bg-opacity-90 transition">SHOP NOW</a>
+                    </div>
+                </div>
+                
+                <!-- Indicateurs -->
+                <div class="absolute bottom-4 w-full flex justify-center space-x-2">
+                    {% for i in 0..(products|length - 1) %}
+                        <button 
+                            @click="activeSlide = {{ i }}"
+                            class="w-3 h-3 rounded-full"
+                            :class="{ 'bg-yb-gold': activeSlide === {{ i }}, 'bg-white bg-opacity-50': activeSlide !== {{ i }} }"
+                        ></button>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 
-		<!-- Section Capsules -->
-		<section class="capsules py-5">
-			<div class=" container-fluid">
-				<h2 class="text-center mb-4">Capsules</h2>
-				<p class="text-center mb-5 mx-auto">
-					Troisième histoire de Youngbrighthing, la CAPSULE III déconstruit le costume, s'inspirant d'un univers où les vêtements n'ont plus de limites, laines ajourées, cotons mélangés, mailles déchirées, tissus recyclés, l'idée de vêtement unisexe est toujours présente avec un style brut et urbain, l'élégance et l'esthétique qui rendent chaque pièce unique correspond à toute morphologie.
-				</p>
-				<div class="d-flex justify-content-center gap-5">
-					{% for category in category %}
-						<a href="{{ path('app_drop', { name: category.name }) }}" class="text-uppercase btn btn-dark text-gold px-5">
-							{{ category.name }}</a>
-					{% endfor %}
-				</div>
-			</div>
-		</section>
+    <!-- Section Capsules -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-serif text-center mb-6">Capsules</h2>
+            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">
+                Troisième histoire de Youngbrighthing, la CAPSULE III déconstruit le costume, s'inspirant d'un univers où les vêtements n'ont plus de limites, laines ajourées, cotons mélangés, mailles déchirées, tissus recyclés, l'idée de vêtement unisexe est toujours présente avec un style brut et urbain, l'élégance et l'esthétique qui rendent chaque pièce unique correspond à toute morphologie.
+            </p>
+            
+            <div class="flex flex-wrap justify-center gap-4">
+                {% for category in category %}
+                    <a href="{{ path('app_drop', { name: category.name }) }}" class="px-6 py-3 bg-yb-dark text-yb-gold uppercase font-medium rounded-md hover:bg-opacity-90 transition transform hover:-translate-y-1">
+                        {{ category.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
 
-		<!-- Section Last Drop -->
-		<section class="last-drop p-5 bg-dark">
-			<div class="container-fluid">
-				<h2 class="text-center mb-5 text-gold">Last drop</h2>
-				<div class="row g-4">
-					{% for product in products|filter(product => 'yes' in product.category|map(category => category.last)) %}
-						<div class="col-12 col-lg-3">
-							<div class="card h-100">
-								<img src="{{ asset('images/product/' ~ product.imageName ) }}" class="card-img-top img-card" alt="Article {{ product.id }}">
-								<div class="card-body text-center bg-gray">
-									<h5 class="card-title mb-2text-uppercase">{{ product.name }}</h5>
-									<div class="text-white mb-2">{{ product.price ~ " €"}}</div>
+    <!-- Last Drop Section -->
+    <section class="py-20 bg-yb-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-serif text-center text-yb-gold mb-12">Last Drop</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                {% for product in products|filter(product => product.category.last is defined and product.category.last) %}
+                    <div class="group">
+                        <div class="relative bg-white rounded-t-lg overflow-hidden" style="padding-bottom: 100%;">
+                            <img 
+                                src="{{ asset('images/product/' ~ product.imageName ) }}" 
+                                alt="{{ product.name }}" 
+                                class="absolute w-full h-full object-center object-cover transform group-hover:scale-105 transition duration-300"
+                            >
+                        </div>
+                        <div class="bg-yb-gray p-4 rounded-b-lg">
+                            <h3 class="text-lg font-medium text-yb-dark">{{ product.name }}</h3>
+                            <p class="text-yb-dark font-bold mt-1">{{ product.price ~ " €"}}</p>
+                            
+                            <div class="mt-3">
+                                {% if product.isSold() %}
+                                    <a href="{{ path('app_product', { id: product.id }) }}" class="block w-full text-center py-2 bg-yb-dark text-yb-gold rounded hover:bg-opacity-90 transition">
+                                        Voir
+                                    </a>
+                                {% else %}
+                                    <button class="block w-full text-center py-2 bg-gray-400 text-white rounded cursor-not-allowed" disabled>
+                                        Épuisé
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
 
-									{% if product.isSold() %}
-										<a href="{{ path('app_product', { id: product.id }) }}" class="btn btn-dark text-gold">Voir</a>
-									{% else %}
-										<button class="btn btn-secondary" disabled>Épuisé</button>
-									{% endif %}
+    <!-- À Propos Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl font-serif mb-6">Youngbrighthing - Libérer le Style Sans Limites</h2>
+                    <p class="text-gray-600 leading-relaxed">
+                        Entrez chez Youngbrighthing, où la mode abolit les frontières. CAPSULE III réinvente la tenue, avec des laines ajourées, des coton mélangés et des tissus recyclés. Nos créations unisexes dégagent une élégance urbaine brute, adaptée à toutes les silhouettes. Découvrez une mode sans limites chez Youngbrighthing.
+                    </p>
+                </div>
+                <div class="relative">
+                    <div class="relative h-80 md:h-96">
+                        <img 
+                            src="{{ asset('images/IMG_20240417_172439_073.jpg')}}" 
+                            alt="À propos de Youngbrighthing" 
+                            class="rounded-lg shadow-xl object-cover w-full h-full"
+                        >
+                        <!-- Décoration -->
+                        <div class="absolute -bottom-4 -right-4 w-24 h-24 bg-yb-gold rounded-br-lg -z-10"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
 
-								</div>
-							</div>
-						</div>
-					{% endfor %}
-				</div>
-			</div>
-		</section>
-
-		<!-- Section À Propos -->
-		<section class="about py-5">
-			<div class="container-lg">
-				<div class="row g-0">
-					<div class="col-md-6 p-4">
-						<h2 class="text-center mb-4">Youngbrighthing - Libérer le Style Sans Limites</h2>
-						<p class="text-justify">
-							Entrez chez Youngbrighthing, où la mode abolit les frontières.CAPSULE III réinvente la tenue, avec des laines ajourées, des coton mélangés et des tissus recyclés. Nos créations unisexes dégagent uneélégance urbaine brute, adaptée à toutes les silhouettes. Découvrez une mode sans limites chez Youngbrighthing.
-						</p>
-					</div>
-					<div class="col-md-6">
-						<img src="{{ asset('images/IMG_20240417_172439_073.jpg')}}" alt="À propos de Youngbrighthing" class="img-fluid w-100 h-100 object-fit-cover">
-					</div>
-				</div>
-			</div>
-		</section>
-	</main>
+{% block javascripts %}
+<script>
+    // Script pour le carousel si Alpine.js ne fonctionne pas correctement
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.carousel-slide');
+        const indicators = document.querySelectorAll('.carousel button');
+        let currentSlide = 0;
+        
+        function showSlide(index) {
+            // Masquer tous les slides
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+            });
+            
+            // Afficher le slide demandé
+            slides[index].classList.add('active');
+            
+            // Mettre à jour les indicateurs
+            indicators.forEach((indicator, i) => {
+                if (i === index) {
+                    indicator.classList.add('bg-yb-gold');
+                    indicator.classList.remove('bg-white', 'bg-opacity-50');
+                } else {
+                    indicator.classList.remove('bg-yb-gold');
+                    indicator.classList.add('bg-white', 'bg-opacity-50');
+                }
+            });
+        }
+        
+        // Changement automatique toutes les 5 secondes
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }, 5000);
+        
+        // Ajouter des écouteurs d'événements aux indicateurs
+        indicators.forEach((indicator, i) => {
+            indicator.addEventListener('click', () => {
+                currentSlide = i;
+                showSlide(currentSlide);
+            });
+        });
+        
+        // Afficher le premier slide
+        showSlide(0);
+    });
+</script>
 {% endblock %}

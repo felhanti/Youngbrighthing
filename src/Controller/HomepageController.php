@@ -72,16 +72,20 @@ class HomepageController extends AbstractController
     }
 
     #[Route('/campagne', name: 'app_campagne')]
-    public function campagne(ProductRepository $productRepository): Response
-    {
-        return $this->render('campagne/index.html.twig');
-    }
+public function campagne(ProductRepository $productRepository): Response
+{
+    return $this->render('campagne/index.html.twig', [
+        'products' => $productRepository->findAll(),
+    ]);
+}
 
     #[Route('/histoire', name: 'app_histoire')]
-    public function histoire(ProductRepository $productRepository): Response
-    {
-        return $this->render('histoire/index.html.twig');
-    }
+public function histoire(ProductRepository $productRepository): Response
+{
+    return $this->render('histoire/index.html.twig', [
+        'products' => $productRepository->findAll(),
+    ]);
+}
 
     #[Route('/drop/{name}', name: 'app_drop')]
     public function drop(string $name, CategoryRepository $categoryRepository): Response

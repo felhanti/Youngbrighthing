@@ -1,29 +1,119 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block title %}Collections - Youngbrighthing{% endblock %}
 
 {% block body %}
-	<section class="last-drop p-5">
-		<div class="container-fluid">
-			<h2 class="text-center mb-5 text-dark">Collections</h2>
-			<div class="row g-4">
-				{% for product in products %}
-					<div class="col-12 col-lg-3">
-						<div class="card h-100">
-							<img src="{{ asset('images/product/' ~ product.imageName ) }}" class="card-img-top img-card" alt="Article {{ product.id }}">
-							<div class="card-body text-center bg-dark">
-								<h5 class="card-title mb-2 text-uppercase text-white">{{ product.name }}</h5>
-								<div class="text-gold mb-2">{{ product.price ~ " €"}}</div>
-								{% if product.isSold() %}
-									<a href="{{ path('app_product', { id: product.id }) }}" class="btn btn-light">Voir</a>
-								{% else %}
-									<button class="btn btn-secondary" disabled>Épuisé</button>
-								{% endif %}
-							</div>
-						</div>
-					</div>
-				{% endfor %}
-			</div>
-		</div>
-	</section>
+<!-- Hero Banner -->
+<div class="relative">
+    <div class="absolute inset-0 bg-gradient-to-r from-yb-dark to-gray-800 opacity-90"></div>
+    <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
+        <h1 class="text-4xl font-extrabold tracking-tight text-white md:text-5xl lg:text-6xl font-serif">Collections</h1>
+        <p class="mt-6 max-w-3xl text-xl text-gray-300">
+            Explorez l'univers Youngbrighthing à travers notre gamme de créations uniques. Chaque pièce raconte une histoire de durabilité et d'élégance.
+        </p>
+    </div>
+</div>
+
+<!-- Filter Bar -->
+<div class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center">
+                <span class="text-sm font-medium text-gray-700 mr-3">{{ products|length }} produits</span>
+                
+                <!-- Cette section simule des filtres, à activer ultérieurement -->
+                <div class="hidden sm:flex space-x-3">
+                    <button type="button" class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+                        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z" clip-rule="evenodd" />
+                        </svg>
+                        Filtres
+                    </button>
+                    <button type="button" class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+                        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                        </svg>
+                        Trier par
+                    </button>
+                </div>
+            </div>
+            
+            <nav class="flex space-x-4" aria-label="Tabs">
+                <a href="{{ path('app_collection_all') }}" class="px-3 py-2 text-sm font-medium text-yb-dark bg-yb-gold rounded-md" aria-current="page">
+                    Tous les produits
+                </a>
+                <a href="#" class="px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 rounded-md">
+                    Dernières arrivées
+                </a>
+                <a href="#" class="px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 rounded-md">
+                    Meilleures ventes
+                </a>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Products Grid -->
+<div class="bg-white">
+    <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+            {% for product in products %}
+                <div class="group">
+                    <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                        {% if product.imageName %}
+                            <img 
+                                src="{{ asset('images/product/' ~ product.imageName) }}" 
+                                alt="{{ product.name }}" 
+                                class="w-full h-full object-center object-cover group-hover:opacity-90 transition-opacity"
+                            >
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                <span class="text-gray-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </span>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Badges des catégories superposés -->
+                        <div class="absolute top-2 left-2 flex flex-wrap gap-1">
+                            {% for category in product.category %}
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                                    {{ category.name }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="mt-4 flex justify-between">
+                        <div>
+                            <h3 class="text-sm text-gray-900 font-medium">{{ product.name }}</h3>
+                            <p class="mt-1 text-xs text-gray-500">Taille: {{ product.size }}</p>
+                        </div>
+                        <p class="text-base font-medium text-gray-900">{{ product.price|number_format(2, ',', ' ') }} €</p>
+                    </div>
+                    <div class="mt-2">
+                        {% if product.isSold() %}
+                            <a href="{{ path('app_product', { id: product.id }) }}" class="w-full inline-block text-center py-2 bg-yb-dark text-yb-gold rounded hover:bg-opacity-90 transition-colors">
+                                Voir le produit
+                            </a>
+                        {% else %}
+                            <button disabled class="w-full inline-block text-center py-2 bg-gray-200 text-gray-400 rounded cursor-not-allowed">
+                                Épuisé
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-span-full text-center py-12">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                    </svg>
+                    <h3 class="mt-2 text-base font-medium text-gray-900">Aucun produit disponible</h3>
+                    <p class="mt-1 text-sm text-gray-500">Nos nouvelles collections seront bientôt disponibles.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}
