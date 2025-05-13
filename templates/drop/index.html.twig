@@ -1,33 +1,144 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{% endblock %}
+{% block title %}{{ category.name }} - Collection Youngbrighthing{% endblock %}
 
 {% block body %}
-	<section class="last-drop p-5">
-		<div
-			class="container-fluid">
-			<!-- Afficher les catégories d'un produit -->
-			<h2 class="text-center mb-5 text-dark">
-				{{ category.name }}
-			</h2>
-			<div class="row g-4">
-				{% for product in products %}
-					<div class="col-12 col-lg-4">
-						<div class="card h-100">
-							<img src="{{ asset('images/product/' ~ product.imageName ) }}" class="card-img-top img-card" alt="Article {{ product.id }}">
-							<div class="card-body text-center bg-dark">
-								<h5 class="card-title mb-2 text-uppercase text-white">{{ product.name }}</h5>
-								<div class="text-gold mb-2">{{ product.price ~ " €"}}</div>
-								{% if product.isSold() %}
-									<a href="{{ path('app_product', { id: product.id }) }}" class="btn btn-light">Voir</a>
-								{% else %}
-									<button class="btn btn-secondary" disabled>Épuisé</button>
-								{% endif %}
-							</div>
-						</div>
-					</div>
-				{% endfor %}
-			</div>
-		</div>
-	</section>
+<!-- Hero Section -->
+<div class="relative bg-gray-900 py-32">
+    <!-- Background Overlay -->
+    <div class="absolute inset-0 overflow-hidden">
+        <!-- Utilisons la première image de produit comme fond si disponible -->
+        {% if products|length > 0 %}
+            <img src="{{ asset('images/product/' ~ products|first.imageName) }}" alt="Background" class="w-full h-full object-cover opacity-20">
+        {% endif %}
+        <!-- Overlay gradient -->
+        <div class="absolute inset-0 bg-gradient-to-b from-yb-dark via-yb-dark to-transparent opacity-80"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl font-bold tracking-tight text-white md:text-5xl font-serif">
+            {{ category.name }}
+        </h1>
+        <p class="mt-6 max-w-lg mx-auto text-xl text-gray-300">
+            Découvrez notre collection {{ category.name }} - des pièces uniques où style et durabilité se rencontrent.
+        </p>
+    </div>
+</div>
+
+<!-- Products Section -->
+<div class="bg-white">
+    <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+        <!-- Stats -->
+        <div class="pb-12 border-b border-gray-200">
+            <dl class="grid grid-cols-1 gap-y-8 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+                <div class="text-center">
+                    <dt class="order-2 mt-2 text-lg leading-6 font-medium text-gray-500">Produits</dt>
+                    <dd class="order-1 text-5xl font-extrabold text-yb-dark">{{ products|length }}</dd>
+                </div>
+                
+                <div class="text-center">
+                    <dt class="order-2 mt-2 text-lg leading-6 font-medium text-gray-500">Origine</dt>
+                    <dd class="order-1 text-5xl font-extrabold text-yb-dark">France</dd>
+                </div>
+                
+                <div class="text-center">
+                    <dt class="order-2 mt-2 text-lg leading-6 font-medium text-gray-500">Upcycling</dt>
+                    <dd class="order-1 text-5xl font-extrabold text-yb-dark">100%</dd>
+                </div>
+            </dl>
+        </div>
+        
+        <!-- Description -->
+        <div class="mt-10 text-center">
+            <p class="max-w-3xl mx-auto text-xl text-gray-500">
+                Chaque pièce est unique, soigneusement conçue dans notre atelier avec des matériaux durables et de qualité. 
+                Notre processus d'upcycling transforme des vêtements existants en créations contemporaines et intemporelles.
+            </p>
+        </div>
+        
+        <!-- Products Grid -->
+        <div class="mt-16">
+            {% if products|length > 0 %}
+                <div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+                    {% for product in products %}
+                        <div class="group relative">
+                            <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-md overflow-hidden xl:aspect-w-7 xl:aspect-h-8 transition-all duration-300 shadow-sm group-hover:shadow-lg">
+                                {% if product.imageName %}
+                                    <img 
+                                        src="{{ asset('images/product/' ~ product.imageName) }}" 
+                                        alt="{{ product.name }}" 
+                                        class="w-full h-full object-center object-cover group-hover:scale-105 transition-transform duration-500"
+                                    >
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                        <span class="text-gray-400">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                {% endif %}
+                                <!-- Badge indiquant la disponibilité -->
+                                <div class="absolute top-2 right-2">
+                                    {% if product.isSold() %}
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Disponible
+                                        </span>
+                                    {% else %}
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            Épuisé
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="mt-4 flex items-center justify-between">
+                                <div>
+                                    <h3 class="text-sm font-medium text-gray-900">
+                                        <a href="{{ path('app_product', { id: product.id }) }}" class="hover:underline">
+                                            {{ product.name }}
+                                        </a>
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-500">{{ product.size }}</p>
+                                </div>
+                                <p class="text-base font-medium text-gray-900">{{ product.price|number_format(2, ',', ' ') }} €</p>
+                            </div>
+                            <div class="mt-3">
+                                {% if product.isSold() %}
+                                    <a href="{{ path('app_product', { id: product.id }) }}" class="block w-full py-2 text-center bg-yb-dark text-yb-gold rounded-md hover:bg-opacity-90 transition-colors duration-200">
+                                        Voir le produit
+                                    </a>
+                                {% else %}
+                                    <button disabled class="block w-full py-2 text-center bg-gray-300 text-gray-500 rounded-md cursor-not-allowed">
+                                        Épuisé
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-12">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+                    </svg>
+                    <h3 class="mt-2 text-lg font-medium text-gray-900">Aucun produit</h3>
+                    <p class="mt-1 text-base text-gray-500">Nous n'avons pas encore de produits dans cette collection.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- CTA -->
+        <div class="mt-20 text-center">
+            <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Découvrez nos autres collections</h2>
+            <div class="mt-8 flex justify-center space-x-6">
+                <a href="{{ path('app_collection_all') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none">
+                    Toutes les collections
+                </a>
+                <a href="{{ path('home') }}" class="inline-flex items-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none">
+                    Retour à l'accueil
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

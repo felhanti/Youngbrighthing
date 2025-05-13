@@ -1,69 +1,217 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Youngbrighthing
-{% endblock %}
+{% block title %}Notre Histoire - Youngbrighthing{% endblock %}
 
 {% block body %}
-	  <div class="container my-5">
-        <h1 class="text-center mb-5">Notre Histoire</h1>
-
+<div class="bg-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+                <span class="block">Notre Histoire</span>
+            </h1>
+            <p class="mt-4 max-w-3xl mx-auto text-xl text-gray-500">
+                L'histoire de Youngbrighthing, une marque née de la passion pour la mode durable et l'upcycling.
+            </p>
+        </div>
+        
         <!-- Section 1 -->
-        <div class="row align-items-center mb-5">
-            <div class="col-md-6">
-                <p>
-                    Tout a commencé en 2020, avec une idée simple mais pleine d’ambition : et si nous pouvions redonner
-                    vie aux vêtements oubliés, ceux qui dorment dans des placards ou qui ont été mis de côté ? Et si, au
-                    lieu de produire toujours plus, nous transformions l'existant en créations uniques, responsables et
-                    porteuses de sens ? C'est ainsi qu'est née notre marque.
-                </p>
-            </div>
-            <div class="col-md-6 text-center">
-                <img src="https://via.placeholder.com/500x300" class="img-fluid rounded" alt="Image transformation">
+        <div class="mt-20">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
+                <div class="lg:col-span-5">
+                    <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+                        Les débuts
+                    </h2>
+                    <p class="mt-3 text-lg text-gray-500">
+                        Tout a commencé en 2020, avec une idée simple mais pleine d'ambition : et si nous pouvions redonner
+                        vie aux vêtements oubliés, ceux qui dorment dans des placards ou qui ont été mis de côté ? Et si, au
+                        lieu de produire toujours plus, nous transformions l'existant en créations uniques, responsables et
+                        porteuses de sens ? C'est ainsi qu'est née notre marque.
+                    </p>
+                </div>
+                <div class="mt-10 lg:mt-0 lg:col-span-7">
+                    <div class="relative lg:pl-10">
+                        <div class="bg-gray-200 rounded-lg shadow-lg overflow-hidden">
+                            <div class="relative" style="padding-top: 75%;">  <!-- 4:3 aspect ratio -->
+                                {% if products is defined and products|length > 0 %}
+                                    <img 
+                                        class="absolute inset-0 w-full h-full object-contain p-4" 
+                                        src="{{ asset('images/product/' ~ products[0].imageName) }}" 
+                                        alt="Image transformation"
+                                    >
+                                {% else %}
+                                    <img 
+                                        class="absolute inset-0 w-full h-full object-contain p-4" 
+                                        src="{{ asset('images/IMG_20240417_172439_073.jpg') }}" 
+                                        alt="Image transformation"
+                                    >
+                                {% endif %}
+                            </div>
+                            <!-- Overlay design element -->
+                            <div class="absolute inset-0 bg-gradient-to-tr from-yb-dark to-transparent opacity-10 pointer-events-none"></div>
+                        </div>
+                        <!-- Decorative element -->
+                        <div class="absolute -bottom-6 -left-6 w-24 h-24 bg-yb-gold rounded-br-2xl -z-10"></div>
+                    </div>
+                </div>
             </div>
         </div>
-
+        
         <!-- Section 2 -->
-        <div class="row align-items-center mb-5">
-            <div class="col-md-6 text-center">
-                <img src="https://via.placeholder.com/500x300" class="img-fluid rounded" alt="Image upcycling">
-            </div>
-            <div class="col-md-6">
-                <p>
-                    Au cœur de notre démarche, l'upcycling. Ce processus créatif nous permet de déconstruire des
-                    vêtements de qualité, souvent jugés obsolètes, pour les transformer en pièces modernes et stylées.
-                    Chacune de nos créations raconte une histoire et reflète notre engagement envers une mode
-                    circulaire et éthique.
-                </p>
+        <div class="mt-32">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
+                <div class="lg:col-span-7 order-2 lg:order-1">
+                    <div class="relative lg:pr-10">
+                        <div class="bg-gray-200 rounded-lg shadow-lg overflow-hidden">
+                            <div class="relative" style="padding-top: 75%;">  <!-- 4:3 aspect ratio -->
+                                {% if products is defined and products|length > 1 %}
+                                    <img 
+                                        class="absolute inset-0 w-full h-full object-contain p-4" 
+                                        src="{{ asset('images/product/' ~ products[1].imageName) }}" 
+                                        alt="Image upcycling"
+                                    >
+                                {% elseif products is defined and products|length > 0 %}
+                                    <img 
+                                        class="absolute inset-0 w-full h-full object-contain p-4" 
+                                        src="{{ asset('images/product/' ~ products[0].imageName) }}" 
+                                        alt="Image upcycling"
+                                    >
+                                {% else %}
+                                    <img 
+                                        class="absolute inset-0 w-full h-full object-contain p-4" 
+                                        src="{{ asset('images/IMG_20240417_172439_073.jpg') }}" 
+                                        alt="Image upcycling"
+                                    >
+                                {% endif %}
+                            </div>
+                            <!-- Overlay design element -->
+                            <div class="absolute inset-0 bg-gradient-to-br from-yb-gold to-transparent opacity-10 pointer-events-none"></div>
+                        </div>
+                        <!-- Decorative element -->
+                        <div class="absolute -top-6 -right-6 w-24 h-24 bg-yb-dark rounded-tl-2xl -z-10"></div>
+                    </div>
+                </div>
+                <div class="mt-10 lg:mt-0 lg:col-span-5 order-1 lg:order-2">
+                    <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+                        L'Upcycling
+                    </h2>
+                    <p class="mt-3 text-lg text-gray-500">
+                        Au cœur de notre démarche, l'upcycling. Ce processus créatif nous permet de déconstruire des
+                        vêtements de qualité, souvent jugés obsolètes, pour les transformer en pièces modernes et stylées.
+                        Chacune de nos créations raconte une histoire et reflète notre engagement envers une mode
+                        circulaire et éthique.
+                    </p>
+                </div>
             </div>
         </div>
-
+        
         <!-- Section 3 -->
-        <div class="row align-items-center mb-5">
-            <div class="col-md-6">
-                <p>
-                    Nous avons voulu aller au-delà de l’esthétique. En choisissant nos vêtements, vous choisissez aussi
-                    de participer à une révolution de la mode : consommer moins, consommer mieux. Chaque pièce est une
-                    invitation à repenser nos habitudes et à réduire notre impact sur la planète.
-                </p>
-            </div>
-            <div class="col-md-6 text-center">
-                <img src="https://via.placeholder.com/500x300" class="img-fluid rounded" alt="Image impact écologique">
+        <div class="mt-32">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
+                <div class="lg:col-span-5">
+                    <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+                        Notre Vision
+                    </h2>
+                    <p class="mt-3 text-lg text-gray-500">
+                        Nous avons voulu aller au-delà de l'esthétique. En choisissant nos vêtements, vous choisissez aussi
+                        de participer à une révolution de la mode : consommer moins, consommer mieux. Chaque pièce est une
+                        invitation à repenser nos habitudes et à réduire notre impact sur la planète.
+                    </p>
+                </div>
+                <div class="mt-10 lg:mt-0 lg:col-span-7">
+                    <div class="relative lg:pl-10">
+                        <div class="bg-gray-200 rounded-lg shadow-lg overflow-hidden">
+                            <div class="relative" style="padding-top: 75%;">  <!-- 4:3 aspect ratio -->
+                                {% if products is defined and products|length > 2 %}
+                                    <img 
+                                        class="absolute inset-0 w-full h-full object-contain p-4" 
+                                        src="{{ asset('images/product/' ~ products[2].imageName) }}" 
+                                        alt="Impact écologique"
+                                    >
+                                {% elseif products is defined and products|length > 0 %}
+                                    <img 
+                                        class="absolute inset-0 w-full h-full object-contain p-4" 
+                                        src="{{ asset('images/product/' ~ products[0].imageName) }}" 
+                                        alt="Impact écologique"
+                                    >
+                                {% else %}
+                                    <img 
+                                        class="absolute inset-0 w-full h-full object-contain p-4" 
+                                        src="{{ asset('images/IMG_20240417_172439_073.jpg') }}" 
+                                        alt="Impact écologique"
+                                    >
+                                {% endif %}
+                            </div>
+                            <!-- Overlay design element -->
+                            <div class="absolute inset-0 bg-gradient-to-tl from-yb-dark to-transparent opacity-10 pointer-events-none"></div>
+                        </div>
+                        <!-- Decorative element -->
+                        <div class="absolute -bottom-6 -left-6 w-24 h-24 bg-yb-gold rounded-tr-2xl -z-10"></div>
+                    </div>
+                </div>
             </div>
         </div>
-
+        
         <!-- Section 4 -->
-        <div class="row align-items-center">
-            <div class="col-md-6 text-center">
-                <img src="https://via.placeholder.com/500x300" class="img-fluid rounded" alt="Image création mode">
+        <div class="mt-32">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-8 items-center">
+                <div class="lg:col-span-7 order-2 lg:order-1">
+                    <div class="relative lg:pr-10">
+                        <div class="bg-gray-200 rounded-lg shadow-lg overflow-hidden">
+                            <div class="relative" style="padding-top: 75%;">  <!-- 4:3 aspect ratio -->
+                                {% if products is defined and products|length > 3 %}
+                                    <img 
+                                        class="absolute inset-0 w-full h-full object-contain p-4" 
+                                        src="{{ asset('images/product/' ~ products[3].imageName) }}" 
+                                        alt="Image création mode"
+                                    >
+                                {% elseif products is defined and products|length > 0 %}
+                                    <img 
+                                        class="absolute inset-0 w-full h-full object-contain p-4" 
+                                        src="{{ asset('images/product/' ~ products[0].imageName) }}" 
+                                        alt="Image création mode"
+                                    >
+                                {% else %}
+                                    <img 
+                                        class="absolute inset-0 w-full h-full object-contain p-4" 
+                                        src="{{ asset('images/IMG_20240417_172439_073.jpg') }}" 
+                                        alt="Image création mode"
+                                    >
+                                {% endif %}
+                            </div>
+                            <!-- Overlay design element -->
+                            <div class="absolute inset-0 bg-gradient-to-bl from-yb-gold to-transparent opacity-10 pointer-events-none"></div>
+                        </div>
+                        <!-- Decorative element -->
+                        <div class="absolute -top-6 -right-6 w-24 h-24 bg-yb-dark rounded-bl-2xl -z-10"></div>
+                    </div>
+                </div>
+                <div class="mt-10 lg:mt-0 lg:col-span-5 order-1 lg:order-2">
+                    <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+                        Notre Mission
+                    </h2>
+                    <p class="mt-3 text-lg text-gray-500">
+                        Aujourd'hui, notre mission est claire : valoriser le passé tout en regardant vers l'avenir. Nos
+                        collections, composées de vestes, jeans et chemises intemporelles, incarnent l'harmonie entre style
+                        et responsabilité. Ensemble, construisons une mode plus durable, une pièce unique à la fois.
+                    </p>
+                </div>
             </div>
-            <div class="col-md-6">
-                <p>
-                    Aujourd’hui, notre mission est claire : valoriser le passé tout en regardant vers l’avenir. Nos
-                    collections, composées de vestes, jeans et chemises intemporelles, incarnent l’harmonie entre style
-                    et responsabilité. Ensemble, construisons une mode plus durable, une pièce unique à la fois.
-                </p>
+        </div>
+        
+        <!-- Call to Action -->
+        <div class="mt-32 text-center">
+            <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+                Rejoignez le Mouvement
+            </h2>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                Découvrez nos collections conçues pour ceux qui veulent faire la différence.
+            </p>
+            <div class="mt-8">
+                <a href="{{ path('app_collection_all') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
+                    Nos Collections
+                </a>
             </div>
         </div>
     </div>
-</body>
+</div>
 {% endblock %}

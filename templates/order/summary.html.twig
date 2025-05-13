@@ -3,56 +3,140 @@
 {% block title %}Résumé de votre commande{% endblock %}
 
 {% block body %}
-	<div class="container mt-5">
-		<h1 class="text-center">Résumé de votre commande</h1>
-
-		{% for label, messages in app.flashes %}
-			<div class="alert alert-{{ label }} mt-3">
-				{% for message in messages %}
-					{{ message }}
-				{% endfor %}
-			</div>
-		{% endfor %}
-
-		<div class="order-summary mt-4">
-			<h3>Numéro de commande : <span class="text-muted">{{ order.id }}</span></h3>
-			<p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
-			<p><strong>Statut :</strong>
-				{% if order.status == 'pending' %}
-					<span class="badge badge-pill bg-warning text-dark">En attente</span>
-				{% elseif order.status == 'processing' %}
-					<span class="badge badge-pill bg-info text-white">En cours de traitement</span>
-				{% elseif order.status == 'completed' %}
-					<span class="badge badge-pill bg-success text-white">Terminée</span>
-				{% else %}
-					<span class="badge badge-pill bg-danger text-white">Annulée</span>
-				{% endif %}
-			</p>
-		</div>
-
-		<table class="table table-striped mt-4">
-			<thead>
-				<tr>
-					<th>Produit</th>
-					<th>Prix</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for item in order.orderItems %}
-					<tr>
-						<td>{{ item.productName }}</td>
-						<td>{{ item.totalPrice|number_format(2, ',', ' ') }} €</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-
-		<div class="total mt-4">
-			<h3>Total : <strong>{{ order.total|number_format(2, ',', ' ') }} €</strong></h3>
-		</div>
-
-		<div class="mt-5">
-			<a href="{{ path('home') }}" class="btn btn-dark text-gold mt-3 mb-3">Retour à l'accueil</a>
-		</div>
-	</div>
+<div class="bg-gray-50 py-12">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div class="bg-yb-dark px-4 py-5 sm:px-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl leading-6 font-medium text-yb-gold">Résumé de votre commande</h2>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
+                        {% if order.status == 'pending' %}
+                            bg-yellow-100 text-yellow-800
+                        {% elseif order.status == 'processing' %}
+                            bg-blue-100 text-blue-800
+                        {% elseif order.status == 'completed' %}
+                            bg-green-100 text-green-800
+                        {% else %}
+                            bg-red-100 text-red-800
+                        {% endif %}
+                    ">
+                        {% if order.status == 'pending' %}
+                            En attente
+                        {% elseif order.status == 'processing' %}
+                            En cours de traitement
+                        {% elseif order.status == 'completed' %}
+                            Terminée
+                        {% else %}
+                            Annulée
+                        {% endif %}
+                    </span>
+                </div>
+                <p class="mt-1 max-w-2xl text-sm text-gray-300">
+                    Merci pour votre achat chez Youngbrighthing.
+                </p>
+            </div>
+            
+            <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+                <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">
+                            Numéro de commande
+                        </dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            #{{ order.id }}
+                        </dd>
+                    </div>
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">
+                            Date
+                        </dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            {{ order.createdAt|date('d/m/Y H:i') }}
+                        </dd>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <dt class="text-sm font-medium text-gray-500">
+                            Articles commandés
+                        </dt>
+                        <dd class="mt-1 text-sm text-gray-900">
+                            <ul class="border border-gray-200 rounded-md divide-y divide-gray-200">
+                                {% for item in order.orderItems %}
+                                    <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm">
+                                        <div class="w-0 flex-1 flex items-center">
+                                            <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" />
+                                            </svg>
+                                            <span class="ml-2 flex-1 truncate">
+                                                {{ item.productName }}
+                                            </span>
+                                        </div>
+                                        <div class="ml-4 flex-shrink-0">
+                                            <span class="font-medium">{{ item.totalPrice|number_format(2, ',', ' ') }} €</span>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </dd>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <dt class="text-sm font-medium text-gray-500">
+                            Total
+                        </dt>
+                        <dd class="mt-1 text-xl font-semibold text-gray-900">
+                            {{ order.total|number_format(2, ',', ' ') }} €
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+            
+            <div class="bg-gray-50 px-4 py-5 sm:px-6 border-t border-gray-200">
+                <div class="flex justify-between items-center">
+                    <a href="{{ path('order_list') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-yb-dark bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
+                        <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        Mes commandes
+                    </a>
+                    
+                    <a href="{{ path('home') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
+                        Continuer mes achats
+                        <svg class="ml-2 -mr-1 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                <div class="px-4 py-5 sm:px-6">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">
+                        Service client
+                    </h3>
+                    <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                        Besoin d'aide avec votre commande ?
+                    </p>
+                </div>
+                <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+                    <div class="flex flex-col space-y-4">
+                        <div class="flex items-center">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                            </svg>
+                            <span class="ml-2 text-sm text-gray-500">contact@youngbrighthing.com</span>
+                        </div>
+                        <div class="flex items-center">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="ml-2 text-sm text-gray-500">Consultez notre <a href="{{ path('app_cgv_retour') }}" class="text-yb-dark hover:text-yb-gold">politique de retour</a></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
