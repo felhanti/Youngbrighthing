@@ -1,30 +1,105 @@
 {% block body %}
-	<div style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
-		<div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden;">
-			<div style="background-color: #007bff; color: white; text-align: center; padding: 20px;">
-				<h1 style="margin: 0; font-size: 24px;">Confirmez votre email</h1>
-			</div>
-			<div style="padding: 20px; color: #333;">
-				<p style="font-size: 16px;">Bonjour,</p>
-				<p style="font-size: 16px; line-height: 1.5;">
-					Veuillez confirmer votre adresse email en cliquant sur le bouton ci-dessous :
-				</p>
-				<div style="text-align: center; margin: 20px 0;">
-					<a href="{{ signedUrl|raw }}" style="background-color: #007bff; color: white; text-decoration: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; display: inline-block;">
-						Confirmer mon Email
-					</a>
-				</div>
-				<p style="font-size: 14px; color: #555;">
-					Ce lien expirera dans
-					<strong>{{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}</strong>
-					heure(s).
-				</p>
-				<p style="font-size: 16px;">Cordialement,<br>
-					L'équipe de support de Youngbrighthing</p>
-			</div>
-			<div style="background-color: #f1f1f1; text-align: center; padding: 10px; font-size: 12px; color: #888;">
-				<p style="margin: 0;">Cet email a été envoyé automatiquement, merci de ne pas répondre.</p>
-			</div>
-		</div>
-	</div>
+<div style="font-family: Arial, sans-serif; background-color: #f9fafb; margin: 0; padding: 0; -webkit-font-smoothing: antialiased;">
+    <div style="min-height: 100vh; padding: 40px 16px;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); overflow: hidden;">
+            <!-- Header -->
+            <div style="background-color: #1A1A1A; padding: 32px; text-align: center;">
+                <h1 style="color: #FFD700; margin: 0; font-size: 28px; font-weight: bold; font-family: 'Playfair Display', serif;">
+                    Confirmez votre adresse email
+                </h1>
+                <div style="margin-top: 8px; height: 2px; width: 60px; background-color: #FFD700; margin-left: auto; margin-right: auto;"></div>
+            </div>
+
+            <!-- Content -->
+            <div style="padding: 32px; color: #1F2937;">
+                <p style="font-size: 18px; color: #1A1A1A; margin: 0 0 24px 0;">
+                    Bonjour,
+                </p>
+                
+                <p style="line-height: 1.6; margin: 0 0 24px 0; color: #4B5563;">
+                    Merci de vous être inscrit sur Youngbrighthing ! Pour finaliser votre inscription et accéder à votre compte, veuillez confirmer votre adresse email.
+                </p>
+
+                <p style="line-height: 1.6; margin: 0 0 32px 0; color: #4B5563;">
+                    Cliquez sur le bouton ci-dessous pour confirmer votre adresse email :
+                </p>
+
+                <!-- CTA Button -->
+                <div style="text-align: center; margin: 32px 0;">
+                    <a href="{{ signedUrl|raw }}" style="
+                        display: inline-block;
+                        background-color: #1A1A1A;
+                        color: #FFD700;
+                        padding: 16px 32px;
+                        text-decoration: none;
+                        border-radius: 8px;
+                        font-weight: bold;
+                        font-size: 16px;
+                        transition: opacity 0.2s;
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    ">
+                        ✨ Confirmer mon adresse email
+                    </a>
+                </div>
+
+                <!-- Alternative link -->
+                <div style="background-color: #F3F4F6; padding: 20px; border-radius: 8px; margin: 24px 0;">
+                    <p style="margin: 0 0 12px 0; font-size: 14px; color: #6B7280;">
+                        Si le bouton ne fonctionne pas, copiez et collez ce lien dans votre navigateur :
+                    </p>
+                    <p style="margin: 0; word-break: break-all;">
+                        <a href="{{ signedUrl|raw }}" style="color: #1A1A1A; text-decoration: underline;">
+                            {{ signedUrl|raw }}
+                        </a>
+                    </p>
+                </div>
+
+                <!-- Security info -->
+                <div style="border-left: 4px solid #FFD700; padding-left: 20px; margin: 24px 0; background-color: #FFFBEB; padding: 16px; border-radius: 0 8px 8px 0;">
+                    <p style="margin: 0 0 8px 0; font-weight: bold; color: #92400E;">
+                        🔒 Informations de sécurité
+                    </p>
+                    <p style="margin: 0; font-size: 14px; color: #92400E;">
+                        Ce lien est valide pendant <strong>{{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}</strong> uniquement et ne peut être utilisé qu'une seule fois.
+                    </p>
+                </div>
+
+                <p style="line-height: 1.6; margin: 24px 0 0 0; color: #4B5563;">
+                    Si vous n'avez pas créé de compte sur Youngbrighthing, vous pouvez ignorer cet email en toute sécurité.
+                </p>
+
+                <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid #E5E7EB;">
+                    <p style="margin: 0; color: #6B7280; font-size: 14px;">
+                        Cordialement,<br>
+                        <strong style="color: #1A1A1A;">L'équipe Youngbrighthing</strong>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div style="background-color: #F9FAFB; padding: 24px; text-align: center; border-top: 1px solid #E5E7EB;">
+                <p style="margin: 0 0 8px 0; color: #6B7280; font-size: 12px;">
+                    Vous recevez cet email car vous avez créé un compte sur Youngbrighthing.
+                </p>
+                <p style="margin: 0; color: #9CA3AF; font-size: 12px;">
+                    © {{ "now"|date("Y") }} Youngbrighthing. Tous droits réservés.
+                </p>
+                
+                <!-- Social Links -->
+                <div style="margin-top: 16px;">
+                    <a href="https://www.instagram.com/youngbrighthing/" style="color: #6B7280; text-decoration: none; margin: 0 8px;">
+                        📷 Instagram
+                    </a>
+                    <span style="color: #D1D5DB;">|</span>
+                    <a href="{{ path('app_cgv_confidentialite') }}" style="color: #6B7280; text-decoration: none; margin: 0 8px;">
+                        🔒 Confidentialité
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom spacing -->
+        <div style="height: 40px;"></div>
+    </div>
+</div>
 {% endblock %}
