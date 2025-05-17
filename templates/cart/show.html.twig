@@ -7,6 +7,13 @@
     <!-- Titre de la page -->
     <h1 class="text-3xl font-semibold text-center mb-10">Mon Panier</h1>
     
+    {% set total = 0 %}
+    {% if cart.getProduct|length > 0 %}
+        {% for product in cart.getProduct %}
+            {% set total = total + product.price %}
+        {% endfor %}
+    {% endif %}
+    
     <div class="lg:grid lg:grid-cols-12 lg:gap-8">
         <!-- Partie gauche (Produits) -->
         <div class="lg:col-span-8">
@@ -21,10 +28,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            {% set total = 0 %}
                             {% for product in cart.getProduct %}
-                                {% set subtotal = product.price %}
-                                {% set total = total + subtotal %}
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">

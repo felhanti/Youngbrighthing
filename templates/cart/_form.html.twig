@@ -1,4 +1,45 @@
-{{ form_start(form) }}
-{{ form_widget(form) }}
-<button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+
+<div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+    <!-- Date -->
+    <div class="sm:col-span-3">
+        {{ form_label(form.date, 'Date', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+        <div class="mt-1">
+            {{ form_widget(form.date, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
+        </div>
+        {{ form_errors(form.date, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+    </div>
+
+    <!-- Utilisateur -->
+    <div class="sm:col-span-3">
+        {{ form_label(form.user, 'Utilisateur', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+        <div class="mt-1">
+            {{ form_widget(form.user, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
+        </div>
+        {{ form_errors(form.user, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+    </div>
+
+    <!-- Produits -->
+    <div class="sm:col-span-6">
+        {{ form_label(form.product, 'Produits', {'label_attr': {'class': 'block text-sm font-medium text-gray-700 mb-2'}}) }}
+        <div class="max-h-40 overflow-y-auto border border-gray-300 rounded-md p-3">
+            {% for choice in form.product %}
+                <div class="flex items-center mb-2">
+                    {{ form_widget(choice, {'attr': {'class': 'h-4 w-4 text-yb-gold focus:ring-yb-gold border-gray-300 rounded'}}) }}
+                    {{ form_label(choice, null, {'label_attr': {'class': 'ml-2 block text-sm text-gray-900'}}) }}
+                </div>
+            {% endfor %}
+        </div>
+        {{ form_errors(form.product, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+    </div>
+</div>
+
+<div class="pt-5">
+    <div class="flex justify-end">
+        <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
+            {{ button_label|default('Enregistrer') }}
+        </button>
+    </div>
+</div>
+
 {{ form_end(form) }}
