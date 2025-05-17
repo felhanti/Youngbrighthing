@@ -34,7 +34,14 @@
 							<div class="mt-1">
 								{{ form_widget(registrationForm.prenom, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
 							</div>
-							{{ form_errors(registrationForm.prenom, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+							<!-- Messages d'erreur pour le prénom -->
+							<div class="mt-1">
+								{% for error in registrationForm.prenom.vars.errors %}
+									<div style="color: #DC2626 !important;" class="text-sm">
+										{{ error.message }}
+									</div>
+								{% endfor %}
+							</div>
 						</div>
 
 						<div>
@@ -42,7 +49,14 @@
 							<div class="mt-1">
 								{{ form_widget(registrationForm.nom, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
 							</div>
-							{{ form_errors(registrationForm.nom, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+							<!-- Messages d'erreur pour le nom -->
+							<div class="mt-1">
+								{% for error in registrationForm.nom.vars.errors %}
+									<div style="color: #DC2626 !important;" class="text-sm">
+										{{ error.message }}
+									</div>
+								{% endfor %}
+							</div>
 						</div>
 
 						<div class="sm:col-span-2">
@@ -50,7 +64,14 @@
 							<div class="mt-1">
 								{{ form_widget(registrationForm.email, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
 							</div>
-							{{ form_errors(registrationForm.email, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+							<!-- Messages d'erreur pour l'email -->
+							<div class="mt-1">
+								{% for error in registrationForm.email.vars.errors %}
+									<div style="color: #DC2626 !important;" class="text-sm">
+										{{ error.message }}
+									</div>
+								{% endfor %}
+							</div>
 						</div>
 
 						<div class="sm:col-span-2">
@@ -60,11 +81,20 @@
 								<div class="absolute inset-y-0 right-0 pr-3 flex items-center">
 									<button type="button" class="toggle-password focus:outline-none" onclick="togglePasswordVisibility()">
 										<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewbox="0 0 24 24" stroke="currentColor">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 616 0z"/>
 											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
 										</svg>
 									</button>
 								</div>
+							</div>
+
+							<!-- Messages d'erreur pour le mot de passe -->
+							<div class="mt-1">
+								{% for error in registrationForm.plainPassword.vars.errors %}
+									<div style="color: #DC2626 !important;" class="text-sm">
+										{{ error.message }}
+									</div>
+								{% endfor %}
 							</div>
 
 							<!-- Conditions du mot de passe -->
@@ -77,11 +107,6 @@
 									<li>Au moins un chiffre</li>
 								</ul>
 							</div>
-
-							<!-- Messages d'erreur en rouge -->
-							<div class="mt-1">
-								{{ form_errors(registrationForm.plainPassword, {'attr': {'class': 'text-red-600 text-sm'}}) }}
-							</div>
 						</div>
 
 						<div>
@@ -89,7 +114,14 @@
 							<div class="mt-1">
 								{{ form_widget(registrationForm.birthDate, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
 							</div>
-							{{ form_errors(registrationForm.birthDate, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+							<!-- Messages d'erreur pour la date de naissance -->
+							<div class="mt-1">
+								{% for error in registrationForm.birthDate.vars.errors %}
+									<div style="color: #DC2626 !important;" class="text-sm">
+										{{ error.message }}
+									</div>
+								{% endfor %}
+							</div>
 						</div>
 
 						<div class="sm:col-span-2">
@@ -97,7 +129,14 @@
 							<div class="mt-1">
 								{{ form_widget(registrationForm.adress, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
 							</div>
-							{{ form_errors(registrationForm.adress, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+							<!-- Messages d'erreur pour l'adresse -->
+							<div class="mt-1">
+								{% for error in registrationForm.adress.vars.errors %}
+									<div style="color: #DC2626 !important;" class="text-sm">
+										{{ error.message }}
+									</div>
+								{% endfor %}
+							</div>
 						</div>
 
 						<div>
@@ -105,7 +144,14 @@
 							<div class="mt-1">
 								{{ form_widget(registrationForm.cp, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
 							</div>
-							{{ form_errors(registrationForm.cp, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+							<!-- Messages d'erreur pour le code postal -->
+							<div class="mt-1">
+								{% for error in registrationForm.cp.vars.errors %}
+									<div style="color: #DC2626 !important;" class="text-sm">
+										{{ error.message }}
+									</div>
+								{% endfor %}
+							</div>
 						</div>
 
 						<div>
@@ -113,7 +159,14 @@
 							<div class="mt-1">
 								{{ form_widget(registrationForm.city, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
 							</div>
-							{{ form_errors(registrationForm.city, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+							<!-- Messages d'erreur pour la ville -->
+							<div class="mt-1">
+								{% for error in registrationForm.city.vars.errors %}
+									<div style="color: #DC2626 !important;" class="text-sm">
+										{{ error.message }}
+									</div>
+								{% endfor %}
+							</div>
 						</div>
 
 						<div class="sm:col-span-2">
@@ -121,7 +174,14 @@
 							<div class="mt-1">
 								{{ form_widget(registrationForm.country, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md'}}) }}
 							</div>
-							{{ form_errors(registrationForm.country, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+							<!-- Messages d'erreur pour le pays -->
+							<div class="mt-1">
+								{% for error in registrationForm.country.vars.errors %}
+									<div style="color: #DC2626 !important;" class="text-sm">
+										{{ error.message }}
+									</div>
+								{% endfor %}
+							</div>
 						</div>
 
 						<div class="sm:col-span-2">
@@ -134,7 +194,14 @@
 										J'accepte les
 										<a href="{{ path('app_cgv_cgu') }}" target="_blank" class="text-yb-dark font-medium hover:text-yb-gold">conditions générales d'utilisation</a>
 									</label>
-									{{ form_errors(registrationForm.agreeTerms, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+									<!-- Messages d'erreur pour les conditions générales -->
+									<div class="mt-1">
+										{% for error in registrationForm.agreeTerms.vars.errors %}
+											<div style="color: #DC2626 !important;" class="text-sm block">
+												{{ error.message }}
+											</div>
+										{% endfor %}
+									</div>
 								</div>
 							</div>
 						</div>
@@ -162,22 +229,22 @@
 
 	<script>
 		function togglePasswordVisibility() {
-const passwordInput = document.querySelector('# {{ registrationForm.plainPassword.vars.id }}');
-const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-passwordInput.setAttribute('type', type);
+			const passwordInput = document.querySelector('#{{ registrationForm.plainPassword.vars.id }}');
+			const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+			passwordInput.setAttribute('type', type);
 
-// Change the icon if needed
-const eyeIcon = document.querySelector('.toggle-password svg');
-if (type === 'text') {
-eyeIcon.innerHTML = `
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            `;
-} else {
-eyeIcon.innerHTML = `
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-            `;
-}
-}
+			// Change the icon if needed
+			const eyeIcon = document.querySelector('.toggle-password svg');
+			if (type === 'text') {
+				eyeIcon.innerHTML = `
+	                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+	                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+	            `;
+			} else {
+				eyeIcon.innerHTML = `
+	                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+	            `;
+			}
+		}
 	</script>
 {% endblock %}

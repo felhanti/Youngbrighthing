@@ -1,0 +1,40 @@
+# Traductions pour les messages d'erreur du formulaire d'inscription
+
+# Messages d'erreur de validation génériques
+validation:
+    not_blank: "Ce champ ne peut pas être vide"
+    email_invalid: "Veuillez saisir une adresse email valide"
+    
+# Messages spécifiques pour les champs
+form:
+    user:
+        email:
+            not_blank: "L'adresse email est obligatoire"
+            invalid: "Veuillez saisir une adresse email valide"
+        prenom:
+            not_blank: "Le prénom est obligatoire"
+        nom:
+            not_blank: "Le nom est obligatoire"
+        password:
+            not_blank: "Le mot de passe est obligatoire"
+            too_short: "Le mot de passe doit contenir au moins {{ limit }} caractères"
+            regex: "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule et un chiffre"
+        birthDate:
+            not_blank: "La date de naissance est obligatoire"
+            invalid: "Veuillez saisir une date valide"
+        adress:
+            not_blank: "L'adresse est obligatoire"
+        cp:
+            not_blank: "Le code postal est obligatoire"
+        city:
+            not_blank: "La ville est obligatoire"
+        country:
+            not_blank: "Le pays est obligatoire"
+        agreeTerms:
+            is_true: "Vous devez accepter les conditions générales d'utilisation"
+
+# Messages d'erreur Symfony génériques
+This value should not be blank.: "Ce champ ne peut pas être vide."
+This value is not a valid email address.: "Cette valeur n'est pas une adresse email valide."
+You must agree to our terms.: "Vous devez accepter nos conditions d'utilisation."
+There is already an account with this email. : "Il existe déjà un compte avec cet email"
