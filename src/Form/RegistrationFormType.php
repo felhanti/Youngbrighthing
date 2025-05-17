@@ -16,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Validator\Constraints\Regex;
-
+use Symfony\Component\Validator\Constraints\Email;
 
 class RegistrationFormType extends AbstractType
 {
@@ -28,13 +28,21 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Entrez l\'email'
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'L\'adresse email est obligatoire',
+                    ]),
+                    new Email([
+                        'message' => 'Veuillez saisir une adresse email valide',
+                    ]),
+                ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'Vous devez accepter les termes en cochant la case',
+                        'message' => 'Vous devez accepter les conditions générales d\'utilisation en cochant cette case',
                     ]),
                 ],
                 'attr' => [
@@ -51,7 +59,7 @@ class RegistrationFormType extends AbstractType
                 ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe',
+                        'message' => 'Le mot de passe est obligatoire',
                     ]),
                     new Length([
                         'min' => 8,
@@ -69,14 +77,24 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Entrez le nom'
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le nom est obligatoire',
+                    ]),
+                ],
             ])
             ->add('prenom', TextType::class, [
                 'label' => 'Prénom',
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Entrez le prénom'
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le prénom est obligatoire',
+                    ]),
+                ],
             ])
             ->add('birthDate', DateType::class, [
                 'widget' => 'single_text',
@@ -86,19 +104,34 @@ class RegistrationFormType extends AbstractType
                 'attr' => [
                     'class' => 'form-control'
                 ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'La date de naissance est obligatoire',
+                    ]),
+                ],
             ])
             ->add('adress', TextType::class, [
                 'label' => 'Adresse',
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Entrez votre adresse'
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'L\'adresse est obligatoire',
+                    ]),
+                ],
             ])
             ->add('cp', TextType::class, [
                 'label' => 'Code Postal',
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Entrez votre code postal',
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le code postal est obligatoire',
+                    ]),
                 ],
             ])
             ->add('city', TextType::class, [
@@ -107,13 +140,23 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control',
                     'placeholder' => 'Entrez votre ville',
                 ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'La ville est obligatoire',
+                    ]),
+                ],
             ])
             ->add('country', CountryType::class, [
                 'label' => 'Pays',
                 'attr' => [
                     'class' => 'form-control',
                 ],
-                'placeholder' => 'Choisissez un pays', // Affiche une option vide
+                'placeholder' => 'Choisissez un pays',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Le pays est obligatoire',
+                    ]),
+                ],
             ])
         ;
     }
