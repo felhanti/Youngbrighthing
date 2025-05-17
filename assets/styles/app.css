@@ -16,19 +16,12 @@ main {
   flex: 1 0 auto;
 }
 
-header {
-  flex-shrink: 0;
-}
-
+header,
 footer {
   flex-shrink: 0;
 }
 
-.navbar-menu {
-  height: 70px; /* Hauteur fixe pour le menu */
-}
-
-
+/* Classes personnalisées utilisées */
 .bg-gray {
   background-color: #c7c7c7;
 }
@@ -36,71 +29,24 @@ footer {
 .text-gold {
   color: rgb(255, 217, 0);
 }
+
 .bg-gold {
   background-color: #ffd700;
 }
 
-.logo {
-  text-decoration: none;
-}
-
-.carousel-item img {
-  height: 70vh;
-  object-fit: cover;
-}
-
-/* .card {
-  transition: transform 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-10px);
-} */
-
-.object-fit-cover {
-  object-fit: cover;
-}
-
-.nav-link:hover{
+/* Navigation */
+.nav-link:hover {
   color: lightgoldenrodyellow;
 }
-@media (max-width: 768px) {
-  .carousel-item img {
-    height: 50vh;
-  }
-  .logo {
-    text-decoration: none;
-    justify-content: center;
-  }
-}
 
-.white-space{
-  white-space: nowrap;
-}
-
-.back_img_product{
-  max-width: 250px;
-  max-height: 350px;
-}
-
-.img-card{
-  height: 100%;
-  max-width: 1200px;
-  /* max-height: 1200px; */
-}
-
+/* Formulaires */
 .form-check-label {
   display: block;
-  margin-bottom: 0.5rem; /* Espace entre le label et la case à cocher */
+  margin-bottom: 0.5rem;
 }
-
-.img-product {
-  max-width: 100%;
-}
-
 
 #password {
-  padding-right: 2.5rem; /* Assure qu'il y a assez d'espace pour l'icône */
+  padding-right: 2.5rem;
 }
 
 .input-group-text img {
@@ -108,69 +54,47 @@ footer {
   height: 20px;
 }
 
-/* Styles pour les messages d'erreur */
+/* Messages d'erreur */
 .form-error-icon {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    padding-right: 12px;
-    color: #DC2626;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-right: 12px;
+  color: #DC2626;
 }
 
 .form-error-message {
-    color: #DC2626 !important;
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
-    display: block;
+  color: #DC2626 !important;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  display: block;
 }
 
-/* Input avec erreur */
 .is-invalid {
-    border-color: #DC2626 !important;
-    box-shadow: 0 0 0 1px #DC2626 !important;
+  border-color: #DC2626 !important;
+  box-shadow: 0 0 0 1px #DC2626 !important;
 }
 
-/* Style pour les erreurs de validation */
 .help-block,
 .invalid-feedback,
 ul.form-error-list {
-    color: #DC2626 !important;
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
-    list-style: none;
-    padding: 0;
+  color: #DC2626 !important;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  list-style: none;
+  padding: 0;
 }
 
 ul.form-error-list li {
-    margin-bottom: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
-/* Validation temps réel */
-.password-requirements {
-    margin-top: 0.5rem;
-    font-size: 0.75rem;
-}
-
-.requirement {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.25rem;
-    color: #6B7280;
-}
-
-.requirement.valid {
-    color: #059669;
-}
-
-.requirement.invalid {
-    color: #DC2626;
-}
-
-.requirement::before {
-    content: "•";
-    margin-right: 0.5rem;
-    font-weight: bold;
+/* Responsive */
+@media (max-width: 768px) {
+  .carousel-item img {
+    height: 50vh;
+  }
 }
