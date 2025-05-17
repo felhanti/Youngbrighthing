@@ -15,8 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Validator\Constraints\PasswordStrength;
-use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
+use Symfony\Component\Validator\Constraints\Regex;
 
 
 class RegistrationFormType extends AbstractType
@@ -43,22 +42,26 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('plainPassword', PasswordType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
                 'label' => 'Mot de passe',
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password', 'class' => 'form-control', 'placeholder' => 'Entrez un mot de passe'],
+                'attr' => [
+                    'autocomplete' => 'new-password', 
+                    'class' => 'form-control password-field', 
+                    'placeholder' => 'Entrez un mot de passe'
+                ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Entez un mot de passe',
+                        'message' => 'Veuillez entrer un mot de passe',
                     ]),
                     new Length([
                         'min' => 8,
                         'minMessage' => 'Votre mot de passe doit contenir au minimum {{ limit }} caractères',
                         'max' => 4096,
                     ]),
-                    // new PasswordStrength(),
-                    new NotCompromisedPassword(),
+                    new Regex([
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/',
+                        'message' => 'Votre mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule et un chiffre'
+                    ]),
                 ],
             ])
             ->add('nom', TextType::class, [

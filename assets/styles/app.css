@@ -108,8 +108,69 @@ footer {
   height: 20px;
 }
 
-/* Palette : Élégance Classique
-Couleur Principale : Noir (#000000)
-Couleur Secondaire : Blanc (#FFFFFF)
-Accent : Or Métallique (#FFD700)
-Couleur de Fond : Gris Clair (#F7F7F7) */
+/* Styles pour les messages d'erreur */
+.form-error-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-right: 12px;
+    color: #DC2626;
+}
+
+.form-error-message {
+    color: #DC2626 !important;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: block;
+}
+
+/* Input avec erreur */
+.is-invalid {
+    border-color: #DC2626 !important;
+    box-shadow: 0 0 0 1px #DC2626 !important;
+}
+
+/* Style pour les erreurs de validation */
+.help-block,
+.invalid-feedback,
+ul.form-error-list {
+    color: #DC2626 !important;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    list-style: none;
+    padding: 0;
+}
+
+ul.form-error-list li {
+    margin-bottom: 0.25rem;
+}
+
+/* Validation temps réel */
+.password-requirements {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+}
+
+.requirement {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.25rem;
+    color: #6B7280;
+}
+
+.requirement.valid {
+    color: #059669;
+}
+
+.requirement.invalid {
+    color: #DC2626;
+}
+
+.requirement::before {
+    content: "•";
+    margin-right: 0.5rem;
+    font-weight: bold;
+}
