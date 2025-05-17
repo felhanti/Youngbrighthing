@@ -9,20 +9,33 @@ use Symfony\Component\Uid\Uuid;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/cart')]
 final class CartController extends AbstractController
 {
     #[Route('/cart/add/{id}', name: 'app_cart_add', methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function addToCart(int $id, EntityManagerInterface $entityManager, ProductRepository $productRepository): Response
+    public function addToCart(int $id, EntityManagerInterface $entityManager, ProductRepository $productRepository): JsonResponse
     {
         // Récupérer le produit par son ID
         $product = $productRepository->find($id);
         if (!$product) {
-            throw $this->createNotFoundException("Produit non trouvé.");
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Produit non trouvé'
+            ], 404);
+        }
+
+        // Vérifier si le produit est disponible
+        if (!$product->getIssold()) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Ce produit n\'est plus disponible'
+            ], 400);
         }
 
         // Récupérer l'utilisateur connecté
@@ -37,21 +50,29 @@ final class CartController extends AbstractController
             $cart->setUser($connectedUser);
         }
 
+        // Vérifier si le produit n'est pas déjà dans le panier
+        if ($cart->getProduct()->contains($product)) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Ce produit est déjà dans votre panier'
+            ], 400);
+        }
+
         // Ajouter le produit au panier
         $cart->addProduct($product);
 
-        // Marquer le produit comme vendu
-        // $product->setIssold(false);
-
-        // Sauvegarder le panier et mettre à jour l'état du produit
+        // Sauvegarder le panier
         $entityManager->persist($cart);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Produit ajouté au panier avec succès.');
+        // Calculer le nouveau nombre d'articles dans le panier
+        $cartCount = $cart->getProduct()->count();
 
-        // Rediriger vers la page du panier
-        return $this->redirectToRoute('app_cart_show', [
-            'id' => $cart->getId(),
+        return new JsonResponse([
+            'success' => true,
+            'message' => 'Produit ajouté au panier avec succès !',
+            'cartCount' => $cartCount,
+            'productName' => $product->getName()
         ]);
     }
 

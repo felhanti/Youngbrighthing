@@ -64,14 +64,16 @@
                 <!-- Actions -->
                 <div class="flex flex-col sm:flex-row gap-4">
                     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                        <form action="{{ path('app_cart_add', {id: product.id}) }}" method="post" class="flex-1">
-                            <button type="submit" class="w-full py-3 bg-yb-dark text-yb-gold rounded-md hover:bg-opacity-90 transition flex items-center justify-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                </svg>
-                                Ajouter au panier
-                            </button>
-                        </form>
+                        <button 
+                            id="add-to-cart-btn" 
+                            onclick="addToCart({{ product.id }})"
+                            class="flex-1 py-3 bg-yb-dark text-yb-gold rounded-md hover:bg-opacity-90 transition flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                            <span>Ajouter au panier</span>
+                        </button>
                     {% else %}
                         <a href="{{ path('app_login') }}" class="flex-1 py-3 bg-yb-dark text-yb-gold rounded-md hover:bg-opacity-90 transition flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -113,4 +115,95 @@
             </div>
         </div>
     </div>
+
+    <!-- Notification de succès -->
+    <div id="cart-notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50">
+        <div class="flex items-center">
+            <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            </svg>
+            <span id="notification-message">Produit ajouté au panier !</span>
+        </div>
+    </div>
+
+    <script>
+        async function addToCart(productId) {
+            const button = document.getElementById('add-to-cart-btn');
+            const originalText = button.innerHTML;
+            
+            // Désactiver le bouton pendant la requête
+            button.disabled = true;
+            button.innerHTML = `
+                <svg class="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Ajout en cours...</span>
+            `;
+
+            try {
+                const response = await fetch(`{{ path('app_cart_add', {'id': '__ID__'}) }}`.replace('__ID__', productId), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Afficher la notification de succès
+                    showNotification(data.message, 'success');
+                    
+                    // Mettre à jour le compteur du panier dans la navigation
+                    updateCartCounter(data.cartCount);
+                } else {
+                    // Afficher l'erreur
+                    showNotification(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Erreur:', error);
+                showNotification('Une erreur est survenue lors de l\'ajout au panier', 'error');
+            } finally {
+                // Réactiver le bouton
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('cart-notification');
+            const messageElement = document.getElementById('notification-message');
+            
+            // Configurer le style selon le type
+            if (type === 'success') {
+                notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50';
+            } else {
+                notification.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 z-50';
+            }
+            
+            messageElement.textContent = message;
+            
+            // Afficher la notification
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+                notification.classList.add('translate-x-0');
+            }, 100);
+            
+            // Masquer la notification après 3 secondes
+            setTimeout(() => {
+                notification.classList.remove('translate-x-0');
+                notification.classList.add('translate-x-full');
+            }, 3000);
+        }
+
+        function updateCartCounter(count) {
+            // Mettre à jour le compteur dans la navigation
+            const cartCounter = document.querySelector('.bg-yb-gold.text-yb-dark');
+            if (cartCounter) {
+                cartCounter.textContent = count;
+            }
+        }
+    </script>
 {% endblock %}
