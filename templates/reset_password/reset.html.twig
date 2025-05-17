@@ -3,76 +3,41 @@
 {% block title %}Réinitialiser votre mot de passe{% endblock %}
 
 {% block body %}
-<div class="py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md mx-auto">
-        <div class="bg-white shadow rounded-lg overflow-hidden">
-            <div class="px-4 py-5 sm:p-6">
-                <h1 class="text-2xl font-bold text-gray-900 text-center mb-6 font-serif">Réinitialiser votre mot de passe</h1>
+<div class="max-w-md mx-auto mt-12 px-4 sm:px-6">
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="px-6 py-8">
+            <h1 class="text-2xl font-bold text-gray-900 text-center mb-6">Réinitialiser votre mot de passe</h1>
 
-                {{ form_start(resetForm, {'attr': {'class': 'space-y-6'}}) }}
+            {{ form_start(resetForm, {'attr': {'class': 'space-y-6'}}) }}
 
-                <div>
-                    <label for="{{ resetForm.plainPassword.first.vars.id }}" class="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
-                    <div class="mt-1 relative">
-                        {{ form_widget(resetForm.plainPassword.first, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md', 'placeholder': 'Entrez votre nouveau mot de passe'}}) }}
-                        <button type="button" onclick="togglePasswordVisibility('{{ resetForm.plainPassword.first.vars.id }}')" class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                        </button>
-                    </div>
-                    {{ form_errors(resetForm.plainPassword.first, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+            <div>
+                <label for="{{ resetForm.plainPassword.first.vars.id }}" class="block text-sm font-medium text-gray-700">Nouveau mot de passe</label>
+                <div class="mt-1">
+                    {{ form_widget(resetForm.plainPassword.first, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md', 'placeholder': 'Entrez votre nouveau mot de passe'}}) }}
                 </div>
+                {{ form_errors(resetForm.plainPassword.first, {'attr': {'class': 'mt-2 text-sm text-red-600'}}) }}
+            </div>
 
-                <div>
-                    <label for="{{ resetForm.plainPassword.second.vars.id }}" class="block text-sm font-medium text-gray-700">Répéter le mot de passe</label>
-                    <div class="mt-1 relative">
-                        {{ form_widget(resetForm.plainPassword.second, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md', 'placeholder': 'Confirmez votre mot de passe'}}) }}
-                        <button type="button" onclick="togglePasswordVisibility('{{ resetForm.plainPassword.second.vars.id }}')" class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                        </button>
-                    </div>
-                    {{ form_errors(resetForm.plainPassword.second, {'attr': {'class': 'text-red-500 text-sm mt-1'}}) }}
+            <div>
+                <label for="{{ resetForm.plainPassword.second.vars.id }}" class="block text-sm font-medium text-gray-700">Répéter le mot de passe</label>
+                <div class="mt-1">
+                    {{ form_widget(resetForm.plainPassword.second, {'attr': {'class': 'shadow-sm focus:ring-yb-gold focus:border-yb-gold block w-full sm:text-sm border-gray-300 rounded-md', 'placeholder': 'Confirmez votre mot de passe'}}) }}
                 </div>
+                {{ form_errors(resetForm.plainPassword.second, {'attr': {'class': 'mt-2 text-sm text-red-600'}}) }}
+            </div>
 
-                <button class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
-                    Réinitialiser le mot de passe
-                </button>
+            <button class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yb-gold">
+                Réinitialiser le mot de passe
+            </button>
 
-                {{ form_end(resetForm) }}
-                
-                <div class="mt-4 text-center">
-                    <a href="{{ path('app_login') }}" class="text-sm font-medium text-yb-dark hover:text-yb-gold">
-                        Retour à la connexion
-                    </a>
-                </div>
+            {{ form_end(resetForm) }}
+            
+            <div class="mt-6 text-center">
+                <a href="{{ path('app_login') }}" class="text-sm font-medium text-yb-dark hover:text-yb-gold">
+                    Retour à la page de connexion
+                </a>
             </div>
         </div>
     </div>
 </div>
-
-<script>
-    function togglePasswordVisibility(elementId) {
-        const input = document.getElementById(elementId);
-        const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-        input.setAttribute('type', type);
-        
-        // Change the icon
-        const icon = event.currentTarget.querySelector('svg');
-        if (type === 'text') {
-            icon.innerHTML = `
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            `;
-        } else {
-            icon.innerHTML = `
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-            `;
-        }
-    }
-</script>
 {% endblock %}
