@@ -1,54 +1,45 @@
 import "./bootstrap.js";
-/*
- * Welcome to your app's main JavaScript file!
- *
- * This file will be included onto the page via the importmap() Twig function,
- * which should already be in your base.html.twig.
- */
 import "./styles/app.css";
 
 console.log("This log comes from assets/app.js - welcome to AssetMapper! 🎉");
+
+// Gestion des alertes avec auto-masquage
 document.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => {
-    const alert = document.querySelector('.alert'); // Récupère uniquement le premier
-    if (alert) { // Vérifie si l'élément existe
+    const alert = document.querySelector('.alert');
+    if (alert) {
       alert.style.transition = "opacity 0.5s";
       alert.style.opacity = "0";
-
-      // Supprime l'alerte après l'animation
       setTimeout(() => alert.remove(), 500);
     }
   }, 2000);
 });
 
-
+// Gestion de l'affichage/masquage du mot de passe
 document.addEventListener("DOMContentLoaded", () => {
-  // Sélection du champ mot de passe et du bouton
   const togglePassword = document.querySelector(".toggle-password");
   const passwordField = document.querySelector(".password");
 
-  // Gestion de l'affichage/masquage du mot de passe
   if (togglePassword && passwordField) {
     togglePassword.addEventListener("click", () => {
-      const img = togglePassword; // L'élément bouton avec l'icône
+      const img = togglePassword;
 
       if (passwordField.type === "password") {
-        passwordField.type = "text"; // Afficher le mot de passe
-        if (img.dataset.eyeOpen) img.src = img.dataset.eyeOpen; // Icône "œil ouvert"
+        passwordField.type = "text";
+        if (img.dataset.eyeOpen) img.src = img.dataset.eyeOpen;
       } else {
-        passwordField.type = "password"; // Masquer le mot de passe
-        if (img.dataset.eyeClose) img.src = img.dataset.eyeClose; // Icône "œil fermé"
+        passwordField.type = "password";
+        if (img.dataset.eyeClose) img.src = img.dataset.eyeClose;
       }
     });
   }
 
   // Validation des champs du formulaire
-  const inputs = document.querySelectorAll(".form-control"); // Tous les champs avec la classe "form-control"
+  const inputs = document.querySelectorAll(".form-control");
 
   inputs.forEach((input) => {
     input.addEventListener("input", () => {
       if (input.classList.contains("password-field")) {
-        // Validation spécifique pour le champ mot de passe
         if (input.value.length >= 8) {
           input.classList.remove("is-invalid");
           input.classList.add("is-valid");
@@ -57,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
           input.classList.add("is-invalid");
         }
       } else {
-        // Validation pour les autres champs selon les règles HTML5
         if (input.checkValidity()) {
           input.classList.remove("is-invalid");
           input.classList.add("is-valid");
@@ -67,7 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // Retirer les classes si le champ est vide
       if (input.value.trim() === "") {
         input.classList.remove("is-valid", "is-invalid");
       }
@@ -75,376 +64,268 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// Fonction globale pour ajouter un produit au panier depuis n'importe quelle page
-async function addToCartGlobal(productId, buttonElement = null) {
-    let button = buttonElement;
-    let originalContent = '';
-    
-    // Si un bouton est fourni, le désactiver pendant la requête
-    if (button) {
-        originalContent = button.innerHTML;
-        button.disabled = true;
-        button.innerHTML = `
-            <svg class="animate-spin h-5 w-5 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Ajout...
-        `;
-    }
+// SYSTÈME DE PANIER - Version unique et corrigée
+class CartManager {
+  constructor() {
+    this.initializeEventListeners();
+    this.createNotificationContainer();
+    this.injectStyles();
+  }
 
-    try {
-        const response = await fetch(`/cart/cart/add/${productId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
+  initializeEventListeners() {
+    document.addEventListener('DOMContentLoaded', () => {
+      this.attachCartButtons();
+    });
+
+    // Observer pour les nouveaux boutons ajoutés dynamiquement
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === Node.ELEMENT_NODE) {
+            if (node.classList && node.classList.contains('add-to-cart-btn')) {
+              this.attachCartButton(node);
+            } else {
+              const buttons = node.querySelectorAll && node.querySelectorAll('.add-to-cart-btn');
+              if (buttons) {
+                buttons.forEach(button => this.attachCartButton(button));
+              }
             }
+          }
         });
+      });
+    });
 
-        const data = await response.json();
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
 
-        if (data.success) {
-            // Afficher la notification de succès
-            showCartNotification(data.message, 'success');
-            
-            // Mettre à jour le compteur du panier
-            updateCartCounter(data.cartCount);
-            
-            // Optionnel : marquer le bouton comme ajouté
-            if (button) {
-                button.innerHTML = `
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    Ajouté !
-                `;
-                button.classList.remove('bg-yb-dark');
-                button.classList.add('bg-green-600');
-                
-                // Remettre le bouton à l'état initial après 2 secondes
-                setTimeout(() => {
-                    if (button && originalContent) {
-                        button.innerHTML = originalContent;
-                        button.classList.remove('bg-green-600');
-                        button.classList.add('bg-yb-dark');
-                        button.disabled = false;
-                    }
-                }, 2000);
-            }
-        } else {
-            // Afficher l'erreur
-            showCartNotification(data.message, 'error');
-            
-            // Remettre le bouton à l'état initial
-            if (button && originalContent) {
-                button.innerHTML = originalContent;
-                button.disabled = false;
-            }
-        }
-    } catch (error) {
-        console.error('Erreur:', error);
-        showCartNotification('Une erreur est survenue lors de l\'ajout au panier', 'error');
-        
-        // Remettre le bouton à l'état initial
-        if (button && originalContent) {
-            button.innerHTML = originalContent;
-            button.disabled = false;
-        }
-    }
-}
+  attachCartButtons() {
+    const buttons = document.querySelectorAll('.add-to-cart-btn');
+    buttons.forEach(button => this.attachCartButton(button));
+  }
 
-// Fonction pour afficher les notifications
-function showCartNotification(message, type = 'success') {
-    // Créer la notification si elle n'existe pas
-    let notification = document.getElementById('cart-notification-global');
-    if (!notification) {
-        notification = document.createElement('div');
-        notification.id = 'cart-notification-global';
-        document.body.appendChild(notification);
-    }
+  attachCartButton(button) {
+    // Éviter d'attacher plusieurs fois le même listener
+    if (button.dataset.cartListenerAttached) return;
     
-    // Configurer le style selon le type
-    const baseClasses = 'fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 z-50 max-w-sm';
-    const typeClasses = type === 'success' 
-        ? 'bg-green-500 text-white' 
-        : 'bg-red-500 text-white';
-    
-    notification.className = `${baseClasses} ${typeClasses} translate-x-full opacity-0`;
-    
-    // Contenu de la notification
-    notification.innerHTML = `
-        <div class="flex items-center">
-            <svg class="h-5 w-5 mr-2 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                ${type === 'success' 
-                    ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />'
-                    : '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />'
-                }
-            </svg>
-            <span class="text-sm font-medium">${message}</span>
-            <button onclick="hideCartNotification()" class="ml-4 text-white hover:text-gray-200">
-                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-            </button>
-        </div>
-    `;
-    
-    // Afficher la notification avec animation
-    setTimeout(() => {
-        notification.classList.remove('translate-x-full', 'opacity-0');
-        notification.classList.add('translate-x-0', 'opacity-100');
-    }, 100);
-    
-    // Masquer automatiquement après 4 secondes
-    setTimeout(() => {
-        hideCartNotification();
-    }, 4000);
-}
-
-// Fonction pour masquer la notification
-function hideCartNotification() {
-    const notification = document.getElementById('cart-notification-global');
-    if (notification) {
-        notification.classList.remove('translate-x-0', 'opacity-100');
-        notification.classList.add('translate-x-full', 'opacity-0');
-    }
-}
-
-// Fonction pour mettre à jour le compteur du panier
-function updateCartCounter(count) {
-    const cartCounters = document.querySelectorAll('.cart-counter');
-    cartCounters.forEach(counter => {
-        counter.textContent = count;
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      const productId = button.dataset.productId;
+      
+      if (!productId) {
+        console.error('ID du produit manquant');
+        this.showNotification('Erreur: ID du produit manquant', 'error');
+        return;
+      }
+      
+      this.addToCart(productId, button);
     });
     
-    // Mettre à jour aussi le badge dans la navigation
-    const cartBadge = document.querySelector('.bg-yb-gold.text-yb-dark');
-    if (cartBadge) {
-        cartBadge.textContent = count;
-    }
-}
+    button.dataset.cartListenerAttached = 'true';
+  }
 
-// Ajouter les gestionnaires d'événements quand le DOM est chargé
-document.addEventListener('DOMContentLoaded', function() {
-    // Gérer tous les boutons "Ajouter au panier" avec la classe add-to-cart
-    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const productId = this.dataset.productId;
-            if (productId) {
-                addToCartGlobal(productId, this);
-            }
-        });
-    });
-});
-
-// Styles CSS pour l'animation de rotation
-const styles = `
-    @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-    .animate-spin {
-        animation: spin 1s linear infinite;
-    }
-`;
-
-// Ajouter les styles à la page
-const styleSheet = document.createElement('style');
-styleSheet.textContent = styles;
-document.head.appendChild(styleSheet);
-
-// Script pour ajouter des produits au panier
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Script panier chargé');
-    
-    // Sélectionner tous les boutons d'ajout au panier
-    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
-    
-    // Ajouter un gestionnaire d'événement à chaque bouton
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const productId = this.dataset.productId;
-            
-            if (!productId) {
-                console.error('ID du produit manquant');
-                showNotification('Erreur: ID du produit manquant', 'error');
-                return;
-            }
-            
-            addToCart(productId, this);
-        });
-    });
-});
-
-// Fonction pour ajouter un produit au panier
-async function addToCart(productId, buttonElement) {
+  async addToCart(productId, buttonElement) {
     const button = buttonElement;
     const originalContent = button.innerHTML;
     
-    // Désactiver le bouton et afficher un indicateur de chargement
+    // Désactiver le bouton et afficher l'indicateur de chargement
     button.disabled = true;
     button.innerHTML = `
-        <svg class="animate-spin h-4 w-4 inline mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        Ajout...
+      <svg class="animate-spin h-4 w-4 inline mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      Ajout...
     `;
     
     try {
-        // Construire l'URL pour la route d'ajout au panier
-        const addToCartUrl = `/cart/cart/add/${productId}`;
-        
-        const response = await fetch(addToCartUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP: ${response.status}`);
+      const response = await fetch(`/cart/cart/add/${productId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
         }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        this.showNotification(data.message || 'Produit ajouté au panier avec succès!', 'success');
+        this.updateCartCounter(data.cartCount);
         
-        const data = await response.json();
+        // Bouton de succès temporaire
+        button.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          Ajouté!
+        `;
+        button.classList.remove('bg-yb-dark');
+        button.classList.add('bg-green-600');
         
-        if (data.success) {
-            // Succès - afficher notification et mettre à jour l'interface
-            showNotification(data.message || 'Produit ajouté au panier avec succès!', 'success');
-            
-            // Mettre à jour le compteur du panier
-            updateCartCounter(data.cartCount);
-            
-            // Modifier temporairement le bouton pour indiquer le succès
-            button.innerHTML = `
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                Ajouté!
-            `;
-            button.classList.remove('bg-yb-dark');
-            button.classList.add('bg-green-600');
-            
-            // Remettre le bouton à l'état initial après 2 secondes
-            setTimeout(() => {
-                button.innerHTML = originalContent;
-                button.classList.remove('bg-green-600');
-                button.classList.add('bg-yb-dark');
-                button.disabled = false;
-            }, 2000);
-            
-        } else {
-            // Échec - afficher le message d'erreur
-            showNotification(data.message || 'Erreur lors de l\'ajout au panier', 'error');
-            
-            // Remettre le bouton à l'état initial
-            button.innerHTML = originalContent;
-            button.disabled = false;
-        }
+        // Remettre le bouton à l'état initial après 2 secondes
+        setTimeout(() => {
+          button.innerHTML = originalContent;
+          button.classList.remove('bg-green-600');
+          button.classList.add('bg-yb-dark');
+          button.disabled = false;
+        }, 2000);
         
+      } else {
+        this.showNotification(data.message || 'Erreur lors de l\'ajout au panier', 'error');
+        this.resetButton(button, originalContent);
+      }
+      
     } catch (error) {
-        console.error('Erreur lors de l\'ajout au panier:', error);
-        showNotification('Une erreur est survenue. Veuillez réessayer.', 'error');
-        
-        // Remettre le bouton à l'état initial
-        button.innerHTML = originalContent;
-        button.disabled = false;
+      console.error('Erreur lors de l\'ajout au panier:', error);
+      this.showNotification('Une erreur est survenue. Veuillez réessayer.', 'error');
+      this.resetButton(button, originalContent);
     }
-}
+  }
 
-// Fonction pour afficher les notifications
-function showNotification(message, type = 'success') {
-    // Supprimer toute notification existante
-    const existingNotification = document.getElementById('cart-notification');
-    if (existingNotification) {
-        existingNotification.remove();
+  resetButton(button, originalContent) {
+    button.innerHTML = originalContent;
+    button.disabled = false;
+  }
+
+  createNotificationContainer() {
+    if (!document.getElementById('cart-notification-container')) {
+      const container = document.createElement('div');
+      container.id = 'cart-notification-container';
+      container.className = 'fixed top-4 right-4 z-50 space-y-2';
+      document.body.appendChild(container);
     }
-    
-    // Créer une nouvelle notification
+  }
+
+  showNotification(message, type = 'success') {
+    const container = document.getElementById('cart-notification-container');
+    if (!container) {
+      this.createNotificationContainer();
+      return this.showNotification(message, type);
+    }
+
+    // Créer la notification
     const notification = document.createElement('div');
-    notification.id = 'cart-notification';
-    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 max-w-sm transform transition-all duration-300 translate-x-full ${
-        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+    notification.className = `notification px-6 py-3 rounded-lg shadow-lg max-w-sm transform transition-all duration-300 translate-x-full ${
+      type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
     }`;
     
     const iconSvg = type === 'success' 
-        ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />'
-        : '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />';
+      ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />'
+      : '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />';
     
     notification.innerHTML = `
-        <div class="flex items-center">
-            <svg class="h-5 w-5 mr-2 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                ${iconSvg}
-            </svg>
-            <span class="text-sm font-medium">${message}</span>
-            <button onclick="this.parentElement.parentElement.remove()" class="ml-3 text-white hover:text-gray-200 focus:outline-none">
-                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-            </button>
-        </div>
+      <div class="flex items-center">
+        <svg class="h-5 w-5 mr-2 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          ${iconSvg}
+        </svg>
+        <span class="text-sm font-medium">${message}</span>
+        <button class="close-btn ml-3 text-white hover:text-gray-200 focus:outline-none">
+          <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
     `;
     
-    // Ajouter la notification au document
-    document.body.appendChild(notification);
+    // Ajouter le gestionnaire de fermeture
+    notification.querySelector('.close-btn').addEventListener('click', () => {
+      this.hideNotification(notification);
+    });
     
-    // Animer l'entrée de la notification
+    // Ajouter au container
+    container.appendChild(notification);
+    
+    // Animation d'entrée
     setTimeout(() => {
-        notification.classList.remove('translate-x-full');
-        notification.classList.add('translate-x-0');
+      notification.classList.remove('translate-x-full');
+      notification.classList.add('translate-x-0');
     }, 100);
     
-    // Supprimer automatiquement après 4 secondes
+    // Masquage automatique après 4 secondes
     setTimeout(() => {
-        if (notification && notification.parentNode) {
-            notification.classList.add('translate-x-full');
-            setTimeout(() => {
-                if (notification && notification.parentNode) {
-                    notification.remove();
-                }
-            }, 300);
-        }
+      this.hideNotification(notification);
     }, 4000);
-}
-
-// Fonction pour mettre à jour le compteur du panier
-function updateCartCounter(count) {
-    // Mettre à jour le badge du panier dans la navigation
-    const cartBadges = document.querySelectorAll('.bg-yb-gold.text-yb-dark');
-    cartBadges.forEach(badge => {
-        if (badge.textContent.match(/^\d+$/)) {
-            badge.textContent = count;
-        }
-    });
     
-    // Mettre à jour tout autre compteur de panier
-    const cartCounters = document.querySelectorAll('.cart-counter');
-    cartCounters.forEach(counter => {
-        counter.textContent = count;
+    // Limiter le nombre de notifications affichées
+    const notifications = container.querySelectorAll('.notification');
+    if (notifications.length > 3) {
+      this.hideNotification(notifications[0]);
+    }
+  }
+
+  hideNotification(notification) {
+    if (notification && notification.parentNode) {
+      notification.classList.add('translate-x-full');
+      setTimeout(() => {
+        if (notification && notification.parentNode) {
+          notification.remove();
+        }
+      }, 300);
+    }
+  }
+
+  updateCartCounter(count) {
+    // Mettre à jour tous les compteurs de panier
+    const selectors = [
+      '.bg-yb-gold.text-yb-dark', // Badge dans la navigation
+      '.cart-counter',            // Compteurs génériques
+      '[data-cart-count]'         // Éléments avec attribut data
+    ];
+    
+    selectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(element => {
+        // Vérifier si c'est un compteur numérique
+        if (element.textContent.match(/^\d+$/)) {
+          element.textContent = count;
+        } else if (element.dataset.cartCount !== undefined) {
+          element.dataset.cartCount = count;
+          element.textContent = count;
+        }
+      });
     });
+  }
+
+  injectStyles() {
+    if (!document.getElementById('cart-styles')) {
+      const styles = `
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin {
+          animation: spin 1s linear infinite;
+        }
+        
+        #cart-notification-container {
+          pointer-events: none;
+        }
+        
+        #cart-notification-container .notification {
+          pointer-events: auto;
+        }
+        
+        .notification {
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+      `;
+
+      const styleSheet = document.createElement('style');
+      styleSheet.id = 'cart-styles';
+      styleSheet.textContent = styles;
+      document.head.appendChild(styleSheet);
+    }
+  }
 }
 
-// Ajouter les styles CSS pour l'animation
-const styles = `
-    @keyframes spin {
-        from { transform: rotate(0deg); }
-        to { transform: rotate(360deg); }
-    }
-    .animate-spin {
-        animation: spin 1s linear infinite;
-    }
-`;
+// Initialiser le gestionnaire de panier
+const cartManager = new CartManager();
 
-// Injecter les styles dans la page
-if (!document.getElementById('cart-styles')) {
-    const styleSheet = document.createElement('style');
-    styleSheet.id = 'cart-styles';
-    styleSheet.textContent = styles;
-    document.head.appendChild(styleSheet);
-}
-
+// Exposer les fonctions globalement pour compatibilité
+window.addToCart = (productId, button) => cartManager.addToCart(productId, button);
+window.showCartNotification = (message, type) => cartManager.showNotification(message, type);
+window.updateCartCounter = (count) => cartManager.updateCartCounter(count);
