@@ -255,3 +255,196 @@ const styleSheet = document.createElement('style');
 styleSheet.textContent = styles;
 document.head.appendChild(styleSheet);
 
+// Script pour ajouter des produits au panier
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Script panier chargé');
+    
+    // Sélectionner tous les boutons d'ajout au panier
+    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+    
+    // Ajouter un gestionnaire d'événement à chaque bouton
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const productId = this.dataset.productId;
+            
+            if (!productId) {
+                console.error('ID du produit manquant');
+                showNotification('Erreur: ID du produit manquant', 'error');
+                return;
+            }
+            
+            addToCart(productId, this);
+        });
+    });
+});
+
+// Fonction pour ajouter un produit au panier
+async function addToCart(productId, buttonElement) {
+    const button = buttonElement;
+    const originalContent = button.innerHTML;
+    
+    // Désactiver le bouton et afficher un indicateur de chargement
+    button.disabled = true;
+    button.innerHTML = `
+        <svg class="animate-spin h-4 w-4 inline mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Ajout...
+    `;
+    
+    try {
+        // Construire l'URL pour la route d'ajout au panier
+        const addToCartUrl = `/cart/cart/add/${productId}`;
+        
+        const response = await fetch(addToCartUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Erreur HTTP: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Succès - afficher notification et mettre à jour l'interface
+            showNotification(data.message || 'Produit ajouté au panier avec succès!', 'success');
+            
+            // Mettre à jour le compteur du panier
+            updateCartCounter(data.cartCount);
+            
+            // Modifier temporairement le bouton pour indiquer le succès
+            button.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                Ajouté!
+            `;
+            button.classList.remove('bg-yb-dark');
+            button.classList.add('bg-green-600');
+            
+            // Remettre le bouton à l'état initial après 2 secondes
+            setTimeout(() => {
+                button.innerHTML = originalContent;
+                button.classList.remove('bg-green-600');
+                button.classList.add('bg-yb-dark');
+                button.disabled = false;
+            }, 2000);
+            
+        } else {
+            // Échec - afficher le message d'erreur
+            showNotification(data.message || 'Erreur lors de l\'ajout au panier', 'error');
+            
+            // Remettre le bouton à l'état initial
+            button.innerHTML = originalContent;
+            button.disabled = false;
+        }
+        
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout au panier:', error);
+        showNotification('Une erreur est survenue. Veuillez réessayer.', 'error');
+        
+        // Remettre le bouton à l'état initial
+        button.innerHTML = originalContent;
+        button.disabled = false;
+    }
+}
+
+// Fonction pour afficher les notifications
+function showNotification(message, type = 'success') {
+    // Supprimer toute notification existante
+    const existingNotification = document.getElementById('cart-notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+    
+    // Créer une nouvelle notification
+    const notification = document.createElement('div');
+    notification.id = 'cart-notification';
+    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 max-w-sm transform transition-all duration-300 translate-x-full ${
+        type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+    }`;
+    
+    const iconSvg = type === 'success' 
+        ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />'
+        : '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />';
+    
+    notification.innerHTML = `
+        <div class="flex items-center">
+            <svg class="h-5 w-5 mr-2 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                ${iconSvg}
+            </svg>
+            <span class="text-sm font-medium">${message}</span>
+            <button onclick="this.parentElement.parentElement.remove()" class="ml-3 text-white hover:text-gray-200 focus:outline-none">
+                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
+    `;
+    
+    // Ajouter la notification au document
+    document.body.appendChild(notification);
+    
+    // Animer l'entrée de la notification
+    setTimeout(() => {
+        notification.classList.remove('translate-x-full');
+        notification.classList.add('translate-x-0');
+    }, 100);
+    
+    // Supprimer automatiquement après 4 secondes
+    setTimeout(() => {
+        if (notification && notification.parentNode) {
+            notification.classList.add('translate-x-full');
+            setTimeout(() => {
+                if (notification && notification.parentNode) {
+                    notification.remove();
+                }
+            }, 300);
+        }
+    }, 4000);
+}
+
+// Fonction pour mettre à jour le compteur du panier
+function updateCartCounter(count) {
+    // Mettre à jour le badge du panier dans la navigation
+    const cartBadges = document.querySelectorAll('.bg-yb-gold.text-yb-dark');
+    cartBadges.forEach(badge => {
+        if (badge.textContent.match(/^\d+$/)) {
+            badge.textContent = count;
+        }
+    });
+    
+    // Mettre à jour tout autre compteur de panier
+    const cartCounters = document.querySelectorAll('.cart-counter');
+    cartCounters.forEach(counter => {
+        counter.textContent = count;
+    });
+}
+
+// Ajouter les styles CSS pour l'animation
+const styles = `
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    .animate-spin {
+        animation: spin 1s linear infinite;
+    }
+`;
+
+// Injecter les styles dans la page
+if (!document.getElementById('cart-styles')) {
+    const styleSheet = document.createElement('style');
+    styleSheet.id = 'cart-styles';
+    styleSheet.textContent = styles;
+    document.head.appendChild(styleSheet);
+}
+
