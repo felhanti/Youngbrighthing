@@ -1,6 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.name }} - Détails du produit{% endblock %}
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block meta_description %}{{ product.description|slice(0, 155) }} — Pièce unique, fait main en France. Taille {{ product.size }}.{% endblock %}
+
+{% block og_type %}product{% endblock %}
+{% block og_image %}{{ absolute_url(asset('images/product/' ~ product.imageName)) }}{% endblock %}
+
+{% block jsonld %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Product","name":"{{ product.name }}","description":"{{ product.description|replace({'"': '\\"', "\n": ' '})|raw }}","image":"{{ absolute_url(asset('images/product/' ~ product.imageName)) }}","offers":{"@type":"Offer","priceCurrency":"EUR","price":"{{ product.price }}","availability":"{% if product.isSold() %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}","seller":{"@type":"Organization","name":"Youngbrighthing"}},"brand":{"@type":"Brand","name":"Youngbrighthing"}}
+</script>
+{% endblock %}
 
 {% block body %}
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -83,7 +94,7 @@
                         </a>
                     {% endif %}
                     
-                    <a href="Javascript:history.go(-1)" class="flex-1 py-3 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition flex items-center justify-center">
+                    <a href="{{ path('app_collection_all') }}" class="flex-1 py-3 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition flex items-center justify-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
                         </svg>

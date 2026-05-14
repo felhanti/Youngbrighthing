@@ -20,13 +20,10 @@ class CartToOrderService
         $this->cartRepository = $cartRepository;
     }
 
-    public function createOrderFromCart(User $user,Cart $cart): ?Order
+    public function createOrderFromCart(User $user, Cart $cart): ?Order
     {
-        // Récupérer le panier actif de l'utilisateur
-        $cart = $this->cartRepository->findOneBy(['user' => $user]);
-
-        if (!$cart) {
-            throw new \Exception('Aucun panier actif trouvé pour cet utilisateur.');
+        if ($cart->getProduct()->isEmpty()) {
+            throw new \Exception('Le panier est vide.');
         }
 
         // Créer la commande

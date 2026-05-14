@@ -3,11 +3,34 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>
-			{% block title %}{% endblock %}
-			- Youngbrighthing</title>
-		<link
-		rel="icon" href="{{ asset('favicon.ico') }}">
+		<title>{% block title %}Youngbrighthing{% endblock %} - Youngbrighthing</title>
+
+		{% set meta_desc = block('meta_description') is defined ? block('meta_description') : 'Youngbrighthing — mode unisexe fait main en France. Capsules limitées, pièces uniques, style urbain brut. Découvrez nos collections.' %}
+		<meta name="description" content="{{ meta_desc }}">
+		<meta name="robots" content="{% block robots %}index, follow{% endblock %}">
+
+		{% set page_title = block('title') ~ ' - Youngbrighthing' %}
+		{% set og_image = block('og_image') is defined ? block('og_image') : absolute_url(asset('images/LOGO_ybt-01_72c34f78-1ef2-4c5c-a378-735dffc185cb.png')) %}
+		<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+		<meta property="og:site_name" content="Youngbrighthing">
+		<meta property="og:locale" content="fr_FR">
+		<meta property="og:title" content="{{ page_title }}">
+		<meta property="og:description" content="{{ meta_desc }}">
+		<meta property="og:url" content="{{ app.request.uri }}">
+		<meta property="og:image" content="{{ og_image }}">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="{{ page_title }}">
+		<meta name="twitter:description" content="{{ meta_desc }}">
+		<meta name="twitter:image" content="{{ og_image }}">
+
+		<link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
+		<link rel="icon" href="{{ asset('favicon.ico') }}">
+
+		{% block jsonld %}
+		<script type="application/ld+json">
+		{"@context":"https://schema.org","@type":"Organization","name":"Youngbrighthing","url":"https://youngbrighthing.com","logo":"{{ absolute_url(asset('images/LOGO_ybt-01_72c34f78-1ef2-4c5c-a378-735dffc185cb.png')) }}","sameAs":["https://www.instagram.com/youngbrighthing/"],"contactPoint":{"@type":"ContactPoint","email":"contact@youngbrighthing.com","contactType":"customer service","availableLanguage":"French"}}
+		</script>
+		{% endblock %}
 
 		<!-- Tailwind CSS via CDN -->
 		<link
