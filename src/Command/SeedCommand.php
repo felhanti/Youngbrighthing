@@ -25,7 +25,7 @@ class SeedCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // Wipe existing data
+        // Wipe existing data (quote reserved words for PostgreSQL compatibility)
         $this->em->getConnection()->executeStatement('DELETE FROM order_item');
         $this->em->getConnection()->executeStatement('DELETE FROM "order"');
         $this->em->getConnection()->executeStatement('DELETE FROM cart_product');
@@ -34,7 +34,7 @@ class SeedCommand extends Command
         $this->em->getConnection()->executeStatement('DELETE FROM product');
         $this->em->getConnection()->executeStatement('DELETE FROM category');
         $this->em->getConnection()->executeStatement('DELETE FROM reset_password_request');
-        $this->em->getConnection()->executeStatement('DELETE FROM user');
+        $this->em->getConnection()->executeStatement('DELETE FROM "user"');
 
         // Admin
         $admin = new User();
