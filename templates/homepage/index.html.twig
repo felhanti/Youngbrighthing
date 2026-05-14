@@ -1,6 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil
+{% block title %}Accueil{% endblock %}
+
+{% block meta_description %}Youngbrighthing — mode unisexe fait main en France. Capsules limitées, pièces uniques aux influences urbaines et brutes. Découvrez les dernières collections.{% endblock %}
+
+{% block jsonld %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ClothingStore","name":"Youngbrighthing","url":"https://youngbrighthing.com","logo":"{{ absolute_url(asset('images/LOGO_ybt-01_72c34f78-1ef2-4c5c-a378-735dffc185cb.png')) }}","description":"Mode unisexe fait main en France. Capsules limitées, pièces uniques.","sameAs":["https://www.instagram.com/youngbrighthing/"],"contactPoint":{"@type":"ContactPoint","email":"contact@youngbrighthing.com","contactType":"customer service","availableLanguage":"French"}}
+</script>
 {% endblock %}
 
 {% block stylesheets %}

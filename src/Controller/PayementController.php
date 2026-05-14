@@ -42,7 +42,7 @@ class PayementController extends AbstractController
                     [
                         'price_data' => [
                             'currency' => 'eur',
-                            'unit_amount' => $order->getTotal() * 100, // Convertir en centimes
+                            'unit_amount' => (int) round($order->getTotal() * 100),
                             'product_data' => [
                                 'name' => 'Commande #' . $order->getId(),
                             ],
@@ -51,12 +51,12 @@ class PayementController extends AbstractController
                     ]
                 ],
                 'mode' => 'payment',
-                'success_url' => $this->generateUrl('order_summary', ['id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
+                'metadata' => ['order_id' => (string) $order->getId()],
+                'success_url' => $this->generateUrl('order_summary', ['id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => $this->generateUrl('app_cart_show', ['id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
-                // 'return_url' => $this->generateUrl('home'),
             ]);
-            // Mettez à jour le statut de la commande si nécessaire
-            $order->setStatus('completed');
+
+            $order->setStatus('processing');
             $this->entityManagerInterface->persist($order);
             $this->entityManagerInterface->flush();
 

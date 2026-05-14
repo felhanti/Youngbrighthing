@@ -2,10 +2,14 @@
 
 namespace App\Controller;
 
+use Stripe\Stripe;
+use Stripe\Checkout\Session as StripeSession;
 use App\Service\CartToOrderService;
 use App\Repository\OrderRepository;
 use App\Repository\CartRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,11 +17,13 @@ class OrderController extends AbstractController
 {
     private CartToOrderService $cartToOrderService;
     private CartRepository $cartRepository;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(CartToOrderService $cartToOrderService, CartRepository $cartRepository)
+    public function __construct(CartToOrderService $cartToOrderService, CartRepository $cartRepository, EntityManagerInterface $entityManager)
     {
         $this->cartToOrderService = $cartToOrderService;
         $this->cartRepository = $cartRepository;
+        $this->entityManager = $entityManager;
     }
 
     #[Route("/order/finalize", name: "order_finalize")]
@@ -55,18 +61,30 @@ class OrderController extends AbstractController
     }
 
     #[Route("/order/summary/{id}", name: "order_summary")]
-    public function orderSummary(int $id, OrderRepository $orderRepository): Response
-    { 
-        // Récupère la commande par son ID
+    public function orderSummary(int $id, Request $request, OrderRepository $orderRepository): Response
+    {
         $order = $orderRepository->find($id);
 
-        // Vérifie que la commande existe et appartient à l'utilisateur connecté
         if (!$order || $order->getUser() !== $this->getUser()) {
             $this->addFlash('danger', 'Commande introuvable ou accès non autorisé.');
             return $this->redirectToRoute('home');
         }
 
-        // Affiche le résumé de la commande
+        // Vérifie le paiement Stripe et marque la commande comme terminée
+        $sessionId = $request->query->get('session_id');
+        if ($sessionId && $order->getStatus() === 'processing') {
+            try {
+                Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
+                $stripeSession = StripeSession::retrieve($sessionId);
+                if ($stripeSession->payment_status === 'paid') {
+                    $order->setStatus('completed');
+                    $this->entityManager->flush();
+                }
+            } catch (\Exception) {
+                // Session Stripe invalide, on garde le statut actuel
+            }
+        }
+
         return $this->render('order/summary.html.twig', [
             'order' => $order,
         ]);
