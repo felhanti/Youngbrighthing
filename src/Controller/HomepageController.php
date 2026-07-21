@@ -13,9 +13,12 @@ class HomepageController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(CategoryRepository $categoryRepository, ProductRepository $productRepository): Response
     {
+        $drops = $categoryRepository->findBy([], ['id' => 'DESC']);
+
         return $this->render('homepage/index.html.twig', [
-            'category' => $categoryRepository->findAll(),
-            'products' => $productRepository->findAll(),
+            'drops' => $drops,
+            'heroDrop' => $categoryRepository->findOneBy(['Last' => true]) ?? ($drops[0] ?? null),
+            'featuredProducts' => $productRepository->findBy([], ['add_date' => 'DESC'], 4),
         ]);
     }
 

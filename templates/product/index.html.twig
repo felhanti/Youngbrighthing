@@ -76,7 +76,7 @@
                 <div class="flex flex-col sm:flex-row gap-4">
                     {% if not product.isSold() %}
                         <button disabled class="flex-1 py-3 bg-gray-300 text-gray-600 rounded-md cursor-not-allowed flex items-center justify-center">
-                            Pièce déjà vendue
+                            Épuisé
                         </button>
                     {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
                         <button
