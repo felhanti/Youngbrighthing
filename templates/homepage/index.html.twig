@@ -110,6 +110,9 @@
 					<div class="group">
 						<div class="relative bg-white rounded-t-lg overflow-hidden" style="padding-bottom: 100%;">
 							<img src="{{ asset('images/product/' ~ product.imageName ) }}" alt="{{ product.name }}" class="absolute w-full h-full object-center object-cover transform group-hover:scale-105 transition duration-300">
+							{% if not product.isSold() %}
+								<span class="absolute top-2 left-2 bg-yb-dark text-white text-xs font-medium px-2 py-1 rounded">Vendu</span>
+							{% endif %}
 						</div>
 						<div class="bg-yb-gray p-4 rounded-b-lg">
 							<h3 class="text-lg font-medium text-yb-dark">{{ product.name }}</h3>

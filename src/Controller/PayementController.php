@@ -52,6 +52,9 @@ class PayementController extends AbstractController
                 ],
                 'mode' => 'payment',
                 'metadata' => ['order_id' => (string) $order->getId()],
+                // Pièces uniques : on limite la fenêtre de paiement pour libérer vite
+                // la réservation si le client abandonne (cf. StripeWebhookController).
+                'expires_at' => time() + 1800,
                 'success_url' => $this->generateUrl('order_summary', ['id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '?session_id={CHECKOUT_SESSION_ID}',
                 'cancel_url' => $this->generateUrl('app_cart_show', ['id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
             ]);

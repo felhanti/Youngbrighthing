@@ -26,6 +26,27 @@ class CartToOrderService
             throw new \Exception('Le panier est vide.');
         }
 
+        // Chaque pièce est unique : vérifier qu'aucune n'a été vendue entre-temps
+        // (achetée par un autre client) avant de créer la commande.
+        $unavailable = [];
+        foreach ($cart->getProduct() as $product) {
+            if (!$product->getIssold()) {
+                $unavailable[] = $product;
+            }
+        }
+        if (!empty($unavailable)) {
+            foreach ($unavailable as $product) {
+                $cart->removeProduct($product);
+            }
+            $this->entityManager->flush();
+
+            $names = implode(', ', array_map(fn ($p) => $p->getName(), $unavailable));
+            throw new \Exception(sprintf(
+                'Désolé, la/les pièce(s) suivante(s) viennent d\'être vendues et ont été retirées de votre panier : %s',
+                $names
+            ));
+        }
+
         // Créer la commande
         $order = new Order();
         $order->setUser($user);
@@ -35,23 +56,30 @@ class CartToOrderService
         // Parcourir les produits du panier
         foreach ($cart->getProduct() as $product) {
             $orderItem = new OrderItem();
+            $orderItem->setProduct($product);
             $orderItem->setProductName($product->getName());
+            $orderItem->setUnitPrice($product->getPrice());
+            $orderItem->setQuantity(1);
             $orderItem->setTotalPrice($product->getPrice());
 
             $totalPrice += $orderItem->getTotalPrice();
 
             $orderItem->setCustomerOrder($order); // Relation avec la commande
             $order->addOrderItem($orderItem);
+
+            // Réserver la pièce unique immédiatement pour empêcher qu'elle
+            // soit vendue à quelqu'un d'autre pendant le paiement Stripe.
+            $product->setIssold(false);
         }
 
         $order->setTotal($totalPrice);
 
         // Enregistrer la commande dans la base de données
         $this->entityManager->persist($order);
-        $this->entityManager->flush();
 
-        // Optionnel : Nettoyer le panier ou le marquer comme traité
+        // Nettoyer le panier
         $cart->getProduct()->clear();
+
         $this->entityManager->flush();
 
         return $order;

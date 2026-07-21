@@ -16,28 +16,44 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
-    //    /**
-    //     * @return Order[] Returns an array of Order objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('o.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return array<string, int> Nombre de commandes par statut
+     */
+    public function countByStatus(): array
+    {
+        $rows = $this->createQueryBuilder('o')
+            ->select('o.status, COUNT(o.id) as nb')
+            ->groupBy('o.status')
+            ->getQuery()
+            ->getResult();
 
-    //    public function findOneBySomeField($value): ?Order
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $counts = [];
+        foreach ($rows as $row) {
+            $counts[$row['status']] = (int) $row['nb'];
+        }
+
+        return $counts;
+    }
+
+    public function sumTotalByStatus(string $status): string
+    {
+        return $this->createQueryBuilder('o')
+            ->select('COALESCE(SUM(o.total), 0)')
+            ->andWhere('o.status = :status')
+            ->setParameter('status', $status)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * @return Order[]
+     */
+    public function findRecent(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('o')
+            ->orderBy('o.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

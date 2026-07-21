@@ -95,16 +95,17 @@
                         <div class="ml-5">
                             <h3 class="text-lg font-medium text-gray-900">Statistiques</h3>
                             <p class="mt-1 text-sm text-gray-500">
-                                Consultez les statistiques de vente
+                                Chiffre d'affaires (commandes terminées)
                             </p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-4 sm:px-6">
-                    <span class="text-sm text-gray-500">Fonctionnalité à venir</span>
+                <div class="bg-gray-50 px-4 py-4 sm:px-6 space-y-1">
+                    <div class="text-2xl font-bold text-gray-900">{{ revenue|number_format(2, ',', ' ') }} €</div>
+                    <div class="text-sm text-gray-500">{{ productsAvailable }} / {{ productsTotal }} pièces disponibles &middot; {{ usersTotal }} clients</div>
                 </div>
             </div>
-            
+
             <!-- Commandes -->
             <div class="bg-white overflow-hidden shadow rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
@@ -117,16 +118,23 @@
                         <div class="ml-5">
                             <h3 class="text-lg font-medium text-gray-900">Commandes</h3>
                             <p class="mt-1 text-sm text-gray-500">
-                                Gérez les commandes des clients
+                                {{ ordersTotal }} commande(s) au total
                             </p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-4 sm:px-6">
-                    <span class="text-sm text-gray-500">Fonctionnalité à venir</span>
+                <div class="bg-gray-50 px-4 py-4 sm:px-6 space-y-1">
+                    <div class="text-sm text-gray-500">
+                        {{ ordersByStatus.completed|default(0) }} terminée(s) &middot;
+                        {{ ordersByStatus.processing|default(0) }} en cours &middot;
+                        {{ ordersByStatus.cancelled|default(0) }} annulée(s)
+                    </div>
+                    <a href="{{ path('app_admin_order_index') }}" class="text-sm font-medium text-yb-dark hover:underline block">
+                        Voir toutes les commandes <span aria-hidden="true">&rarr;</span>
+                    </a>
                 </div>
             </div>
-            
+
             <!-- Retour au site -->
             <div class="bg-white overflow-hidden shadow rounded-lg">
                 <div class="px-4 py-5 sm:p-6">
@@ -150,6 +158,39 @@
                     </a>
                 </div>
             </div>
+        </div>
+
+        <!-- Dernières commandes -->
+        <div class="mt-10 bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:px-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Dernières commandes</h3>
+            </div>
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for order in recentOrders %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <a href="{{ path('app_admin_order_show', {'id': order.id}) }}" class="text-yb-dark hover:underline">#{{ order.id }}</a>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ order.user ? order.user.email : 'Client supprimé' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ order.total|number_format(2, ',', ' ') }} €</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ order.status }}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Aucune commande pour le moment</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

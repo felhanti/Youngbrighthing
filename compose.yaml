@@ -11,9 +11,8 @@ services:
       DATABASE_URL: "postgresql://app:!ChangeMe!@database:5432/app?serverVersion=16&charset=utf8"
       APP_ENV: dev
       APP_SECRET: 75dc39bca9b7c1fabafa564af27eb065
-      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY}
-      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
-      MAILER_DSN: ${MAILER_DSN}
+      # Secrets (Stripe, mailer) : ne pas les injecter ici. Symfony les lit
+      # directement depuis .env.local (non versionné, monté via le volume .:/app).
     depends_on:
       database:
         condition: service_healthy
