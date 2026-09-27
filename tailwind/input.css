@@ -47,4 +47,14 @@
     border-color: var(--color-gold);
     color: var(--color-gold);
   }
+
+  /* Champs sur fond sombre : Chrome peint les champs pré-remplis en bleu clair, on garde le style du site. */
+  .ybt-field:-webkit-autofill,
+  .ybt-field:-webkit-autofill:hover,
+  .ybt-field:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--color-light);
+    -webkit-box-shadow: 0 0 0 1000px var(--color-dark) inset;
+    caret-color: var(--color-light);
+    transition: background-color 9999s ease-out;
+  }
 }

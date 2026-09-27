@@ -5,105 +5,109 @@
 {% block robots %}noindex, nofollow{% endblock %}
 
 {% block body %}
-<section class="grid grid-cols-1 lg:grid-cols-12 lg:min-h-[calc(100vh-5rem)]">
-
-	{# Visuel de campagne : bandeau sur mobile, demi-page sur ordinateur. #}
-	<div class="relative min-w-0 lg:col-span-7 h-[42vh] lg:h-auto overflow-hidden">
+<section class="relative bg-yb-dark">
+	{# Photo de campagne : bandeau sur mobile, moitié gauche pleine hauteur à partir de la tablette. #}
+	<div class="absolute inset-x-0 top-0 h-[46vh] md:inset-y-0 md:right-auto md:w-1/2 md:h-auto overflow-hidden">
 		<img src="{{ asset('images/IMG_20240417_172439_073.jpg') }}" alt=""
 			class="absolute inset-0 w-full h-full object-cover object-[center_30%] grayscale contrast-125">
 		<div class="absolute inset-0 bg-gradient-to-t from-yb-dark via-yb-dark/40 to-yb-dark/10"></div>
-
-		<div class="absolute top-6 left-6 lg:top-10 lg:left-10 flex items-center gap-3 text-[11px] tracking-[0.3em] uppercase text-yb-gold">
-			<span class="h-px w-8 bg-yb-gold"></span>
-			Espace membre
-		</div>
-
-		<div class="absolute bottom-6 left-6 right-6 lg:bottom-12 lg:left-10 lg:right-10">
-			<p class="font-display text-yb-light leading-[0.9] text-5xl sm:text-6xl lg:text-8xl">
-				Chaque pièce<br>n'existe<br><span class="text-yb-gold">qu'une fois.</span>
-			</p>
-			<p class="hidden lg:block mt-6 max-w-sm text-sm text-yb-light/60 leading-relaxed">
-				Connectez-vous pour retrouver votre panier avant qu'une autre personne ne craque pour la même pièce.
-			</p>
-		</div>
+		<div class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-yb-dark/70 to-transparent"></div>
 	</div>
 
-	{# Formulaire. #}
-	<div class="min-w-0 lg:col-span-5 flex items-center px-6 sm:px-12 lg:px-16 py-14 lg:py-20 bg-yb-dark">
-		<div class="w-full max-w-sm mx-auto">
+	{# Même conteneur que l'en-tête : l'accroche s'aligne sous le logo, le formulaire sous « Panier ». #}
+	<div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 md:min-h-[calc(100vh-5rem)]">
 
-			<h1 class="font-display text-yb-light text-6xl lg:text-7xl leading-none">Connexion</h1>
-			<div class="mt-4 h-0.5 w-12 bg-yb-gold"></div>
-
-			{% if app.user %}
-				<p class="mt-10 text-sm text-yb-light/70">
-					Vous êtes déjà connecté(e) en tant que
-					<span class="text-yb-light">{{ app.user.userIdentifier }}</span>.
+		<div class="min-w-0 h-[46vh] md:h-auto flex flex-col justify-between py-8 md:py-12 md:pr-12">
+			<div class="flex items-center gap-3 text-[11px] tracking-[0.3em] uppercase text-yb-gold">
+				<span class="h-px w-8 bg-yb-gold"></span>
+				Espace membre
+			</div>
+			<div>
+				<p class="font-display text-yb-light leading-[0.9] text-5xl sm:text-6xl lg:text-7xl xl:text-8xl">
+					Chaque pièce<br>n'existe<br><span class="text-yb-gold">qu'une fois.</span>
 				</p>
-				<div class="mt-8 flex flex-col gap-3">
-					<a href="{{ path('app_account') }}" class="group flex items-center justify-between bg-yb-gold text-yb-dark px-6 py-4 text-sm font-bold uppercase tracking-[0.2em] hover:bg-yb-light transition-colors">
-						Mon compte
-						<span class="transition-transform group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
-					</a>
-					<a href="{{ path('app_logout') }}" class="text-center text-xs uppercase tracking-[0.2em] text-yb-light/50 hover:text-yb-gold py-2">Se déconnecter</a>
-				</div>
-			{% else %}
-				<p class="mt-6 text-sm text-yb-light/60 leading-relaxed">
-					Votre panier, vos commandes et l'accès aux prochains drops.
+				<p class="hidden md:block mt-6 max-w-sm text-sm text-yb-light/60 leading-relaxed">
+					Connectez-vous pour retrouver votre panier avant qu'une autre personne ne craque pour la même pièce.
 				</p>
+			</div>
+		</div>
 
-				{% if error %}
-					<div class="mt-8 border-l-2 border-red-400 bg-red-400/10 px-4 py-3 text-sm text-red-200" role="alert">
-						{{ error.messageKey|trans(error.messageData, 'security') }}
+		<div class="min-w-0 flex items-center md:justify-end py-14 md:py-20 md:pl-12">
+			<div class="w-full md:max-w-sm">
+
+				<h1 class="font-display text-yb-light text-6xl lg:text-7xl leading-none">Connexion</h1>
+				<div class="mt-4 h-0.5 w-12 bg-yb-gold"></div>
+
+				{% if app.user %}
+					<p class="mt-10 text-sm text-yb-light/70">
+						Vous êtes déjà connecté(e) en tant que
+						<span class="text-yb-light">{{ app.user.userIdentifier }}</span>.
+					</p>
+					<div class="mt-8 flex flex-col gap-3">
+						<a href="{{ path('app_account') }}" class="group flex items-center justify-between bg-yb-gold text-yb-dark px-6 py-4 text-sm font-bold uppercase tracking-[0.2em] hover:bg-yb-light transition-colors">
+							Mon compte
+							<span class="transition-transform group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+						</a>
+						<a href="{{ path('app_logout') }}" class="text-center text-xs uppercase tracking-[0.2em] text-yb-light/50 hover:text-yb-gold py-2">Se déconnecter</a>
+					</div>
+				{% else %}
+					<p class="mt-6 text-sm text-yb-light/60 leading-relaxed">
+						Votre panier, vos commandes et l'accès aux prochains drops.
+					</p>
+
+					{% if error %}
+						<div class="mt-8 border-l-2 border-red-400 bg-red-400/10 px-4 py-3 text-sm text-red-200" role="alert">
+							{{ error.messageKey|trans(error.messageData, 'security') }}
+						</div>
+					{% endif %}
+
+					<form method="post" class="mt-10 space-y-8" novalidate>
+						<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+						<div>
+							<label for="username" class="block text-[11px] uppercase tracking-[0.25em] text-yb-light/50">Adresse e-mail</label>
+							<input id="username" name="_username" type="email" value="{{ last_username }}" autocomplete="email" required autofocus
+								class="ybt-field mt-2 block w-full bg-transparent border-0 border-b border-yb-light/20 px-0 py-3 text-lg text-yb-light placeholder-yb-light/20 focus:outline-none focus:ring-0 focus:border-yb-gold transition-colors"
+								placeholder="vous@exemple.fr">
+						</div>
+
+						<div>
+							<div class="flex items-baseline justify-between">
+								<label for="password" class="block text-[11px] uppercase tracking-[0.25em] text-yb-light/50">Mot de passe</label>
+								<a href="{{ path('app_forgot_password_request') }}" class="text-[11px] uppercase tracking-[0.2em] text-yb-light/40 hover:text-yb-gold transition-colors">Oublié ?</a>
+							</div>
+							<div class="relative mt-2">
+								<input id="password" name="_password" type="password" autocomplete="current-password" required
+									class="ybt-field block w-full bg-transparent border-0 border-b border-yb-light/20 px-0 py-3 pr-20 text-lg text-yb-light placeholder-yb-light/20 focus:outline-none focus:ring-0 focus:border-yb-gold transition-colors"
+									placeholder="••••••••">
+								<button type="button" id="toggle-password" aria-controls="password" aria-pressed="false"
+									class="absolute right-0 top-1/2 -translate-y-1/2 text-[11px] uppercase tracking-[0.2em] text-yb-light/40 hover:text-yb-gold focus:outline-none focus:text-yb-gold transition-colors">
+									Afficher
+								</button>
+							</div>
+						</div>
+
+						<label for="remember_me" class="flex items-center gap-3 cursor-pointer select-none text-sm text-yb-light/60">
+							<input id="remember_me" name="_remember_me" type="checkbox"
+								class="h-4 w-4 accent-yb-gold cursor-pointer">
+							Rester connecté(e)
+						</label>
+
+						<button type="submit" class="group w-full flex items-center justify-between bg-yb-gold text-yb-dark px-6 py-4 text-sm font-bold uppercase tracking-[0.2em] hover:bg-yb-light focus:outline-none focus:ring-2 focus:ring-yb-gold focus:ring-offset-2 focus:ring-offset-yb-dark transition-colors">
+							Se connecter
+							<span class="transition-transform group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+						</button>
+					</form>
+
+					<div class="mt-12 pt-8 border-t border-yb-light/10">
+						<p class="text-[11px] uppercase tracking-[0.25em] text-yb-light/40">Pas encore de compte ?</p>
+						<a href="{{ path('app_register') }}" class="group mt-3 inline-flex items-center gap-3 font-display text-3xl text-yb-light hover:text-yb-gold transition-colors">
+							Rejoindre Youngbrighthing
+							<span class="text-yb-gold transition-transform group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+						</a>
 					</div>
 				{% endif %}
-
-				<form method="post" class="mt-10 space-y-8" novalidate>
-					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-					<div>
-						<label for="username" class="block text-[11px] uppercase tracking-[0.25em] text-yb-light/50">Adresse e-mail</label>
-						<input id="username" name="_username" type="email" value="{{ last_username }}" autocomplete="email" required autofocus
-							class="mt-2 block w-full bg-transparent border-0 border-b border-yb-light/20 px-0 py-3 text-lg text-yb-light placeholder-yb-light/20 focus:outline-none focus:ring-0 focus:border-yb-gold transition-colors"
-							placeholder="vous@exemple.fr">
-					</div>
-
-					<div>
-						<div class="flex items-baseline justify-between">
-							<label for="password" class="block text-[11px] uppercase tracking-[0.25em] text-yb-light/50">Mot de passe</label>
-							<a href="{{ path('app_forgot_password_request') }}" class="text-[11px] uppercase tracking-[0.2em] text-yb-light/40 hover:text-yb-gold transition-colors">Oublié ?</a>
-						</div>
-						<div class="relative mt-2">
-							<input id="password" name="_password" type="password" autocomplete="current-password" required
-								class="block w-full bg-transparent border-0 border-b border-yb-light/20 px-0 py-3 pr-20 text-lg text-yb-light placeholder-yb-light/20 focus:outline-none focus:ring-0 focus:border-yb-gold transition-colors"
-								placeholder="••••••••">
-							<button type="button" id="toggle-password" aria-controls="password" aria-pressed="false"
-								class="absolute right-0 top-1/2 -translate-y-1/2 text-[11px] uppercase tracking-[0.2em] text-yb-light/40 hover:text-yb-gold focus:outline-none focus:text-yb-gold transition-colors">
-								Afficher
-							</button>
-						</div>
-					</div>
-
-					<label for="remember_me" class="flex items-center gap-3 cursor-pointer select-none text-sm text-yb-light/60">
-						<input id="remember_me" name="_remember_me" type="checkbox"
-							class="h-4 w-4 accent-yb-gold cursor-pointer">
-						Rester connecté(e)
-					</label>
-
-					<button type="submit" class="group w-full flex items-center justify-between bg-yb-gold text-yb-dark px-6 py-4 text-sm font-bold uppercase tracking-[0.2em] hover:bg-yb-light focus:outline-none focus:ring-2 focus:ring-yb-gold focus:ring-offset-2 focus:ring-offset-yb-dark transition-colors">
-						Se connecter
-						<span class="transition-transform group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
-					</button>
-				</form>
-
-				<div class="mt-12 pt-8 border-t border-yb-light/10">
-					<p class="text-[11px] uppercase tracking-[0.25em] text-yb-light/40">Pas encore de compte ?</p>
-					<a href="{{ path('app_register') }}" class="group mt-3 inline-flex items-center gap-3 font-display text-3xl text-yb-light hover:text-yb-gold transition-colors">
-						Rejoindre Youngbrighthing
-						<span class="text-yb-gold transition-transform group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
-					</a>
-				</div>
-			{% endif %}
+			</div>
 		</div>
 	</div>
 </section>
