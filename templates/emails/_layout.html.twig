@@ -1,0 +1,18 @@
+{# Mise en page commune des e-mails : styles en ligne, seuls compris par tous les clients mail. #}
+<div style="font-family: Arial, sans-serif; background-color: #f9fafb; margin: 0; padding: 40px 16px;">
+    <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);">
+        <div style="background-color: #1A1A1A; padding: 32px; text-align: center;">
+            <h1 style="color: #FFD700; margin: 0; font-size: 26px; font-weight: bold; font-family: 'Playfair Display', Georgia, serif;">
+                {% block heading %}{% endblock %}
+            </h1>
+            <div style="margin: 8px auto 0; height: 2px; width: 60px; background-color: #FFD700;"></div>
+        </div>
+        <div style="padding: 32px; color: #4B5563; line-height: 1.6; font-size: 15px;">
+            {% block content %}{% endblock %}
+        </div>
+        <div style="background-color: #1A1A1A; padding: 20px; text-align: center; color: #9CA3AF; font-size: 12px;">
+            Youngbrighthing · Pièces uniques, fait main en France
+            {% block footer %}{% endblock %}
+        </div>
+    </div>
+</div>

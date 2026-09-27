@@ -14,13 +14,25 @@ class Order
 {
     public const STATUS_PENDING = 'pending';
     public const STATUS_PROCESSING = 'processing';
+    /** Payée, à préparer. */
     public const STATUS_COMPLETED = 'completed';
+    public const STATUS_SHIPPED = 'shipped';
     public const STATUS_CANCELLED = 'cancelled';
+
+    /** Statut => libellé affiché au client et dans l'admin. */
+    public const STATUS_LABELS = [
+        self::STATUS_PENDING => 'En attente de paiement',
+        self::STATUS_PROCESSING => 'Paiement en cours',
+        self::STATUS_COMPLETED => 'Payée, en préparation',
+        self::STATUS_SHIPPED => 'Expédiée',
+        self::STATUS_CANCELLED => 'Annulée',
+    ];
 
     public const STATUSES = [
         self::STATUS_PENDING,
         self::STATUS_PROCESSING,
         self::STATUS_COMPLETED,
+        self::STATUS_SHIPPED,
         self::STATUS_CANCELLED,
     ];
 
@@ -44,6 +56,13 @@ class Order
     /** Session Stripe Checkout en cours : seule celle-ci peut valider ou annuler la commande. */
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripeSessionId = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $shippedAt = null;
+
+    /** Numéro de suivi transporteur, communiqué au client à l'expédition. */
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $trackingNumber = null;
 
     /**
      * @var Collection<int, OrderItem>
@@ -100,6 +119,40 @@ class Order
         $this->status = $status;
 
         return $this;
+    }
+
+    public function getStatusLabel(): string
+    {
+        return self::STATUS_LABELS[$this->status] ?? (string) $this->status;
+    }
+
+    public function isPaid(): bool
+    {
+        return in_array($this->status, [self::STATUS_COMPLETED, self::STATUS_SHIPPED], true);
+    }
+
+    /** Marque la commande expédiée. Seule une commande payée peut l'être. */
+    public function ship(?string $trackingNumber): static
+    {
+        if (self::STATUS_COMPLETED !== $this->status) {
+            throw new \LogicException('Seule une commande payée et pas encore expédiée peut être expédiée.');
+        }
+
+        $this->status = self::STATUS_SHIPPED;
+        $this->shippedAt = new \DateTimeImmutable();
+        $this->trackingNumber = $trackingNumber ? trim($trackingNumber) : null;
+
+        return $this;
+    }
+
+    public function getShippedAt(): ?\DateTimeImmutable
+    {
+        return $this->shippedAt;
+    }
+
+    public function getTrackingNumber(): ?string
+    {
+        return $this->trackingNumber;
     }
 
     /** La commande peut encore être payée (pas encore payée ni annulée). */

@@ -35,12 +35,13 @@ class OrderRepository extends ServiceEntityRepository
         return $counts;
     }
 
-    public function sumTotalByStatus(string $status): string
+    /** Chiffre d'affaires encaissé : commandes payées, expédiées ou non. */
+    public function sumPaidTotal(): string
     {
         return $this->createQueryBuilder('o')
             ->select('COALESCE(SUM(o.total), 0)')
-            ->andWhere('o.status = :status')
-            ->setParameter('status', $status)
+            ->andWhere('o.status IN (:statuses)')
+            ->setParameter('statuses', [Order::STATUS_COMPLETED, Order::STATUS_SHIPPED])
             ->getQuery()
             ->getSingleScalarResult();
     }

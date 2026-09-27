@@ -125,7 +125,8 @@
                 </div>
                 <div class="bg-gray-50 px-4 py-4 sm:px-6 space-y-1">
                     <div class="text-sm text-gray-500">
-                        {{ ordersByStatus.completed|default(0) }} terminée(s) &middot;
+                        {{ ordersByStatus.completed|default(0) }} à expédier &middot;
+                        {{ ordersByStatus.shipped|default(0) }} expédiée(s) &middot;
                         {{ ordersByStatus.processing|default(0) }} en cours &middot;
                         {{ ordersByStatus.cancelled|default(0) }} annulée(s)
                     </div>
@@ -182,7 +183,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ order.user ? order.user.email : 'Client supprimé' }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ order.total|number_format(2, ',', ' ') }} €</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ order.status }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ include('order/_status_badge.html.twig') }}</td>
                         </tr>
                     {% else %}
                         <tr>

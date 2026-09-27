@@ -8,8 +8,8 @@ use App\Exception\ProductsUnavailableException;
 use App\Repository\CartRepository;
 use App\Repository\OrderRepository;
 use App\Service\CartToOrderService;
+use App\Service\OrderPaymentService;
 use App\Service\StripeCheckoutService;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,7 +50,7 @@ final class OrderController extends AbstractController
         Order $order,
         Request $request,
         StripeCheckoutService $stripe,
-        EntityManagerInterface $entityManager,
+        OrderPaymentService $payments,
         LoggerInterface $logger,
     ): Response {
         if ($order->getUser() !== $this->getUser()) {
@@ -63,8 +63,7 @@ final class OrderController extends AbstractController
         if ('' !== $sessionId && Order::STATUS_PROCESSING === $order->getStatus()) {
             try {
                 if ($stripe->isPaidSessionFor($stripe->retrieveSession($sessionId), $order)) {
-                    $order->setStatus(Order::STATUS_COMPLETED);
-                    $entityManager->flush();
+                    $payments->confirmPayment($order);
                 }
             } catch (\Throwable $e) {
                 // Le webhook prendra le relais.

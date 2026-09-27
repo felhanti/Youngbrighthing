@@ -1,0 +1,20 @@
+{% extends 'emails/_layout.html.twig' %}
+
+{% block heading %}Merci pour votre commande{% endblock %}
+
+{% block content %}
+    <p style="font-size: 17px; color: #1A1A1A; margin: 0 0 16px;">Bonjour {{ order.user.prenom }},</p>
+    <p style="margin: 0 0 8px;">
+        Votre paiement pour la commande <strong>#{{ order.id }}</strong> a bien été reçu.
+        {{ order.orderItems|length > 1 ? 'Ces pièces uniques sont désormais les vôtres' : 'Cette pièce unique est désormais la vôtre' }} :
+        nous la préparons avec soin et vous écrirons dès son expédition.
+    </p>
+
+    {% include 'emails/_order_items.html.twig' %}
+
+    <div style="text-align: center; margin: 32px 0 8px;">
+        <a href="{{ url('order_summary', {id: order.id}) }}" style="display: inline-block; background-color: #1A1A1A; color: #FFD700; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+            Suivre ma commande
+        </a>
+    </div>
+{% endblock %}

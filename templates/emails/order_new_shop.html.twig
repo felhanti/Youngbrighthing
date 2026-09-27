@@ -1,0 +1,20 @@
+{% extends 'emails/_layout.html.twig' %}
+
+{% block heading %}Nouvelle commande #{{ order.id }}{% endblock %}
+
+{% block content %}
+    <p style="margin: 0 0 8px;">
+        <strong>{{ order.user.prenom }} {{ order.user.nom }}</strong> ({{ order.user.email }}) vient de payer sa commande.
+    </p>
+    <p style="margin: 0 0 8px;">
+        Adresse : {{ order.user.adress }}, {{ order.user.cp }} {{ order.user.city }}, {{ order.user.country }}
+    </p>
+
+    {% include 'emails/_order_items.html.twig' %}
+
+    <div style="text-align: center; margin: 32px 0 8px;">
+        <a href="{{ url('app_admin_order_show', {id: order.id}) }}" style="display: inline-block; background-color: #1A1A1A; color: #FFD700; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+            Voir la commande dans l'admin
+        </a>
+    </div>
+{% endblock %}

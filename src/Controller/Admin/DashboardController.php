@@ -20,7 +20,7 @@ class DashboardController extends AbstractController
         $ordersByStatus = $orderRepository->countByStatus();
 
         return $this->render('admin/index.html.twig', [
-            'revenue' => $orderRepository->sumTotalByStatus('completed'),
+            'revenue' => $orderRepository->sumPaidTotal(),
             'ordersByStatus' => $ordersByStatus,
             'ordersTotal' => array_sum($ordersByStatus),
             'recentOrders' => $orderRepository->findRecent(5),

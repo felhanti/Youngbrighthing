@@ -4,9 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Repository\OrderRepository;
+use App\Service\OrderPaymentService;
 use App\Service\OrderReservationService;
 use App\Service\StripeCheckoutService;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Stripe\Checkout\Session;
 use Stripe\Exception\SignatureVerificationException;
@@ -20,8 +20,8 @@ use Symfony\Component\Routing\Attribute\Route;
 final class StripeWebhookController extends AbstractController
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager,
         private readonly OrderRepository $orderRepository,
+        private readonly OrderPaymentService $payments,
         private readonly OrderReservationService $reservationService,
         private readonly StripeCheckoutService $stripe,
         private readonly LoggerInterface $logger,
@@ -69,8 +69,7 @@ final class StripeWebhookController extends AbstractController
 
         // Idempotent : Stripe peut renvoyer le même événement plusieurs fois.
         if ($order && Order::STATUS_PROCESSING === $order->getStatus() && $this->stripe->isPaidSessionFor($session, $order)) {
-            $order->setStatus(Order::STATUS_COMPLETED);
-            $this->entityManager->flush();
+            $this->payments->confirmPayment($order);
         }
     }
 

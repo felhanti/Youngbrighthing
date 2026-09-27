@@ -1,0 +1,17 @@
+{% extends 'emails/_layout.html.twig' %}
+
+{% block heading %}Votre commande est en route{% endblock %}
+
+{% block content %}
+    <p style="font-size: 17px; color: #1A1A1A; margin: 0 0 16px;">Bonjour {{ order.user.prenom }},</p>
+    <p style="margin: 0 0 16px;">Bonne nouvelle : votre commande <strong>#{{ order.id }}</strong> vient d'être expédiée.</p>
+
+    {% if order.trackingNumber %}
+        <p style="margin: 0 0 16px; padding: 16px; background-color: #F3F4F6; border-radius: 8px; text-align: center;">
+            Numéro de suivi<br>
+            <strong style="font-size: 18px; color: #1A1A1A; letter-spacing: 1px;">{{ order.trackingNumber }}</strong>
+        </p>
+    {% endif %}
+
+    {% include 'emails/_order_items.html.twig' %}
+{% endblock %}

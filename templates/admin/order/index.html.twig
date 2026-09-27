@@ -24,6 +24,13 @@
             </div>
         </div>
 
+        <nav class="flex flex-wrap gap-2 mb-4" aria-label="Filtrer par statut">
+            <a href="{{ path('app_admin_order_index') }}" class="px-3 py-1 rounded-full text-sm {{ currentStatus is null ? 'bg-yb-dark text-yb-gold' : 'bg-white text-gray-700 border border-gray-300' }}">Toutes</a>
+            {% for status, label in constant('App\\Entity\\Order::STATUS_LABELS') %}
+                <a href="{{ path('app_admin_order_index', {status: status}) }}" class="px-3 py-1 rounded-full text-sm {{ currentStatus == status ? 'bg-yb-dark text-yb-gold' : 'bg-white text-gray-700 border border-gray-300' }}">{{ label }}</a>
+            {% endfor %}
+        </nav>
+
         <div class="flex flex-col">
             <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -47,15 +54,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ order.createdAt|date('d/m/Y H:i') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ order.total|number_format(2, ',', ' ') }} €</td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            {% set statusColors = {
-                                                pending: 'bg-gray-100 text-gray-800',
-                                                processing: 'bg-yellow-100 text-yellow-800',
-                                                completed: 'bg-green-100 text-green-800',
-                                                cancelled: 'bg-red-100 text-red-800'
-                                            } %}
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ statusColors[order.status]|default('bg-gray-100 text-gray-800') }}">
-                                                {{ order.status }}
-                                            </span>
+                                            {{ include('order/_status_badge.html.twig') }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <a href="{{ path('app_admin_order_show', {'id': order.id}) }}" class="text-yb-dark hover:underline">
