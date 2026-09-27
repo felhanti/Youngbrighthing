@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Compile Tailwind (tailwind/input.css -> assets/styles/app.css).
+# À relancer après toute modification de classes dans templates/, assets/ ou src/Form.
+#   bin/build-css           build minifié
+#   bin/build-css --watch   recompile à chaque modification
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+VERSION="v3.4.17"
+BIN="var/tailwindcss-$VERSION"
+
+if [[ ! -x "$BIN" ]]; then
+  case "$(uname -s)-$(uname -m)" in
+    Darwin-arm64) asset="tailwindcss-macos-arm64" ;;
+    Darwin-x86_64) asset="tailwindcss-macos-x64" ;;
+    Linux-x86_64) asset="tailwindcss-linux-x64" ;;
+    Linux-aarch64) asset="tailwindcss-linux-arm64" ;;
+    *) echo "Plateforme non gérée : $(uname -s)-$(uname -m)" >&2; exit 1 ;;
+  esac
+  mkdir -p var
+  echo "Téléchargement de Tailwind $VERSION ($asset)…"
+  curl -fsSL -o "$BIN" "https://github.com/tailwindlabs/tailwindcss/releases/download/$VERSION/$asset"
+  chmod +x "$BIN"
+fi
+
+if [[ "${1:-}" == "--watch" ]]; then
+  exec "$BIN" -c tailwind.config.js -i tailwind/input.css -o assets/styles/app.css --watch
+fi
+"$BIN" -c tailwind.config.js -i tailwind/input.css -o assets/styles/app.css --minify

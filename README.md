@@ -34,6 +34,18 @@ stripe listen --forward-to localhost:8080/stripe/webhook
 
 Copier le `whsec_...` affiché dans `STRIPE_WEBHOOK_SECRET` de `.env.local`.
 
+## CSS (Tailwind)
+
+Le CSS est compilé par Tailwind v3 (binaire autonome, sans Node) de `tailwind/input.css` vers `assets/styles/app.css`, qui est versionné.
+**Après toute modification de classes** dans `templates/`, `assets/` ou `src/Form/`, recompiler depuis le Mac :
+
+```bash
+bin/build-css          # build minifié
+bin/build-css --watch  # recompile en continu pendant le développement
+```
+
+Les couleurs de la marque sont dans `tailwind.config.js` (`yb-gold`, `yb-dark`, `yb-light`, `yb-gray`) : toutes les variantes (`hover:`, `focus:`, `/50`…) fonctionnent.
+
 ## Réservation des pièces uniques
 
 Quand un client valide son panier, ses pièces sont réservées (`available = false`) le temps du paiement Stripe (30 min max).

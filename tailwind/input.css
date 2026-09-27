@@ -1,0 +1,50 @@
+/* Source de assets/styles/app.css : ne pas modifier app.css à la main, relancer bin/build-css. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-gold: theme('colors.yb.gold');
+    --color-dark: theme('colors.yb.dark');
+    --color-light: theme('colors.yb.light');
+    --color-gray: theme('colors.yb.gray');
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: theme('fontFamily.display');
+    letter-spacing: 1px;
+  }
+}
+
+@layer components {
+  .ybt-nav-link {
+    color: var(--color-light);
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .ybt-nav-link:hover {
+    color: var(--color-gold);
+  }
+
+  .ybt-cart-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid rgba(243, 241, 234, 0.3);
+    color: var(--color-light);
+    padding: 10px 18px;
+    border-radius: 2px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .ybt-cart-pill:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+  }
+}

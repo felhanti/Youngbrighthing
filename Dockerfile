@@ -12,4 +12,4 @@ COPY . .
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 EXPOSE 8000
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public/"]
+CMD ["php", "-S", "0.0.0.0:8000", "-t", "public/", "docker/router.php"]
