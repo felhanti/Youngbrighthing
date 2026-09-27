@@ -180,6 +180,11 @@ class Product
             $this->updatedAt = new \DateTimeImmutable();
         }
     }
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
     public function getImageFile(): ?File
     {
         return $this->imageFile;

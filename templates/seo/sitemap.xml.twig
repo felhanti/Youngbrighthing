@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{% for route in ['home', 'app_collection_all', 'app_histoire', 'app_campagne'] %}
+    <url><loc>{{ url(route) }}</loc></url>
+{% endfor %}
+{% for drop in drops %}
+    <url><loc>{{ url('app_drop', {name: drop.name}) }}</loc></url>
+{% endfor %}
+{% for product in products %}
+    <url>
+        <loc>{{ url('app_product', {id: product.id}) }}</loc>
+        <lastmod>{{ (product.updatedAt ?? product.addDate)|date('Y-m-d') }}</lastmod>
+    </url>
+{% endfor %}
+{% for route in ['app_cgv_cgu', 'app_cgv_confidentialite', 'app_cgv_mentions_legales', 'app_cgv_retour'] %}
+    <url><loc>{{ url(route) }}</loc></url>
+{% endfor %}
+</urlset>
