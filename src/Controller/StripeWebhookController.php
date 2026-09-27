@@ -78,8 +78,8 @@ final class StripeWebhookController extends AbstractController
         // pour qu'elles redeviennent achetables par un autre client.
         foreach ($order->getOrderItems() as $orderItem) {
             $product = $orderItem->getProduct();
-            if ($product && !$product->getIssold()) {
-                $product->setIssold(true);
+            if ($product && !$product->isAvailable()) {
+                $product->setAvailable(true);
             }
         }
 

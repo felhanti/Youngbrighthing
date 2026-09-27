@@ -28,8 +28,9 @@ class Product
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $price = null;
 
+    /** true = pièce encore en vente ; false = vendue ou réservée pendant un paiement. */
     #[ORM\Column]
-    private ?bool $is_sold = null;
+    private bool $available = true;
 
     #[ORM\Column(length: 10)]
     private ?string $size = null;
@@ -60,9 +61,6 @@ class Product
      */
     #[ORM\ManyToMany(targetEntity: Cart::class, mappedBy: 'product')]
     private Collection $carts;
-
-    // #[ORM\Column(length: 255, nullable: true)]
-    // private ?string $image = null;
 
     public function __construct()
     {
@@ -112,14 +110,14 @@ class Product
         return $this;
     }
 
-    public function getIssold(): ?bool
+    public function isAvailable(): bool
     {
-        return $this->is_sold;
+        return $this->available;
     }
 
-    public function setIssold(bool $is_sold): self
+    public function setAvailable(bool $available): static
     {
-        $this->is_sold = $is_sold;
+        $this->available = $available;
 
         return $this;
     }

@@ -64,7 +64,7 @@
 				{% for product in products %}
 					<div class="group">
 						<div class="relative w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-							{% if not product.isSold() %}
+							{% if not product.isAvailable() %}
 								<span class="absolute top-2 right-2 z-10 bg-yb-dark text-white text-xs font-medium px-2 py-1 rounded">Épuisé</span>
 							{% endif %}
 							{% if product.imageName %}
@@ -106,7 +106,7 @@
 								Voir
 							</a>
 
-							{% if product.isSold() %}
+							{% if product.isAvailable() %}
 								{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 									<button class="add-to-cart-btn w-full py-2 bg-yb-dark text-yb-gold rounded font-medium hover:bg-opacity-90 transition-colors" data-product-id="{{ product.id }}">
 										<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewbox="0 0 24 24" stroke="currentColor">

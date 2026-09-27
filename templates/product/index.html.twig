@@ -9,7 +9,7 @@
 
 {% block jsonld %}
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Product","name":"{{ product.name }}","description":"{{ product.description|replace({'"': '\\"', "\n": ' '})|raw }}","image":"{{ absolute_url(asset('images/product/' ~ product.imageName)) }}","offers":{"@type":"Offer","priceCurrency":"EUR","price":"{{ product.price }}","availability":"{% if product.isSold() %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}","seller":{"@type":"Organization","name":"Youngbrighthing"}},"brand":{"@type":"Brand","name":"Youngbrighthing"}}
+{"@context":"https://schema.org","@type":"Product","name":"{{ product.name }}","description":"{{ product.description|replace({'"': '\\"', "\n": ' '})|raw }}","image":"{{ absolute_url(asset('images/product/' ~ product.imageName)) }}","offers":{"@type":"Offer","priceCurrency":"EUR","price":"{{ product.price }}","availability":"{% if product.isAvailable() %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}","seller":{"@type":"Organization","name":"Youngbrighthing"}},"brand":{"@type":"Brand","name":"Youngbrighthing"}}
 </script>
 {% endblock %}
 
@@ -74,7 +74,7 @@
                 
                 <!-- Actions -->
                 <div class="flex flex-col sm:flex-row gap-4">
-                    {% if not product.isSold() %}
+                    {% if not product.isAvailable() %}
                         <button disabled class="flex-1 py-3 bg-gray-300 text-gray-600 rounded-md cursor-not-allowed flex items-center justify-center">
                             Épuisé
                         </button>

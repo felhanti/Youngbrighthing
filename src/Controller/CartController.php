@@ -33,7 +33,7 @@ final class CartController extends AbstractController
             }
 
             // Vérifier si le produit est disponible
-            if (!$product->getIssold()) {
+            if (!$product->isAvailable()) {
                 return new JsonResponse([
                     'success' => false,
                     'message' => 'Ce produit n\'est plus disponible'

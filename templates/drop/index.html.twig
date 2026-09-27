@@ -80,7 +80,7 @@
                                 {% endif %}
                                 <!-- Badge indiquant la disponibilité -->
                                 <div class="absolute top-2 right-2">
-                                    {% if product.isSold() %}
+                                    {% if product.isAvailable() %}
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                             Disponible
                                         </span>
@@ -103,7 +103,7 @@
                                 <p class="text-base font-medium text-gray-900">{{ product.price|number_format(2, ',', ' ') }} €</p>
                             </div>
                             <div class="mt-3">
-                                {% if product.isSold() %}
+                                {% if product.isAvailable() %}
                                     <a href="{{ path('app_product', { id: product.id }) }}" class="block w-full py-2 text-center bg-yb-dark text-yb-gold rounded-md hover:bg-opacity-90 transition-colors duration-200">
                                         Voir le produit
                                     </a>

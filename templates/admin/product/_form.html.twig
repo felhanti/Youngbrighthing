@@ -55,10 +55,10 @@
                 <!-- Disponibilité -->
                 <div class="sm:col-span-6">
                     <div class="flex items-center">
-                        {{ form_widget(form.is_sold, {'attr': {'class': 'h-4 w-4 text-yb-gold focus:ring-yb-gold border-gray-300 rounded'}}) }}
-                        {{ form_label(form.is_sold, 'Produit disponible', {'label_attr': {'class': 'ml-2 block text-sm text-gray-900'}}) }}
+                        {{ form_widget(form.available, {'attr': {'class': 'h-4 w-4 text-yb-gold focus:ring-yb-gold border-gray-300 rounded'}}) }}
+                        {{ form_label(form.available, 'Produit disponible', {'label_attr': {'class': 'ml-2 block text-sm text-gray-900'}}) }}
                     </div>
-                    {{ form_errors(form.is_sold, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
+                    {{ form_errors(form.available, {'attr': {'class': 'text-red-500 text-xs mt-1'}}) }}
                 </div>
                 
                 <!-- Image du produit -->

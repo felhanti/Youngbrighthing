@@ -36,7 +36,7 @@ class CartControllerTest extends WebTestCase
         $product->setName('Produit de test '.uniqid());
         $product->setDescription('Pièce unique de test.');
         $product->setPrice('50.00');
-        $product->setIssold($available);
+        $product->setAvailable($available);
         $product->setSize('M');
 
         $entityManager->persist($product);

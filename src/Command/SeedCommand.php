@@ -103,7 +103,7 @@ class SeedCommand extends Command
             $p->setName($name);
             $p->setDescription($desc);
             $p->setPrice($price);
-            $p->setIsSold($sold);
+            $p->setAvailable($sold);
             $p->setSize($size);
             $p->setImageName($image);
             $p->addCategory($cat);

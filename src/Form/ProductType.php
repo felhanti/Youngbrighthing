@@ -54,7 +54,7 @@ class ProductType extends AbstractType
                 'label_attr' => ['class' => 'form-label fw-semibold'],
                 'row_attr' => ['class' => 'mb-3']
             ])
-            ->add('is_sold', CheckboxType::class, [
+            ->add('available', CheckboxType::class, [
                 'label' => 'Disponible',
                 'required' => false,
                 'label_attr' => [

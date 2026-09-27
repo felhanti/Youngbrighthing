@@ -48,7 +48,7 @@ class CartToOrderServiceTest extends KernelTestCase
         $product->setName($name);
         $product->setDescription('Pièce unique de test.');
         $product->setPrice('100.00');
-        $product->setIssold($available);
+        $product->setAvailable($available);
         $product->setSize('M');
 
         $this->entityManager->persist($product);
@@ -69,7 +69,7 @@ class CartToOrderServiceTest extends KernelTestCase
 
         $order = $this->service->createOrderFromCart($user, $cart);
 
-        self::assertFalse($product->getIssold(), 'La pièce doit être réservée (indisponible) dès la création de la commande.');
+        self::assertFalse($product->isAvailable(), 'La pièce doit être réservée (indisponible) dès la création de la commande.');
         self::assertCount(1, $order->getOrderItems());
 
         $orderItem = $order->getOrderItems()->first();

@@ -71,7 +71,7 @@
 				<div>
 					<div class="relative rounded-sm overflow-hidden mb-4" style="aspect-ratio:3/4;">
 						<img src="{{ asset('images/product/' ~ product.imageName) }}" alt="{{ product.name }}" class="absolute inset-0 w-full h-full object-cover">
-						{% if not product.isSold() %}
+						{% if not product.isAvailable() %}
 							<div class="absolute top-3 left-3 bg-yb-dark text-yb-light text-xs uppercase tracking-wider px-3 py-1.5 rounded-sm">Épuisé</div>
 						{% endif %}
 					</div>
@@ -84,7 +84,7 @@
 						<a href="{{ path('app_product', { id: product.id }) }}" class="block w-full py-2 text-center border border-gray-700 text-yb-light text-sm uppercase tracking-wider rounded-sm hover:border-yb-gold hover:text-yb-gold transition">
 							Voir
 						</a>
-						{% if product.isSold() %}
+						{% if product.isAvailable() %}
 							{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 								<button class="add-to-cart-btn block w-full py-2 text-center bg-yb-gold text-yb-dark text-sm uppercase tracking-wider font-bold rounded-sm hover:bg-opacity-90 transition" data-product-id="{{ product.id }}">
 									Ajouter au panier

@@ -30,7 +30,7 @@ class CartToOrderService
         // (achetée par un autre client) avant de créer la commande.
         $unavailable = [];
         foreach ($cart->getProduct() as $product) {
-            if (!$product->getIssold()) {
+            if (!$product->isAvailable()) {
                 $unavailable[] = $product;
             }
         }
@@ -69,7 +69,7 @@ class CartToOrderService
 
             // Réserver la pièce unique immédiatement pour empêcher qu'elle
             // soit vendue à quelqu'un d'autre pendant le paiement Stripe.
-            $product->setIssold(false);
+            $product->setAvailable(false);
         }
 
         $order->setTotal($totalPrice);
