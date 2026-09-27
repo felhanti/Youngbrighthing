@@ -3,97 +3,92 @@
 namespace App\Controller;
 
 use App\Entity\Order;
+use App\Repository\OrderRepository;
+use App\Service\OrderReservationService;
+use App\Service\StripeCheckoutService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Stripe\Event;
-use Stripe\Webhook;
+use Stripe\Checkout\Session;
 use Stripe\Exception\SignatureVerificationException;
+use Stripe\Webhook;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Attribute\Route;
 
 final class StripeWebhookController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
+        private readonly OrderRepository $orderRepository,
+        private readonly OrderReservationService $reservationService,
+        private readonly StripeCheckoutService $stripe,
         private readonly LoggerInterface $logger,
+        #[Autowire('%env(STRIPE_WEBHOOK_SECRET)%')]
+        private readonly string $webhookSecret,
     ) {
     }
 
     #[Route('/stripe/webhook', name: 'stripe_webhook', methods: ['POST'])]
     public function handle(Request $request): Response
     {
-        $payload = $request->getContent();
-        $sigHeader = $request->headers->get('Stripe-Signature', '');
-        $webhookSecret = $_ENV['STRIPE_WEBHOOK_SECRET'] ?? '';
+        if ('' === $this->webhookSecret) {
+            $this->logger->error('Webhook Stripe reçu mais STRIPE_WEBHOOK_SECRET est vide.');
+
+            return new Response('Webhook non configuré', Response::HTTP_SERVICE_UNAVAILABLE);
+        }
 
         try {
-            $event = Webhook::constructEvent($payload, $sigHeader, $webhookSecret);
+            $event = Webhook::constructEvent(
+                $request->getContent(),
+                $request->headers->get('Stripe-Signature', ''),
+                $this->webhookSecret,
+            );
         } catch (\UnexpectedValueException|SignatureVerificationException $e) {
             $this->logger->warning('Webhook Stripe rejeté : signature/payload invalide.', ['error' => $e->getMessage()]);
 
-            return new Response('Signature invalide', 400);
+            return new Response('Signature invalide', Response::HTTP_BAD_REQUEST);
         }
 
-        match ($event->type) {
-            'checkout.session.completed' => $this->onCheckoutCompleted($event),
-            'checkout.session.expired' => $this->onCheckoutExpired($event),
-            default => null,
-        };
+        $session = $event->data->object;
+        if ($session instanceof Session) {
+            match ($event->type) {
+                'checkout.session.completed' => $this->onCompleted($session),
+                'checkout.session.expired' => $this->onExpired($session),
+                default => null,
+            };
+        }
 
-        return new Response('OK', 200);
+        return new Response('OK');
     }
 
-    private function onCheckoutCompleted(Event $event): void
+    private function onCompleted(Session $session): void
     {
-        $session = $event->data->object;
-        $order = $this->findOrderFromSession($session);
+        $order = $this->findOrder($session);
 
-        if (!$order) {
-            return;
-        }
-
-        // Idempotent : ignore si déjà marquée comme terminée (Stripe peut renvoyer l'événement plusieurs fois).
-        if ($order->getStatus() === 'completed') {
-            return;
-        }
-
-        if ($session->payment_status === 'paid') {
-            $order->setStatus('completed');
+        // Idempotent : Stripe peut renvoyer le même événement plusieurs fois.
+        if ($order && Order::STATUS_PROCESSING === $order->getStatus() && $this->stripe->isPaidSessionFor($session, $order)) {
+            $order->setStatus(Order::STATUS_COMPLETED);
             $this->entityManager->flush();
         }
     }
 
-    private function onCheckoutExpired(Event $event): void
+    private function onExpired(Session $session): void
     {
-        $session = $event->data->object;
-        $order = $this->findOrderFromSession($session);
+        $order = $this->findOrder($session);
 
-        if (!$order || $order->getStatus() !== 'processing') {
-            return;
+        // On ne réagit qu'à la session en cours : si le client a relancé un paiement,
+        // l'expiration de l'ancienne session ne doit pas annuler la commande.
+        if ($order && $order->getStripeSessionId() === $session->id) {
+            $this->reservationService->cancel($order);
         }
-
-        // Le client n'a pas payé à temps : on libère les pièces uniques réservées
-        // pour qu'elles redeviennent achetables par un autre client.
-        foreach ($order->getOrderItems() as $orderItem) {
-            $product = $orderItem->getProduct();
-            if ($product && !$product->isAvailable()) {
-                $product->setAvailable(true);
-            }
-        }
-
-        $order->setStatus('cancelled');
-        $this->entityManager->flush();
     }
 
-    private function findOrderFromSession(object $session): ?Order
+    private function findOrder(Session $session): ?Order
     {
-        $orderId = $session->metadata->order_id ?? null;
-        if (!$orderId) {
-            return null;
-        }
+        $orderId = $session->metadata['order_id'] ?? null;
 
-        return $this->entityManager->getRepository(Order::class)->find((int) $orderId);
+        return $orderId ? $this->orderRepository->find((int) $orderId) : null;
     }
 }

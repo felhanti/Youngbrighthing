@@ -2,175 +2,90 @@
 
 namespace App\Controller;
 
-use App\Entity\Cart;
-use App\Entity\User;
 use App\Entity\Product;
-use Symfony\Component\Uid\Uuid;
-use App\Repository\ProductRepository;
+use App\Entity\User;
+use App\Repository\CartRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+/**
+ * Chaque client a un seul panier : on le déduit toujours de l'utilisateur connecté,
+ * jamais d'un identifiant passé dans l'URL.
+ */
 #[Route('/cart')]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class CartController extends AbstractController
 {
-    #[Route('/cart/add/{id}', name: 'app_cart_add', methods: ['POST'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function addToCart(int $id, EntityManagerInterface $entityManager, ProductRepository $productRepository): JsonResponse
-    {
-        try {
-            // Récupérer le produit par son ID
-            $product = $productRepository->find($id);
-            if (!$product) {
-                return new JsonResponse([
-                    'success' => false,
-                    'message' => 'Produit non trouvé'
-                ], 404);
-            }
-
-            // Vérifier si le produit est disponible
-            if (!$product->isAvailable()) {
-                return new JsonResponse([
-                    'success' => false,
-                    'message' => 'Ce produit n\'est plus disponible'
-                ], 400);
-            }
-
-            // Récupérer l'utilisateur connecté
-            /** @var User $connectedUser */
-            $connectedUser = $this->getUser();
-
-            // Récupérer ou créer le panier de l'utilisateur
-            $cart = null;
-            $carts = $connectedUser->getCarts();
-            
-            if (count($carts) > 0) {
-                $cart = $carts->first();
-            } else {
-                $cart = new Cart();
-                $cart->setUser($connectedUser);
-                $entityManager->persist($cart);
-            }
-
-            // Vérifier si le produit n'est pas déjà dans le panier
-            if ($cart->getProduct()->contains($product)) {
-                return new JsonResponse([
-                    'success' => false,
-                    'message' => 'Ce produit est déjà dans votre panier'
-                ], 400);
-            }
-
-            // Ajouter le produit au panier
-            $cart->addProduct($product);
-
-            // Sauvegarder les modifications
-            $entityManager->flush();
-
-            // Calculer le nouveau nombre d'articles dans le panier
-            $cartCount = $cart->getProduct()->count();
-
-            return new JsonResponse([
-                'success' => true,
-                'message' => 'Produit ajouté au panier avec succès !',
-                'cartCount' => $cartCount,
-                'productName' => $product->getName()
-            ]);
-
-        } catch (\Exception $e) {
-            // Log l'erreur pour le debugging
-            error_log('Erreur ajout panier: ' . $e->getMessage());
-            
-            return new JsonResponse([
-                'success' => false,
-                'message' => 'Une erreur est survenue lors de l\'ajout au panier'
-            ], 500);
-        }
+    public function __construct(
+        private readonly CartRepository $cartRepository,
+        private readonly EntityManagerInterface $entityManager,
+    ) {
     }
 
-    #[Route('/{id}', name: 'app_cart_show', methods: ['GET'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function showCart(int $id, EntityManagerInterface $entityManager): Response
+    #[Route('', name: 'app_cart_show', methods: ['GET'])]
+    public function show(#[CurrentUser] User $user): Response
     {
-        // Récupérer le panier par son ID
-        $cart = $entityManager->getRepository(Cart::class)->find($id);
-        if (!$cart) {
-            throw $this->createNotFoundException("Panier non trouvé.");
-        }
-
-        // Vérifier que le panier appartient à l'utilisateur connecté
-        /** @var User $connectedUser */
-        $connectedUser = $this->getUser();
-        if ($cart->getUser() !== $connectedUser) {
-            throw $this->createAccessDeniedException("Vous n'avez pas accès à ce panier.");
-        }
-
-        // Rendre la vue avec le panier
         return $this->render('cart/show.html.twig', [
-            'cart' => $cart,
+            'cart' => $this->cartRepository->getOrCreateForUser($user),
         ]);
     }
 
-    #[Route('/cart/remove/{id}', name: 'app_cart_remove', methods: ['POST'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function removeFromCart(int $id, EntityManagerInterface $entityManager): Response
+    #[Route('/add/{id}', name: 'app_cart_add', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function add(Product $product, Request $request, #[CurrentUser] User $user): JsonResponse
     {
-        /** @var User $connectedUser */
-        $connectedUser = $this->getUser();
-        $cart = $connectedUser->getCarts()->first();
-
-        if (!$cart) {
-            throw $this->createNotFoundException("Panier non trouvé.");
+        if (!$this->isCsrfTokenValid('cart', $request->headers->get('X-CSRF-Token'))) {
+            return $this->json(['success' => false, 'message' => 'Session expirée, rechargez la page.'], Response::HTTP_FORBIDDEN);
         }
 
-        $product = $entityManager->getRepository(Product::class)->find($id);
-
-        if (!$product) {
-            throw $this->createNotFoundException("Produit non trouvé.");
+        if (!$product->isAvailable()) {
+            return $this->json(['success' => false, 'message' => 'Ce produit n\'est plus disponible'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Retirer le produit du panier
-        $cart->removeProduct($product);
+        $cart = $this->cartRepository->getOrCreateForUser($user);
+        if ($cart->getProduct()->contains($product)) {
+            return $this->json(['success' => false, 'message' => 'Ce produit est déjà dans votre panier'], Response::HTTP_BAD_REQUEST);
+        }
 
-        // Sauvegarder les changements
-        $entityManager->flush();
+        $cart->addProduct($product);
+        $this->entityManager->flush();
 
-        $this->addFlash('success', 'Produit retiré du panier avec succès.');
-
-        // Rediriger vers la page du panier
-        return $this->redirectToRoute('app_cart_show', [
-            'id' => $cart->getId(),
+        return $this->json([
+            'success' => true,
+            'message' => 'Produit ajouté au panier avec succès !',
+            'cartCount' => $cart->getProduct()->count(),
+            'productName' => $product->getName(),
         ]);
     }
 
-    #[Route('/cart/clear/{id}', name: 'app_cart_clear', methods: ['POST'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function clearCart(int $id, EntityManagerInterface $entityManager): Response
+    #[Route('/remove/{id}', name: 'app_cart_remove', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[IsCsrfTokenValid(new Expression('"cart_remove" ~ args["product"].getId()'))]
+    public function remove(Product $product, #[CurrentUser] User $user): Response
     {
-        $cart = $entityManager->getRepository(Cart::class)->find($id);
+        $this->cartRepository->getOrCreateForUser($user)->removeProduct($product);
+        $this->entityManager->flush();
 
-        if (!$cart) {
-            throw $this->createNotFoundException("Panier non trouvé.");
-        }
+        $this->addFlash('success', 'Produit retiré du panier.');
 
-        /** @var User $connectedUser */
-        $connectedUser = $this->getUser();
+        return $this->redirectToRoute('app_cart_show');
+    }
 
-        // Vérifier que le panier appartient à l'utilisateur connecté
-        if ($cart->getUser() !== $connectedUser) {
-            throw $this->createAccessDeniedException("Vous n'avez pas accès à ce panier.");
-        }
+    #[Route('/clear', name: 'app_cart_clear', methods: ['POST'])]
+    #[IsCsrfTokenValid('cart_clear')]
+    public function clear(#[CurrentUser] User $user): Response
+    {
+        $this->cartRepository->getOrCreateForUser($user)->getProduct()->clear();
+        $this->entityManager->flush();
 
-        // Vider le panier
-        $cart->getProduct()->clear();
+        $this->addFlash('success', 'Le panier a été vidé.');
 
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Le panier a été vidé avec succès.');
-
-        return $this->redirectToRoute('app_cart_show', ['id' => $cart->getId()]);
+        return $this->redirectToRoute('app_cart_show');
     }
 }

@@ -46,6 +46,22 @@ class OrderRepository extends ServiceEntityRepository
     }
 
     /**
+     * Commandes jamais payées (en attente ou paiement commencé) créées avant la date donnée.
+     *
+     * @return Order[]
+     */
+    public function findPayableCreatedBefore(\DateTimeInterface $date): array
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.status IN (:statuses)')
+            ->andWhere('o.createdAt < :date')
+            ->setParameter('statuses', [Order::STATUS_PENDING, Order::STATUS_PROCESSING])
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @return Order[]
      */
     public function findRecent(int $limit = 5): array

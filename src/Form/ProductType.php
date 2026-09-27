@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Product;
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -15,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-
+use Symfony\Component\Validator\Constraints\Image;
 
 class ProductType extends AbstractType
 {
@@ -49,7 +48,7 @@ class ProductType extends AbstractType
                     'min' => 0,
                     'step' => '0.01'
                 ],
-                'currency' => 'None',
+                'currency' => false,
                 'label' => 'Prix',
                 'label_attr' => ['class' => 'form-label fw-semibold'],
                 'row_attr' => ['class' => 'mb-3']
@@ -101,6 +100,16 @@ class ProductType extends AbstractType
                 'label' => 'Image du produit',
                 'label_attr' => ['class' => 'form-label fw-semibold'],
                 'required' => false,
+                'attr' => ['accept' => 'image/jpeg,image/png,image/webp'],
+                // Le fichier atterrit dans public/ : n'accepter que de vraies images,
+                // sinon un script .php envoyé ici serait exécutable par le serveur.
+                'constraints' => [
+                    new Image(
+                        maxSize: '8M',
+                        mimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+                        mimeTypesMessage: 'Formats acceptés : JPEG, PNG ou WebP.',
+                    ),
+                ],
             ])
         ;
     }

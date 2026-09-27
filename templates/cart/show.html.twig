@@ -47,6 +47,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <form method="post" action="{{ path('app_cart_remove', { 'id': product.id }) }}">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('cart_remove' ~ product.id) }}">
                                             <button type="submit" class="text-red-600 hover:text-red-900 focus:outline-none">
                                                 <span class="sr-only">Supprimer</span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -101,12 +102,15 @@
                 
                 <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 space-y-3">
                     {% if cart.getProduct|length > 0 %}
-                        <a href="{{ path('order_finalize')}}" class="block w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-center font-medium text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none">
-                            Passer la commande
-                        </a>
+                        <form action="{{ path('order_finalize') }}" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token('order_finalize') }}">
+                            <button type="submit" class="block w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-center font-medium text-white bg-yb-dark hover:bg-opacity-90 focus:outline-none">
+                                Passer la commande
+                            </button>
+                        </form>
                         
-                        <form action="{{ path('app_cart_clear', { 'id': cart.id }) }}" method="post">
-                            <input type="hidden" name="_token" value="{{ csrf_token('clear_cart' ~ cart.id) }}">
+                        <form action="{{ path('app_cart_clear') }}" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token('cart_clear') }}">
                             <button type="submit" class="block w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-center font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none" onclick="return confirm('Voulez-vous vraiment vider le panier ?')">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

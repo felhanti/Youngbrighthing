@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -37,19 +38,19 @@ class UserType extends AbstractType
             ])
             ->add('plainPassword', PasswordType::class, [
                 'mapped' => false,
-                'required' => false,
+                'required' => $options['require_password'],
                 'label' => 'Mot de passe',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Laissez vide pour garder le mot de passe actuel'
-                    
+                    'autocomplete' => 'new-password',
+                    'placeholder' => $options['require_password']
+                        ? 'Mot de passe du compte'
+                        : 'Laissez vide pour garder le mot de passe actuel',
                 ],
-                'constraints' => [
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Le mot de passe doit faire au moins {{ limit }} caractères',
-                    ])
-                ],
+                'constraints' => array_filter([
+                    $options['require_password'] ? new NotBlank(message: 'Un mot de passe est obligatoire.') : null,
+                    new Length(min: 8, max: 4096, minMessage: 'Le mot de passe doit faire au moins {{ limit }} caractères'),
+                ]),
             ])
             ->add('nom', TextType::class, [
                 'label' => 'Nom',
@@ -108,9 +109,12 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            // true à la création d'un compte, false en édition (vide = inchangé).
+            'require_password' => false,
             'attr' => [
-                'class' => 'needs-validation'
-            ]
+                'class' => 'needs-validation',
+            ],
         ]);
+        $resolver->setAllowedTypes('require_password', 'bool');
     }
 }

@@ -161,7 +161,12 @@
 	<!-- Alpine.js via CDN pour les interactions légères -->
 	<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.1/dist/cdn.min.js" defer></script>
 
-	{% block javascripts %}{% endblock %}
+	{% block javascripts %}
+		{{ importmap('app') }}
+	{% endblock %}
+		{% if app.user %}
+			<meta name="csrf-cart" content="{{ csrf_token('cart') }}">
+		{% endif %}
 </head>
 <body class="flex flex-col min-h-screen bg-yb-dark text-yb-light">
 	<header class="sticky top-0 z-20 border-b border-gray-800" style="background:rgba(13,12,11,0.88);backdrop-filter:blur(8px);">
@@ -193,15 +198,10 @@
 					{% endif %}
 				</nav>
 
-				{% if app.user and app.user.carts|first %}
-					<a href="{{ path('app_cart_show', {'id': app.user.carts|first.id}) }}" class="ybt-cart-pill">
-						Panier (<span class="cart-counter">{{ app.user.carts|first.product|length }}</span>)
-					</a>
-				{% else %}
-					<a href="{{ app.user ? path('app_collection_all') : path('app_login') }}" class="ybt-cart-pill">
-						Panier (<span class="cart-counter">0</span>)
-					</a>
-				{% endif %}
+				{% set user_cart = app.user ? app.user.carts|first : null %}
+				<a href="{{ app.user ? path('app_cart_show') : path('app_login') }}" class="ybt-cart-pill">
+					Panier (<span class="cart-counter">{{ user_cart ? user_cart.product|length : 0 }}</span>)
+				</a>
 			</div>
 		</div>
 

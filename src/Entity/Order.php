@@ -12,6 +12,18 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: '`order`')]
 class Order
 {
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_PROCESSING = 'processing';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_CANCELLED = 'cancelled';
+
+    public const STATUSES = [
+        self::STATUS_PENDING,
+        self::STATUS_PROCESSING,
+        self::STATUS_COMPLETED,
+        self::STATUS_CANCELLED,
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -29,10 +41,14 @@ class Order
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
+    /** Session Stripe Checkout en cours : seule celle-ci peut valider ou annuler la commande. */
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $stripeSessionId = null;
+
     /**
      * @var Collection<int, OrderItem>
      */
-    #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'customerOrder',cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'customerOrder', cascade: ['persist'])]
     private Collection $orderItems;
 
     public function __construct()
@@ -77,14 +93,36 @@ class Order
 
     public function setStatus(string $status): static
     {
-        $differentStatus = ['pending', 'processing', 'completed', 'cancelled'];
-
-        if (!in_array($status, $differentStatus)) {
-            throw new \InvalidArgumentException('Statut non valide.');
+        if (!in_array($status, self::STATUSES, true)) {
+            throw new \InvalidArgumentException(sprintf('Statut de commande invalide : "%s".', $status));
         }
-    
+
         $this->status = $status;
-    
+
+        return $this;
+    }
+
+    /** La commande peut encore être payée (pas encore payée ni annulée). */
+    public function isPayable(): bool
+    {
+        return in_array($this->status, [self::STATUS_PENDING, self::STATUS_PROCESSING], true);
+    }
+
+    /** Montant total en centimes, tel qu'attendu par Stripe. */
+    public function getTotalInCents(): int
+    {
+        return (int) round(((float) $this->total) * 100);
+    }
+
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripeSessionId;
+    }
+
+    public function setStripeSessionId(?string $stripeSessionId): static
+    {
+        $this->stripeSessionId = $stripeSessionId;
+
         return $this;
     }
 

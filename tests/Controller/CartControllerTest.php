@@ -2,89 +2,89 @@
 
 namespace App\Tests\Controller;
 
-use App\Entity\Product;
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Tests\Support\EntityFactory;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CartControllerTest extends WebTestCase
 {
-    private function createUser(EntityManagerInterface $entityManager): User
+    use EntityFactory;
+
+    /** Ajoute au panier comme le fait le navigateur : jeton lu dans la page produit. */
+    private function addToCart(KernelBrowser $client, int $productId, ?string $token = null): void
     {
-        $user = new User();
-        $user->setEmail('cart.user+'.uniqid().'@example.com');
-        $user->setRoles(['ROLE_USER']);
-        $user->setPassword('irrelevant-for-this-test');
-        $user->setNom('Test');
-        $user->setPrenom('User');
-        $user->setBirthDate(new \DateTime('1990-01-01'));
-        $user->setAdress('1 rue de Test');
-        $user->setCP('75000');
-        $user->setCity('Paris');
-        $user->setCountry('France');
-        $user->setVerified(true);
+        if (null === $token) {
+            $crawler = $client->request('GET', '/product/'.$productId);
+            $token = $crawler->filter('meta[name="csrf-cart"]')->attr('content');
+        }
 
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        return $user;
-    }
-
-    private function createProduct(EntityManagerInterface $entityManager, bool $available): Product
-    {
-        $product = new Product();
-        $product->setName('Produit de test '.uniqid());
-        $product->setDescription('Pièce unique de test.');
-        $product->setPrice('50.00');
-        $product->setAvailable($available);
-        $product->setSize('M');
-
-        $entityManager->persist($product);
-        $entityManager->flush();
-
-        return $product;
+        $client->request('POST', '/cart/add/'.$productId, server: ['HTTP_X_CSRF_TOKEN' => $token]);
     }
 
     public function testAddingAnAvailableProductToCartSucceeds(): void
     {
         $client = static::createClient();
-        $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+        $product = $this->createProduct();
+        $client->loginUser($this->createUser());
 
-        $user = $this->createUser($entityManager);
-        $product = $this->createProduct($entityManager, true);
-
-        $client->loginUser($user);
-        $client->request('POST', '/cart/cart/add/'.$product->getId());
+        $this->addToCart($client, $product->getId());
 
         self::assertResponseIsSuccessful();
         $data = json_decode($client->getResponse()->getContent(), true);
         self::assertTrue($data['success']);
+        self::assertSame(1, $data['cartCount']);
     }
 
     public function testAddingAnAlreadySoldProductIsRejected(): void
     {
         $client = static::createClient();
-        $entityManager = static::getContainer()->get(EntityManagerInterface::class);
+        $product = $this->createProduct(available: false);
+        $client->loginUser($this->createUser());
 
-        $user = $this->createUser($entityManager);
-        $product = $this->createProduct($entityManager, false);
-
-        $client->loginUser($user);
-        $client->request('POST', '/cart/cart/add/'.$product->getId());
+        $this->addToCart($client, $product->getId());
 
         self::assertResponseStatusCodeSame(400);
-        $data = json_decode($client->getResponse()->getContent(), true);
-        self::assertFalse($data['success']);
+        self::assertFalse(json_decode($client->getResponse()->getContent(), true)['success']);
+    }
+
+    public function testAddingWithoutValidCsrfTokenIsRejected(): void
+    {
+        $client = static::createClient();
+        $product = $this->createProduct();
+        $client->loginUser($this->createUser());
+
+        $this->addToCart($client, $product->getId(), token: 'jeton-invalide');
+
+        self::assertResponseStatusCodeSame(403);
     }
 
     public function testAnonymousUserCannotAddToCart(): void
     {
         $client = static::createClient();
-        $entityManager = static::getContainer()->get(EntityManagerInterface::class);
-        $product = $this->createProduct($entityManager, true);
+        $product = $this->createProduct();
 
-        $client->request('POST', '/cart/cart/add/'.$product->getId());
+        $client->request('POST', '/cart/add/'.$product->getId());
 
         self::assertResponseRedirects('/login');
+    }
+
+    public function testCartPageWorksForUserWithoutCart(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser());
+
+        $client->request('GET', '/cart');
+
+        self::assertResponseIsSuccessful();
+    }
+
+    public function testClearingTheCartRequiresPost(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser());
+
+        $client->request('GET', '/cart/clear');
+
+        self::assertResponseStatusCodeSame(405);
     }
 }

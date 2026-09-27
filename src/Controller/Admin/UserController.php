@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\ResetPasswordRequestRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,20 +28,13 @@ final class UserController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $user, ['require_password' => true]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            if($plainPassword = $form->get('plainPassword')->getData()){
-                $user->setPassword(
-                    $passwordHasher->hashPassword(
-                        $user,
-                        $plainPassword
-                    )
-                );
-
-            }
+            $user->setPassword($passwordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
+            // Compte créé par un administrateur : pas besoin de confirmer l'e-mail.
+            $user->setVerified(true);
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -68,14 +62,8 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if($plainPassword = $form->get('plainPassword')->getData()){
-                $user->setPassword(
-                    $passwordHasher->hashPassword(
-                        $user,
-                        $plainPassword
-                    )
-                );
-
+            if ($plainPassword = $form->get('plainPassword')->getData()) {
+                $user->setPassword($passwordHasher->hashPassword($user, $plainPassword));
             }
             $entityManager->flush();
 
@@ -89,11 +77,25 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_admin_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, User $user, EntityManagerInterface $entityManager, ResetPasswordRequestRepository $resetRequests): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
+        if (!$this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
+            return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        if ($user === $this->getUser()) {
+            $this->addFlash('danger', 'Vous ne pouvez pas supprimer votre propre compte.');
+        } elseif (!$user->getOrders()->isEmpty()) {
+            // Les commandes sont des pièces comptables : on ne les supprime pas avec le client.
+            $this->addFlash('danger', 'Ce client a des commandes : son compte ne peut pas être supprimé.');
+        } else {
+            $resetRequests->removeRequests($user);
+            foreach ($user->getCarts() as $cart) {
+                $entityManager->remove($cart);
+            }
             $entityManager->remove($user);
             $entityManager->flush();
+            $this->addFlash('success', 'Utilisateur supprimé.');
         }
 
         return $this->redirectToRoute('app_admin_user_index', [], Response::HTTP_SEE_OTHER);

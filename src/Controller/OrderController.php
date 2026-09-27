@@ -2,86 +2,73 @@
 
 namespace App\Controller;
 
-use Stripe\Stripe;
-use Stripe\Checkout\Session as StripeSession;
-use App\Service\CartToOrderService;
-use App\Repository\OrderRepository;
+use App\Entity\Order;
+use App\Entity\User;
+use App\Exception\ProductsUnavailableException;
 use App\Repository\CartRepository;
+use App\Repository\OrderRepository;
+use App\Service\CartToOrderService;
+use App\Service\StripeCheckoutService;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class OrderController extends AbstractController
+#[IsGranted('ROLE_USER')]
+final class OrderController extends AbstractController
 {
-    private CartToOrderService $cartToOrderService;
-    private CartRepository $cartRepository;
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(CartToOrderService $cartToOrderService, CartRepository $cartRepository, EntityManagerInterface $entityManager)
+    #[Route('/order/finalize', name: 'order_finalize', methods: ['POST'])]
+    #[IsCsrfTokenValid('order_finalize')]
+    public function finalize(#[CurrentUser] User $user, CartRepository $cartRepository, CartToOrderService $cartToOrder): Response
     {
-        $this->cartToOrderService = $cartToOrderService;
-        $this->cartRepository = $cartRepository;
-        $this->entityManager = $entityManager;
-    }
+        $cart = $cartRepository->getOrCreateForUser($user);
 
-    #[Route("/order/finalize", name: "order_finalize")]
-    public function finalizeOrder(): Response
-    { 
-        $user = $this->getUser();
-
-        // Vérifie que l'utilisateur est connecté
-        if (!$user) {
-            $this->addFlash('danger', 'Vous devez être connecté pour finaliser votre commande.');
-            return $this->redirectToRoute('app_login');
-        }
-
-        // Récupère le panier de l'utilisateur
-        $cart = $this->cartRepository->findOneBy(['user' => $user]);
-
-        if (!$cart || $cart->getProduct()->isEmpty()) {
+        if ($cart->getProduct()->isEmpty()) {
             $this->addFlash('danger', 'Votre panier est vide.');
-            return $this->redirectToRoute('app_cart_show', ['id' => $cart->getId()]);
+
+            return $this->redirectToRoute('app_cart_show');
         }
 
         try {
-            // Convertit le panier en commande
-            $order = $this->cartToOrderService->createOrderFromCart($user, $cart); // Passer le panier et l'utilisateur ici
-
-            $this->addFlash('success', 'Votre commande a été finalisée avec succès.');
-            return $this->redirectToRoute('payement_stripe', ['orderId' => $order->getId()]);
-        } catch (\Exception $e) {
-            // En cas d'erreur, renvoie l'utilisateur à la vue du panier
+            $order = $cartToOrder->createOrderFromCart($user, $cart);
+        } catch (ProductsUnavailableException $e) {
             $this->addFlash('danger', $e->getMessage());
-            return $this->redirectToRoute('app_cart_show', [
-                'id' => $cart->getId()
-            ]);
+
+            return $this->redirectToRoute('app_cart_show');
         }
+
+        return $this->redirectToRoute('payment_stripe', ['id' => $order->getId()]);
     }
 
-    #[Route("/order/summary/{id}", name: "order_summary")]
-    public function orderSummary(int $id, Request $request, OrderRepository $orderRepository): Response
-    {
-        $order = $orderRepository->find($id);
-
-        if (!$order || $order->getUser() !== $this->getUser()) {
-            $this->addFlash('danger', 'Commande introuvable ou accès non autorisé.');
-            return $this->redirectToRoute('home');
+    #[Route('/order/summary/{id}', name: 'order_summary', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function summary(
+        Order $order,
+        Request $request,
+        StripeCheckoutService $stripe,
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger,
+    ): Response {
+        if ($order->getUser() !== $this->getUser()) {
+            throw $this->createNotFoundException();
         }
 
-        // Vérifie le paiement Stripe et marque la commande comme terminée
-        $sessionId = $request->query->get('session_id');
-        if ($sessionId && $order->getStatus() === 'processing') {
+        // Retour de Stripe : on confirme tout de suite sans attendre le webhook,
+        // mais uniquement si la session prouve le paiement de CETTE commande.
+        $sessionId = $request->query->getString('session_id');
+        if ('' !== $sessionId && Order::STATUS_PROCESSING === $order->getStatus()) {
             try {
-                Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
-                $stripeSession = StripeSession::retrieve($sessionId);
-                if ($stripeSession->payment_status === 'paid') {
-                    $order->setStatus('completed');
-                    $this->entityManager->flush();
+                if ($stripe->isPaidSessionFor($stripe->retrieveSession($sessionId), $order)) {
+                    $order->setStatus(Order::STATUS_COMPLETED);
+                    $entityManager->flush();
                 }
-            } catch (\Exception) {
-                // Session Stripe invalide, on garde le statut actuel
+            } catch (\Throwable $e) {
+                // Le webhook prendra le relais.
+                $logger->warning('Vérification Stripe au retour impossible.', ['order' => $order->getId(), 'error' => $e->getMessage()]);
             }
         }
 
@@ -89,16 +76,12 @@ class OrderController extends AbstractController
             'order' => $order,
         ]);
     }
-    #[Route("/orders", name: "order_list")]
-    public function orderList(OrderRepository $orderRepository): Response
+
+    #[Route('/orders', name: 'order_list', methods: ['GET'])]
+    public function list(#[CurrentUser] User $user, OrderRepository $orderRepository): Response
     {
-        $user = $this->getUser();
-
-        // Récupère toutes les commandes de l'utilisateur
-        $orders = $orderRepository->findBy(['user' => $user], ['createdAt' => 'DESC']);
-
         return $this->render('order/list.html.twig', [
-            'orders' => $orders,
+            'orders' => $orderRepository->findBy(['user' => $user], ['createdAt' => 'DESC']),
         ]);
     }
 }

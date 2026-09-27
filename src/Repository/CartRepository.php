@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Cart;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +17,18 @@ class CartRepository extends ServiceEntityRepository
         parent::__construct($registry, Cart::class);
     }
 
-    //    /**
-    //     * @return Cart[] Returns an array of Cart objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /** Chaque client a un seul panier, créé à la première utilisation. */
+    public function getOrCreateForUser(User $user): Cart
+    {
+        $cart = $user->getCarts()->first() ?: null;
+        if ($cart) {
+            return $cart;
+        }
 
-    //    public function findOneBySomeField($value): ?Cart
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $cart = (new Cart())->setUser($user);
+        $user->addCart($cart);
+        $this->getEntityManager()->persist($cart);
+
+        return $cart;
+    }
 }
