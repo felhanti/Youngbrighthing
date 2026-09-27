@@ -23,7 +23,6 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'attr' => [
-                    'class' => 'form-control',
                     'placeholder' => 'Entrez l\'email'
                 ]
             ])
@@ -41,7 +40,6 @@ class UserType extends AbstractType
                 'required' => $options['require_password'],
                 'label' => 'Mot de passe',
                 'attr' => [
-                    'class' => 'form-control',
                     'autocomplete' => 'new-password',
                     'placeholder' => $options['require_password']
                         ? 'Mot de passe du compte'
@@ -55,14 +53,12 @@ class UserType extends AbstractType
             ->add('nom', TextType::class, [
                 'label' => 'Nom',
                 'attr' => [
-                    'class' => 'form-control',
                     'placeholder' => 'Entrez le nom'
                 ]
             ])
             ->add('prenom', TextType::class, [
                 'label' => 'Prénom',
                 'attr' => [
-                    'class' => 'form-control',
                     'placeholder' => 'Entrez le prénom'
                 ]
             ])
@@ -70,36 +66,27 @@ class UserType extends AbstractType
                 'widget' => 'single_text',
                 'html5' => true,
                 'label' => 'Date de naissance',
-                'attr' => [
-                    'class' => 'form-control'
-                ]
             ])
             ->add('adress', TextType::class, [
                 'label' => 'Adresse',
                 'attr' => [
-                    'class' => 'form-control',
                     'placeholder' => 'Entrez votre adresse'
                 ]
             ])
             ->add('cp', TextType::class, [
                 'label' => 'Code Postal',
                 'attr' => [
-                    'class' => 'form-control',
                     'placeholder' => 'Entrez votre code postal',
                 ],
             ])
             ->add('city', TextType::class, [
                 'label' => 'Ville',
                 'attr' => [
-                    'class' => 'form-control',
                     'placeholder' => 'Entrez votre ville',
                 ],
             ])
             ->add('country', CountryType::class, [
                 'label' => 'Pays',
-                'attr' => [
-                    'class' => 'form-control',
-                ],
                 'placeholder' => 'Choisissez un pays', // Affiche une option vide
             ])
         ;
@@ -111,9 +98,6 @@ class UserType extends AbstractType
             'data_class' => User::class,
             // true à la création d'un compte, false en édition (vide = inchangé).
             'require_password' => false,
-            'attr' => [
-                'class' => 'needs-validation',
-            ],
         ]);
         $resolver->setAllowedTypes('require_password', 'bool');
     }

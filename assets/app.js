@@ -1,47 +1,8 @@
 /*
- * Script global du site, chargé en module (donc après l'analyse du HTML).
- * Les clics sont écoutés sur `document` (délégation) : un bouton ajouté plus tard
- * dans la page fonctionne sans code supplémentaire.
+ * Script global du site : ajout au panier sans rechargement.
+ * Chargé en module (donc après l'analyse du HTML). Les clics sont écoutés sur
+ * `document` (délégation) : un bouton ajouté plus tard fonctionne aussi.
  */
-
-// Masque automatiquement le premier message flash.
-const flash = document.querySelector('.alert');
-if (flash) {
-  setTimeout(() => {
-    flash.style.transition = 'opacity 0.5s';
-    flash.style.opacity = '0';
-    setTimeout(() => flash.remove(), 500);
-  }, 2000);
-}
-
-// Afficher / masquer le mot de passe.
-document.addEventListener('click', (event) => {
-  const toggle = event.target.closest('.toggle-password');
-  const field = document.querySelector('.password');
-  if (!toggle || !field) return;
-
-  const show = field.type === 'password';
-  field.type = show ? 'text' : 'password';
-  const icon = show ? toggle.dataset.eyeOpen : toggle.dataset.eyeClose;
-  if (icon) toggle.src = icon;
-});
-
-// Retour visuel de validation sur les champs de formulaire.
-document.addEventListener('input', (event) => {
-  const input = event.target;
-  if (!input.classList?.contains('form-control')) return;
-
-  if (input.value.trim() === '') {
-    input.classList.remove('is-valid', 'is-invalid');
-    return;
-  }
-
-  const valid = input.classList.contains('password-field')
-    ? input.value.length >= 8
-    : input.checkValidity();
-  input.classList.toggle('is-valid', valid);
-  input.classList.toggle('is-invalid', !valid);
-});
 
 // ---------------------------------------------------------------------------
 // Panier

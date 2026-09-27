@@ -1,0 +1,41 @@
+{#
+ # Thème de formulaire du site : style Tailwind par défaut de tout champ rendu sans classe.
+ # Un template peut toujours imposer ses classes via {'attr': {'class': ...}}.
+ #}
+{% use 'tailwind_2_layout.html.twig' %}
+
+{%- block form_row -%}
+    {%- set row_class = row_class|default('mb-4') -%}
+    {{- parent() -}}
+{%- endblock form_row -%}
+
+{%- block widget_attributes -%}
+    {%- set widget_class = widget_class|default('mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:border-yb-gold focus:ring-1 focus:ring-yb-gold') -%}
+    {%- set widget_errors_class = widget_errors_class|default('border-red-500') -%}
+    {{- parent() -}}
+{%- endblock widget_attributes -%}
+
+{%- block form_label -%}
+    {%- set label_class = label_class|default('block text-sm font-semibold text-gray-700') -%}
+    {{- parent() -}}
+{%- endblock form_label -%}
+
+{%- block form_errors -%}
+    {%- set error_item_class = error_item_class|default('mt-1 text-xs text-red-600') -%}
+    {{- parent() -}}
+{%- endblock form_errors -%}
+
+{%- block checkbox_widget -%}
+    {%- set widget_class = widget_class|default('mr-2 h-4 w-4 rounded border-gray-300 text-yb-gold focus:ring-yb-gold') -%}
+    {{- parent() -}}
+{%- endblock checkbox_widget -%}
+
+{%- block radio_widget -%}
+    {%- set widget_class = widget_class|default('mr-2 h-4 w-4 border-gray-300 text-yb-gold focus:ring-yb-gold') -%}
+    {{- parent() -}}
+{%- endblock radio_widget -%}
+
+{%- block choice_widget_expanded -%}
+    {%- set attr = attr|merge({class: attr.class|default('mt-2 flex flex-wrap gap-4')}) -%}
+    {{- parent() -}}
+{%- endblock choice_widget_expanded -%}

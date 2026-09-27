@@ -26,7 +26,6 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'attr' => [
-                    'class' => 'form-control',
                     'placeholder' => 'Entrez l\'email'
                 ],
                 'constraints' => [
@@ -45,16 +44,13 @@ class RegistrationFormType extends AbstractType
                         message: 'Vous devez accepter les conditions générales d\'utilisation en cochant cette case',
                     ),
                 ],
-                'attr' => [
-                    'class' => 'form-check-input'
-                ],
             ])
             ->add('plainPassword', PasswordType::class, [
                 'label' => 'Mot de passe',
                 'mapped' => false,
                 'attr' => [
                     'autocomplete' => 'new-password', 
-                    'class' => 'form-control password-field', 
+                    'class' => 'password-field', 
                     'placeholder' => 'Entrez un mot de passe'
                 ],
                 'constraints' => [
@@ -75,7 +71,6 @@ class RegistrationFormType extends AbstractType
             ->add('nom', TextType::class, [
                 'label' => 'Nom',
                 'attr' => [
-                    'class' => 'form-control',
                     'placeholder' => 'Entrez le nom'
                 ],
                 'constraints' => [
@@ -87,7 +82,6 @@ class RegistrationFormType extends AbstractType
             ->add('prenom', TextType::class, [
                 'label' => 'Prénom',
                 'attr' => [
-                    'class' => 'form-control',
                     'placeholder' => 'Entrez le prénom'
                 ],
                 'constraints' => [
@@ -101,9 +95,6 @@ class RegistrationFormType extends AbstractType
                 'html5' => true,
                 'required' => true,
                 'label' => 'Date de naissance',
-                'attr' => [
-                    'class' => 'form-control'
-                ],
                 'constraints' => [
                     new NotBlank(
                         message: 'La date de naissance est obligatoire',
@@ -113,7 +104,6 @@ class RegistrationFormType extends AbstractType
             ->add('adress', TextType::class, [
                 'label' => 'Adresse',
                 'attr' => [
-                    'class' => 'form-control',
                     'placeholder' => 'Entrez votre adresse'
                 ],
                 'constraints' => [
@@ -125,7 +115,6 @@ class RegistrationFormType extends AbstractType
             ->add('cp', TextType::class, [
                 'label' => 'Code Postal',
                 'attr' => [
-                    'class' => 'form-control',
                     'placeholder' => 'Entrez votre code postal',
                 ],
                 'constraints' => [
@@ -137,7 +126,6 @@ class RegistrationFormType extends AbstractType
             ->add('city', TextType::class, [
                 'label' => 'Ville',
                 'attr' => [
-                    'class' => 'form-control',
                     'placeholder' => 'Entrez votre ville',
                 ],
                 'constraints' => [
@@ -148,9 +136,6 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('country', CountryType::class, [
                 'label' => 'Pays',
-                'attr' => [
-                    'class' => 'form-control',
-                ],
                 'placeholder' => 'Choisissez un pays',
                 'constraints' => [
                     new NotBlank(

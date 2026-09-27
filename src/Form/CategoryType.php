@@ -17,7 +17,7 @@ class CategoryType extends AbstractType
     {
         $builder
         ->add('name', TextType::class, [
-            'attr' => ['class' => 'form-control', 'placeholder' => 'Nom du produit'],
+            'attr' => ['placeholder' => 'Nom du produit'],
         ])
         ->add('last', ChoiceType::class,[
             'choices' => [
