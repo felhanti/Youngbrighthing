@@ -1,0 +1,20 @@
+{% extends 'emails/_layout.html.twig' %}
+
+{% block heading %}{{ drop.name }} est disponible{% endblock %}
+
+{% block content %}
+    <p style="font-size: 17px; color: #1A1A1A; margin: 0 0 16px;">Bonjour,</p>
+    <p style="margin: 0 0 16px;">
+        Vous nous aviez demandé de vous prévenir : le nouveau drop <strong>{{ drop.name }}</strong> vient de sortir.
+        Chaque pièce n'existe qu'en un seul exemplaire, les premiers arrivés seront les premiers servis.
+    </p>
+    <div style="text-align: center; margin: 32px 0 8px;">
+        <a href="{{ url('app_drop', {name: drop.name}) }}" style="display: inline-block; background-color: #1A1A1A; color: #FFD700; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+            Découvrir le drop
+        </a>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <br><a href="{{ url('app_waitlist_unsubscribe', {token: subscriber.unsubscribeToken}) }}" style="color: #9CA3AF;">Ne plus être prévenu(e) des drops</a>
+{% endblock %}

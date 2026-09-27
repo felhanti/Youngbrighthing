@@ -1,0 +1,23 @@
+{# Inscription à la liste d'attente du prochain drop (affichée dans le pied de page). #}
+<section id="liste-attente" class="border-b border-gray-800">
+	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:flex md:items-center md:justify-between gap-10">
+		<div class="max-w-md">
+			<div style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;" class="text-yb-gold">Le prochain drop part vite</div>
+			<p class="text-sm opacity-70 mt-2 leading-relaxed">Chaque pièce n'existe qu'une fois. Laissez votre e-mail pour être prévenu(e) en premier de la prochaine capsule.</p>
+		</div>
+		<form method="post" action="{{ path('app_waitlist_subscribe') }}" class="mt-6 md:mt-0 w-full md:max-w-md">
+			<input type="hidden" name="_token" value="{{ csrf_token('waitlist') }}">
+			{# Piège à robots : invisible et ignoré par les humains. #}
+			<div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">
+				<label>Site web <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+			</div>
+			<div class="flex gap-2">
+				<label for="waitlist-email" class="sr-only">Adresse e-mail</label>
+				<input id="waitlist-email" type="email" name="email" required maxlength="180" autocomplete="email" placeholder="votre@email.fr"
+					class="flex-1 min-w-0 px-4 py-3 rounded-sm bg-transparent border border-gray-600 text-yb-light placeholder-gray-500 focus:outline-none focus:border-yb-gold">
+				<button type="submit" class="px-5 py-3 bg-yb-gold text-yb-dark text-sm uppercase tracking-wider font-bold rounded-sm hover:bg-opacity-90 transition">Me prévenir</button>
+			</div>
+			<p class="text-xs opacity-50 mt-2">Un e-mail par drop, rien d'autre. Désinscription en un clic dans chaque e-mail.</p>
+		</form>
+	</div>
+</section>

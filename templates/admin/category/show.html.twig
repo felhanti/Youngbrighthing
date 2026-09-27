@@ -1,29 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-	{{ category.Name }}
-{% endblock %}
+{% block title %}{{ category.name }} - Administration{% endblock %}
 
 {% block body %}
-	<div class="container mt-4">
-		<h1>{{ category.Name }}</h1>
+<div class="bg-gray-100 min-h-screen py-10">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="md:flex md:items-center md:justify-between mb-6">
+            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl">
+                {{ category.name }}
+                {% if category.last %}<span class="ml-2 align-middle px-2 py-0.5 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Drop en avant</span>{% endif %}
+            </h2>
+            <div class="mt-4 flex gap-2 md:mt-0">
+                <a href="{{ path('app_admin_category_edit', {id: category.id}) }}" class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yb-dark hover:bg-opacity-90">Modifier</a>
+                <a href="{{ path('app_admin_category_index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Retour à la liste</a>
+            </div>
+        </div>
 
-		<table class="table">
-			<tbody>
-				<tr>
-					<th>Id</th>
-					<td>{{ category.id }}</td>
-				</tr>
-				<tr>
-					<th>Name</th>
-					<td>{{ category.Name }}</td>
-				</tr>
-			</tbody>
-		</table>
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="mb-4 rounded-md px-4 py-3 text-sm {{ type == 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800' }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
 
-		<a class="btn btn-info mr-1" href="{{ path('app_admin_category_index') }}">Retour à la liste</a>
+        <div class="bg-white shadow rounded-lg mb-6 px-4 py-5 sm:p-6">
+            <h3 class="text-lg font-medium text-gray-900">Prévenir la liste d'attente</h3>
+            {% if category.waitlistNotifiedAt %}
+                <p class="mt-2 text-sm text-gray-600">Annonce envoyée le {{ category.waitlistNotifiedAt|date('d/m/Y à H:i') }}.</p>
+            {% else %}
+                <p class="mt-2 text-sm text-gray-600">
+                    Envoie un e-mail « {{ category.name }} est disponible » aux {{ waitlistTotal }} personne(s) inscrite(s).
+                    À faire une fois les pièces en ligne : l'envoi n'est possible qu'une seule fois par drop.
+                </p>
+                <form method="post" action="{{ path('app_admin_category_notify', {id: category.id}) }}" class="mt-4"
+                      onsubmit="return confirm('Envoyer l\'annonce à {{ waitlistTotal }} personne(s) ?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('notify' ~ category.id) }}">
+                    <button type="submit" {{ waitlistTotal == 0 ? 'disabled' }} class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-yb-dark bg-yb-gold hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed">
+                        Envoyer l'annonce
+                    </button>
+                </form>
+            {% endif %}
+        </div>
 
-		<a class="btn btn-warning m-1" href="{{ path('app_admin_category_edit', {'id': category.id}) }}">Modifier</a>
+        <div class="bg-white shadow rounded-lg overflow-hidden mb-6">
+            <div class="px-4 py-4 sm:px-6 border-b border-gray-200 text-sm font-medium text-gray-900">
+                {{ category.products|length }} pièce(s) dans ce drop
+            </div>
+            <ul class="divide-y divide-gray-200">
+                {% for product in category.products %}
+                    <li class="px-4 py-3 sm:px-6 flex justify-between text-sm">
+                        <a href="{{ path('app_admin_product_show', {id: product.id}) }}" class="text-gray-900 hover:underline">{{ product.name }}</a>
+                        <span class="{{ product.available ? 'text-green-700' : 'text-gray-500' }}">{{ product.available ? 'Disponible' : 'Vendue ou réservée' }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-		{{ include('admin/category/_delete_form.html.twig') }}
-	{% endblock %}
+        {{ include('admin/category/_delete_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

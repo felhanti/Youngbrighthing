@@ -27,6 +27,10 @@ class Category
     #[ORM\Column]
     private ?bool $Last = null;
 
+    /** Date d'envoi de l'annonce de ce drop à la liste d'attente (évite un double envoi). */
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $waitlistNotifiedAt = null;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -72,6 +76,18 @@ class Category
         if ($this->products->removeElement($product)) {
             $product->removeCategory($this);
         }
+
+        return $this;
+    }
+
+    public function getWaitlistNotifiedAt(): ?\DateTimeImmutable
+    {
+        return $this->waitlistNotifiedAt;
+    }
+
+    public function markWaitlistNotified(): static
+    {
+        $this->waitlistNotifiedAt = new \DateTimeImmutable();
 
         return $this;
     }

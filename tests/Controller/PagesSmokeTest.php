@@ -64,7 +64,7 @@ class PagesSmokeTest extends WebTestCase
             '/admin/product', '/admin/product/new', '/admin/product/'.$product->getId(), '/admin/product/'.$product->getId().'/edit',
             '/admin/category', '/admin/category/new', '/admin/category/'.$category->getId(), '/admin/category/'.$category->getId().'/edit',
             '/admin/user', '/admin/user/new', '/admin/user/'.$customer->getId(), '/admin/user/'.$customer->getId().'/edit',
-            '/admin/order', '/admin/order/'.$order->getId()];
+            '/admin/order', '/admin/order/'.$order->getId(), '/admin/waitlist'];
 
         foreach ($urls as $url) {
             $client->request('GET', $url);
