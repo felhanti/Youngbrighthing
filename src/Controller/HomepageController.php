@@ -41,7 +41,7 @@ final class HomepageController extends AbstractController
     public function collection(): Response
     {
         return $this->render('collection/index.html.twig', [
-            'products' => $this->productRepository->findBy([], ['add_date' => 'DESC']),
+            'products' => $this->productRepository->findBy([], ['add_date' => 'DESC', 'id' => 'DESC']),
         ]);
     }
 
@@ -97,6 +97,6 @@ final class HomepageController extends AbstractController
     /** @return Product[] */
     private function latestProducts(int $limit): array
     {
-        return $this->productRepository->findBy([], ['add_date' => 'DESC'], $limit);
+        return $this->productRepository->findBy([], ['add_date' => 'DESC', 'id' => 'DESC'], $limit);
     }
 }

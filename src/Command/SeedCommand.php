@@ -90,12 +90,12 @@ class SeedCommand extends Command
 
         // Products
         $products = [
-            ['Veste Déconstruite YBT-01', 'Veste unisexe en laine ajourée déconstruite, inspirée d\'un univers sans limites. Coupe oversize, finitions brutes et coutures apparentes. Pièce unique.', '320.00', true, 'M', $capsule3, 'turtleneckls-6728e248a036a358806097.jpg'],
-            ['Hoodie Recyclé YBT-02', 'Hoodie en tissu recyclé mélangé, motifs brodés à la main. Style urbain brut avec capuche double épaisseur. Coloris anthracite.', '195.00', true, 'L', $capsule3, 'pullchemiseclubface2-6728ddb6ae960563351418.jpg'],
-            ['Pantalon Maille YBT-03', 'Pantalon en maille déchirée, taille haute élastiquée. Coupe unisexe adaptée à toutes les morphologies. Noir intense.', '240.00', true, 'S', $capsule3, 'pullchemiseclubface2-6728ddb6ae960563351418-674eeeb14addf541848998.jpg'],
-            ['T-shirt Coton Mélangé YBT-04', 'T-shirt en coton mélangé traité, col légèrement asymétrique. Logo YBT brodé en fil doré sur la poitrine. Blanc cassé.', '120.00', false, 'XL', $capsule2, 'mixed-denim-blue-sky-face-21674478683047-6728ddab6e7d5990242588.jpg'],
-            ['Manteau Urban YBT-05', 'Manteau long en laine recyclée, doublure amovible. Poches intérieures multiples. Style militaire revisité. Kaki.', '480.00', true, 'M', $capsule2, 'img-20240208-162755-587-6728dd9f291ee420083656.png'],
-            ['Robe Asymétrique YBT-06', 'Robe mi-longue en jersey déstructuré. Ourlet asymétrique et encolure béteau. Pièce unisexe à porter en toute occasion.', '280.00', true, 'S/M', $capsule1, 'img-20240208-162730-611-6728e1efc0794076900155.png'],
+            ['Veste Déconstruite YBT-01', 'Veste unisexe en laine ajourée déconstruite, inspirée d\'un univers sans limites. Coupe oversize, finitions brutes et coutures apparentes. Pièce unique.', '320.00', true, 'M', $capsule3, 'turtleneckls-6728e248a036a358806097.webp'],
+            ['Hoodie Recyclé YBT-02', 'Hoodie en tissu recyclé mélangé, motifs brodés à la main. Style urbain brut avec capuche double épaisseur. Coloris anthracite.', '195.00', true, 'L', $capsule3, 'pullchemiseclubface2-6728ddb6ae960563351418.webp'],
+            ['Pantalon Maille YBT-03', 'Pantalon en maille déchirée, taille haute élastiquée. Coupe unisexe adaptée à toutes les morphologies. Noir intense.', '240.00', true, 'S', $capsule3, 'pullchemiseclubface2-6728ddb6ae960563351418-674eeeb14addf541848998.webp'],
+            ['T-shirt Coton Mélangé YBT-04', 'T-shirt en coton mélangé traité, col légèrement asymétrique. Logo YBT brodé en fil doré sur la poitrine. Blanc cassé.', '120.00', false, 'XL', $capsule2, 'mixed-denim-blue-sky-face-21674478683047-6728ddab6e7d5990242588.webp'],
+            ['Manteau Urban YBT-05', 'Manteau long en laine recyclée, doublure amovible. Poches intérieures multiples. Style militaire revisité. Kaki.', '480.00', true, 'M', $capsule2, 'img-20240208-162755-587-6728dd9f291ee420083656.webp'],
+            ['Robe Asymétrique YBT-06', 'Robe mi-longue en jersey déstructuré. Ourlet asymétrique et encolure béteau. Pièce unisexe à porter en toute occasion.', '280.00', true, 'S/M', $capsule1, 'img-20240208-162730-611-6728e1efc0794076900155.webp'],
         ];
 
         foreach ($products as [$name, $desc, $price, $sold, $size, $cat, $image]) {

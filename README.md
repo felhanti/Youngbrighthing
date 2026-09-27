@@ -46,6 +46,15 @@ bin/build-css --watch  # recompile en continu pendant le développement
 
 Les couleurs de la marque sont dans `tailwind.config.js` (`yb-gold`, `yb-dark`, `yb-light`, `yb-gray`) : toutes les variantes (`hover:`, `focus:`, `/50`…) fonctionnent.
 
+## Photos produits
+
+Chaque photo envoyée depuis l'admin est automatiquement redimensionnée (1600 px de large max) et convertie en WebP.
+Pour convertir des photos plus anciennes (commande relançable sans risque) :
+
+```bash
+php bin/console app:images:optimize
+```
+
 ## Réservation des pièces uniques
 
 Quand un client valide son panier, ses pièces sont réservées (`available = false`) le temps du paiement Stripe (30 min max).
