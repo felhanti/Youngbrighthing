@@ -30,20 +30,20 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Entrez l\'email'
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'L\'adresse email est obligatoire',
-                    ]),
-                    new Email([
-                        'message' => 'Veuillez saisir une adresse email valide',
-                    ]),
+                    new NotBlank(
+                        message: 'L\'adresse email est obligatoire',
+                    ),
+                    new Email(
+                        message: 'Veuillez saisir une adresse email valide',
+                    ),
                 ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'constraints' => [
-                    new IsTrue([
-                        'message' => 'Vous devez accepter les conditions générales d\'utilisation en cochant cette case',
-                    ]),
+                    new IsTrue(
+                        message: 'Vous devez accepter les conditions générales d\'utilisation en cochant cette case',
+                    ),
                 ],
                 'attr' => [
                     'class' => 'form-check-input'
@@ -58,18 +58,18 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Entrez un mot de passe'
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Le mot de passe est obligatoire',
-                    ]),
-                    new Length([
-                        'min' => 8,
-                        'minMessage' => 'Votre mot de passe doit contenir au minimum {{ limit }} caractères',
-                        'max' => 4096,
-                    ]),
-                    new Regex([
-                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/',
-                        'message' => 'Votre mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule et un chiffre'
-                    ]),
+                    new NotBlank(
+                        message: 'Le mot de passe est obligatoire',
+                    ),
+                    new Length(
+                        min: 8,
+                        minMessage: 'Votre mot de passe doit contenir au minimum {{ limit }} caractères',
+                        max: 4096,
+                    ),
+                    new Regex(
+                        pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/',
+                        message: 'Votre mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule et un chiffre'
+                    ),
                 ],
             ])
             ->add('nom', TextType::class, [
@@ -79,9 +79,9 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Entrez le nom'
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Le nom est obligatoire',
-                    ]),
+                    new NotBlank(
+                        message: 'Le nom est obligatoire',
+                    ),
                 ],
             ])
             ->add('prenom', TextType::class, [
@@ -91,9 +91,9 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Entrez le prénom'
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Le prénom est obligatoire',
-                    ]),
+                    new NotBlank(
+                        message: 'Le prénom est obligatoire',
+                    ),
                 ],
             ])
             ->add('birthDate', DateType::class, [
@@ -105,9 +105,9 @@ class RegistrationFormType extends AbstractType
                     'class' => 'form-control'
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'La date de naissance est obligatoire',
-                    ]),
+                    new NotBlank(
+                        message: 'La date de naissance est obligatoire',
+                    ),
                 ],
             ])
             ->add('adress', TextType::class, [
@@ -117,9 +117,9 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Entrez votre adresse'
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'L\'adresse est obligatoire',
-                    ]),
+                    new NotBlank(
+                        message: 'L\'adresse est obligatoire',
+                    ),
                 ],
             ])
             ->add('cp', TextType::class, [
@@ -129,9 +129,9 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Entrez votre code postal',
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Le code postal est obligatoire',
-                    ]),
+                    new NotBlank(
+                        message: 'Le code postal est obligatoire',
+                    ),
                 ],
             ])
             ->add('city', TextType::class, [
@@ -141,9 +141,9 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'Entrez votre ville',
                 ],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'La ville est obligatoire',
-                    ]),
+                    new NotBlank(
+                        message: 'La ville est obligatoire',
+                    ),
                 ],
             ])
             ->add('country', CountryType::class, [
@@ -153,9 +153,9 @@ class RegistrationFormType extends AbstractType
                 ],
                 'placeholder' => 'Choisissez un pays',
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Le pays est obligatoire',
-                    ]),
+                    new NotBlank(
+                        message: 'Le pays est obligatoire',
+                    ),
                 ],
             ])
         ;

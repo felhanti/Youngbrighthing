@@ -2,33 +2,78 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
+use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class HomepageController extends AbstractController
+final class HomepageController extends AbstractController
 {
+    public function __construct(private readonly ProductRepository $productRepository)
+    {
+    }
+
     #[Route('/', name: 'home')]
-    public function index(CategoryRepository $categoryRepository, ProductRepository $productRepository): Response
+    public function index(CategoryRepository $categoryRepository): Response
     {
         $drops = $categoryRepository->findBy([], ['id' => 'DESC']);
 
         return $this->render('homepage/index.html.twig', [
             'drops' => $drops,
             'heroDrop' => $categoryRepository->findOneBy(['Last' => true]) ?? ($drops[0] ?? null),
-            'featuredProducts' => $productRepository->findBy([], ['add_date' => 'DESC'], 4),
+            'featuredProducts' => $this->latestProducts(4),
         ]);
     }
+
+    #[Route('/product/{id}', name: 'app_product', requirements: ['id' => '\d+'])]
+    public function product(Product $product): Response
+    {
+        return $this->render('product/index.html.twig', [
+            'product' => $product,
+        ]);
+    }
+
+    #[Route('/collection/all', name: 'app_collection_all')]
+    public function collection(): Response
+    {
+        return $this->render('collection/index.html.twig', [
+            'products' => $this->productRepository->findBy([], ['add_date' => 'DESC']),
+        ]);
+    }
+
+    #[Route('/drop/{name}', name: 'app_drop')]
+    public function drop(#[MapEntity(mapping: ['name' => 'Name'])] Category $category): Response
+    {
+        return $this->render('drop/index.html.twig', [
+            'category' => $category,
+            'products' => $category->getProducts(),
+        ]);
+    }
+
+    // Pages éditoriales : seules les premières photos produits servent d'illustrations.
+
+    #[Route('/campagne', name: 'app_campagne')]
+    public function campagne(): Response
+    {
+        return $this->render('campagne/index.html.twig', ['products' => $this->latestProducts(3)]);
+    }
+
+    #[Route('/histoire', name: 'app_histoire')]
+    public function histoire(): Response
+    {
+        return $this->render('histoire/index.html.twig', ['products' => $this->latestProducts(4)]);
+    }
+
+    // Pages légales.
 
     #[Route('/cgv/cgu', name: 'app_cgv_cgu')]
     public function cgu(): Response
     {
-        return $this->render('cgv/cgu.html.twig', [
-            'controller_name' => 'HomepageController',
-        ]);
-
+        return $this->render('cgv/cgu.html.twig');
     }
 
     #[Route('/cgv/confidentialite', name: 'app_cgv_confidentialite')]
@@ -49,66 +94,9 @@ class HomepageController extends AbstractController
         return $this->render('cgv/retour.html.twig');
     }
 
-    #[Route('/product/{id}', name: 'app_product')]
-    public function product(int $id, CategoryRepository $categoryRepository, ProductRepository $productRepository): Response
+    /** @return Product[] */
+    private function latestProducts(int $limit): array
     {
-        // Récupère le produit correspondant à l'id donné
-        $product = $productRepository->find($id);
-
-        // Vérifie si le produit existe
-        if (!$product) {
-            throw $this->createNotFoundException('Le produit demandé n\'existe pas.');
-        }
-
-        return $this->render('product/index.html.twig', [
-            'category' => $categoryRepository->findAll(),
-            'product' => $product, // envoie le produit unique, pas tous les produits
-        ]);
+        return $this->productRepository->findBy([], ['add_date' => 'DESC'], $limit);
     }
-
-    #[Route('/collection/all', name: 'app_collection_all')]
-    public function collection(ProductRepository $productRepository): Response
-    {
-        return $this->render('collection/index.html.twig', [
-            'products' => $productRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/campagne', name: 'app_campagne')]
-public function campagne(ProductRepository $productRepository): Response
-{
-    return $this->render('campagne/index.html.twig', [
-        'products' => $productRepository->findAll(),
-    ]);
-}
-
-    #[Route('/histoire', name: 'app_histoire')]
-public function histoire(ProductRepository $productRepository): Response
-{
-    return $this->render('histoire/index.html.twig', [
-        'products' => $productRepository->findAll(),
-    ]);
-}
-
-    #[Route('/drop/{name}', name: 'app_drop')]
-    public function drop(string $name, CategoryRepository $categoryRepository): Response
-    {
-        // Récupérer la catégorie par son nom
-        $category = $categoryRepository->findOneBy(['Name' => $name]);
-        if (!$category) {
-            throw $this->createNotFoundException('La catégorie demandée n\'existe pas.');
-        }
-
-        $products = $category->getProducts(); // Utilisation de la relation ManyToMany
-
-        return $this->render('drop/index.html.twig', [
-            'products' => $products,
-            'category' => $category,
-            
-        ]);
-    }
-
-
-
-
 }

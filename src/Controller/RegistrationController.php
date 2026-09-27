@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Form\RegistrationFormType;
-use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +36,7 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-            $user->setroles(['ROLE_USER']);
+            $user->setRoles(['ROLE_USER']);
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -46,12 +45,10 @@ class RegistrationController extends AbstractController
                 'app_verify_email',
                 $user,
                 (new TemplatedEmail())
-                    ->from(new Address('Youngbrighthing@youngbrighthing.com', 'Youngbrighthing'))
                     ->to($user->getEmail())
                     ->subject('Merci de confirmer votre email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
-            // do anything else you need here, like send an email
 
             return $this->redirectToRoute('app_login');
         }

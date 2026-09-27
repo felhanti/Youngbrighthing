@@ -24,9 +24,9 @@ class DashboardController extends AbstractController
             'ordersByStatus' => $ordersByStatus,
             'ordersTotal' => array_sum($ordersByStatus),
             'recentOrders' => $orderRepository->findRecent(5),
-            'productsTotal' => count($productRepository->findAll()),
-            'productsAvailable' => count($productRepository->findBy(['available' => true])),
-            'usersTotal' => count($userRepository->findAll()),
+            'productsTotal' => $productRepository->count(),
+            'productsAvailable' => $productRepository->count(['available' => true]),
+            'usersTotal' => $userRepository->count(),
         ]);
     }
 }

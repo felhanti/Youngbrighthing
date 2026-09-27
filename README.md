@@ -1,6 +1,6 @@
 # Youngbrighthing
 
-Boutique e-commerce de mode en pièces uniques ("capsules"/drops), construite avec Symfony 7.1, Postgres et Stripe Checkout.
+Boutique e-commerce de mode en pièces uniques ("capsules"/drops), construite avec Symfony 7.4 LTS, Postgres et Stripe Checkout.
 
 ## Prérequis
 
@@ -23,6 +23,7 @@ STRIPE_PUBLIC_KEY=pk_test_...
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 MAILER_DSN="smtp://user:pass@host:port"
+MAILER_FROM="Youngbrighthing <contact@votre-domaine.fr>"
 ```
 
 Pour tester les webhooks Stripe en local (nécessite le [Stripe CLI](https://stripe.com/docs/stripe-cli)) :
@@ -32,6 +33,15 @@ stripe listen --forward-to localhost:8080/stripe/webhook
 ```
 
 Copier le `whsec_...` affiché dans `STRIPE_WEBHOOK_SECRET` de `.env.local`.
+
+## Réservation des pièces uniques
+
+Quand un client valide son panier, ses pièces sont réservées (`available = false`) le temps du paiement Stripe (30 min max).
+Si le client abandonne avant même d'arriver sur Stripe, seule cette commande libère la réservation. **À planifier en production** (cron toutes les 15 min) :
+
+```bash
+php bin/console app:orders:release-expired
+```
 
 ## Base de données
 
@@ -62,6 +72,8 @@ docker compose exec -e DATABASE_URL='postgresql://app:!ChangeMe!@database:5432/a
 ```
 
 Les tests n'envoient jamais de vrais emails (`MAILER_DSN=null://null` dans `.env.test`) ni n'appellent l'API Stripe.
+
+Ils couvrent notamment : panier (CSRF, pièces vendues), accès aux commandes d'autrui, rejeu d'une session Stripe sur une autre commande, libération des réservations, upload de fichiers non-images dans l'admin, et l'affichage de toutes les pages.
 
 ## Administration
 

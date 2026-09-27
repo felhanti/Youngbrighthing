@@ -179,13 +179,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
+    #[\Deprecated]
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        // Aucune donnée sensible temporaire n'est stockée sur l'utilisateur.
     }
 
     public function getAdress(): ?string
